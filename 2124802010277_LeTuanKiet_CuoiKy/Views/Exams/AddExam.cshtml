@@ -1,0 +1,113 @@
+﻿LQuestion List<_2124802010277_LeTuanKiet_CuoiKy.Models.Question>
+    @{
+        ViewBag.Title = "AddExam";
+        _2124802010277_LeTuanKiet_CuoiKy.Models.Question tmp = new _2124802010277_LeTuanKiet_CuoiKy.Models.Question();
+        var x = Model;
+        var id = ViewBag.Id;
+        var i = 0;
+
+    }
+    <h1>
+    </h1>
+    <div class="ContainerAddExam">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form">
+                <h4>Question</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <form action="~/Exams/AddExam" method="post">
+                    <div id="Exams">
+                        <div id="Exam" style="border: 1px solid; ">
+                            <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                <div>
+                                    <label class="control-label col-md-12">Câu hỏi</label>
+                                </div>
+                                <div class="col-md-10" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                    <input class="form-control" name="LQuestion[@i].Ques" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                <div>
+                                    <label class="control-label col-md-12">Đáp án A</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <input class="form-control" name="LQuestion[@i].A" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                <div>
+                                    <label class="control-label col-md-12">Đáp án B</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <input class="form-control" name="LQuestion[@i].B" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                <div>
+                                    <label class="control-label col-md-12">Đáp án C</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <input class="form-control" name="LQuestion[@i].C" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                <div>
+                                    <label class="control-label col-md-12">Đáp án D</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <input class="form-control" name="LQuestion[@i].D" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                <div>
+                                    <label class="control-label col-md-12">Đáp án đúng</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <input class="form-control" name="LQuestion[@i].Ans" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" value=@id name="Id" />
+                    <button type="submit" class="btn btn-primary">Gửi</button>
+                </form>
+            </div>
+        }
+
+        <button class="btn btn-primary" onclick="ThemCauHoi()">Thêm câu hỏi</button>
+    </div>
+
+@section scripts{
+<script>
+    var i = 0;
+        function ThemCauHoi() {
+            
+            i += 1; // Tăng giá trị i lên 1
+
+            console.log("i sau khi tăng lên 1: " + i);
+
+            var examsForm = document.getElementById('Exams');
+            var examClone = document.getElementById('Exam').cloneNode(true);
+            var inputFields = examClone.getElementsByTagName('input');
+
+            // Cập nhật name của trường input để chứa giá trị mới của i
+            for (var j = 0; j < inputFields.length; j++) {
+                inputFields[j].name = "LQuestion["+ i + "]." + inputFields[j].name.split(".")[1];
+                inputFields[j].value = '';
+            }
+
+            // Thêm bản sao vào Exams
+            examsForm.appendChild(examClone);
+        }
+</script>
+}
+
+

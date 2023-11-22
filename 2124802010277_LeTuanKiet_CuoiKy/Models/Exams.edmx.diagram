@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f5ada56bb4294147ba81eae5c606177b" Name="Diagram1">
+        <EntityTypeShape EntityType="DataTiengAnhModel.sysdiagram" PointX="5.75" PointY="0.75" Width="1.5" />
+        <EntityTypeShape EntityType="DataTiengAnhModel.NguPhap" Width="1.5" PointX="0.625" PointY="5.875" />
+        <EntityTypeShape EntityType="DataTiengAnhModel.ChiTietBaiTap" Width="1.5" PointX="5.375" PointY="5.875" />
+        <EntityTypeShape EntityType="DataTiengAnhModel.BaiTap" Width="1.5" PointX="7.5" PointY="5.75" />
+        <EntityTypeShape EntityType="DataTiengAnhModel.CauHoi" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="DataTiengAnhModel.ChiTietThiSinh" Width="1.5" PointX="3" PointY="4.5" />
+        <EntityTypeShape EntityType="DataTiengAnhModel.NguoiDung" Width="1.5" PointX="8.375" PointY="0.75" />
+        <EntityTypeShape EntityType="DataTiengAnhModel.KyThi" Width="1.5" PointX="0.75" PointY="1.625" />
+        <AssociationConnector Association="DataTiengAnhModel.FK_CauHoi_KyThi" />
+        <AssociationConnector Association="DataTiengAnhModel.FK_ChiTietThiSinh_KyThi" />
+        <EntityTypeShape EntityType="DataTiengAnhModel.Message" Width="1.5" PointX="0.75" PointY="9.75" />
+        <EntityTypeShape EntityType="DataTiengAnhModel.Room" Width="1.5" PointX="2.75" PointY="9.75" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

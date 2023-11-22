@@ -1,0 +1,13 @@
+﻿@model IEnumerable<_2124802010277_LeTuanKiet_CuoiKy.Models.NguPhap>
+<ul class="list-group">
+    @foreach (var item in Model)
+    {
+        <a href="@Url.Action("DetailGrammar","Grammar",new {id=item.IdNguPhap})" style="color: white">
+            <li class="list-group-item active">
+
+                @item.TenNguPhap
+
+            </li>
+        </a>
+    }
+</ul>

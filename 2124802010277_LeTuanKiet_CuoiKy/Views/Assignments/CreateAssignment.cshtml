@@ -1,0 +1,68 @@
+﻿@model List<_2124802010277_LeTuanKiet_CuoiKy.Models.ChiTietBaiTap>
+@{
+    ViewBag.Title = "CreateAssignment";
+    var bug = ViewBag.bug;
+    var TenBaiTap = ViewBag.TenBaiTap;
+
+}
+<h4 style="color: red">@bug</h4>
+<div style="padding: 50px 30px 50px 30px;">
+    @using (Html.BeginForm("CreateAssignment", "Assignments", FormMethod.Post, new { style = "margin-left: 120px;" } ))
+    {
+        <div class="form-group">
+            <label class="control-label col-md-2">
+                Tên bài tập
+            </label>
+            <div class="col-md-10">
+                <input class="form-control" name="TenBaiTap" value="@TenBaiTap"/>
+            </div>
+        </div>
+        <table>
+            <!-- Thêm các dòng và cột cho bảng của bạn -->
+            <tr>
+                <th>STT</th>
+                <th>Câu hỏi</th>
+                <th>Đáp án A</th>
+                <th>Đáp án B</th>
+                <th>Đáp án C</th>
+                <th>Đáp án D</th>
+                <th>Câu trả lời</th>
+            </tr>
+            @for (int i = 0; i < 50; i++)
+            {
+                if (i<Model.Count)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td><input type="text" name="ListCauHoi[@i].Ques" value="@Model[i].Ques" /></td>
+                        <td><input type="text" name="ListCauHoi[@i].A"  value="@Model[i].A"/></td>
+                        <td><input type="text" name="ListCauHoi[@i].B" value="@Model[i].B"/></td>
+                        <td><input type="text" name="ListCauHoi[@i].C" value="@Model[i].C"/></td>
+                        <td><input type="text" name="ListCauHoi[@i].D" value="@Model[i].D" /></td>
+                        <td><input type="text" name="ListCauHoi[@i].Ans" value="@Model[i].Ans"/></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td><input type="text" name="ListCauHoi[@i].Ques"/></td>
+                        <td><input type="text" name="ListCauHoi[@i].A" /></td>
+                        <td><input type="text" name="ListCauHoi[@i].B" /></td>
+                        <td><input type="text" name="ListCauHoi[@i].C" /></td>
+                        <td><input type="text" name="ListCauHoi[@i].D" /></td>
+                        <td><input type="text" name="ListCauHoi[@i].Ans" /></td>
+                    </tr>
+                }
+
+            }
+        </table>
+
+        <input type="submit" value="Gửi Dữ Liệu" style="float: right"/>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+</div>

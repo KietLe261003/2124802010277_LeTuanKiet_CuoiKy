@@ -1,0 +1,124 @@
+﻿@model _2124802010277_LeTuanKiet_CuoiKy.Models.KyThi
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@{
+    ViewBag.Title = "DetailExams";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+    List<ChiTietThiSinh> ThiSinh = ViewBag.ThiSinh;
+}
+
+<div class="page-wrapper">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="page-breadcrumb bg-white">
+        <div class="row align-items-center">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <h4 class="page-title">Chi tiết kỳ thi @Model.IdKyThi</h4>
+            </div>
+            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                <div class="d-md-flex">
+                    <ol class="breadcrumb ms-auto">
+                        <li><a href="#" class="fw-normal"></a></li>
+                    </ol>
+                    <a href="https://www.wrappixel.com/templates/ampleadmin/" target="_blank"
+                       class="btn btn-danger  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
+                        Danh sách
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        @*Xây dựng nội dung ở đây*@
+        <h2>DetailExams</h2>
+
+        <div>
+            <h4>KyThi</h4>
+            <hr />
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="color: white">Tên kỳ thi</th>
+                        <th style="text-align: center; color: white">Số thí sinh</th>
+                        <th style="text-align: center; color: white">Ngày bắt đầu</th>
+                        <th style="text-align: center; color: white">Ngày kết thúc</th>
+                        <th style="text-align: center; color: white">Tình trạng công bố</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.TenKyThi</td>
+                        <td style="text-align: center">@Model.SoThiSinh</td>
+                        <td class="DetailExams" style="text-align: center">@string.Format("{0:dd/MM/yyyy}", Model.Ngay)</td>
+                        <td class="DetailExams" style="text-align: center">@string.Format("{0:dd/MM/yyyy}", Model.Ngay)</td>
+                        <td style="text-align: center">@Model.TinhTrang</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="font-weight: bold; font-size: 20px">
+                Chi tiết các thí sinh
+            </p>
+            <table class="table">
+                <tr>
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Điểm
+                    </th>
+                    <th>
+                        Số câu đúng
+                    </th>
+                    <th>
+                        Số câu sai
+                    </th>
+                    <th>
+                        Số câu chưa làm
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (var item in ThiSinh)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IdThiSinh)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Diem)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Dung)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Sai)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ChuaLam)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.IdChiTietThiSinh }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.IdChiTietThiSinh }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.IdChiTietThiSinh })
+                        </td>
+                    </tr>
+                }
+            </table>
+            <div style="float: right">
+                <a class="btn btn-primary" href="@Url.Action("CongBo","Admin",new { id=Model.IdKyThi})">Công bố</a>
+            </div>
+        </div>
+</div>
+
+
+
+
+
+

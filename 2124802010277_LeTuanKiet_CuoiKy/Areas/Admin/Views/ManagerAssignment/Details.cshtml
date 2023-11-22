@@ -1,0 +1,138 @@
+﻿@model _2124802010277_LeTuanKiet_CuoiKy.Models.BaiTap
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    DataTiengAnhEntities db = new DataTiengAnhEntities();
+    NguoiDung tg = db.NguoiDungs.FirstOrDefault(item => item.MaKH == Model.TacGia);
+
+    List<ChiTietBaiTap> ct = ViewBag.ct;
+}
+
+<div class="page-wrapper">
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        @*Xây dựng nội dung ở đây*@
+        <h2>Details</h2>
+        <table class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col" style="color: white; font-weight: bold">Id</th>
+                    <th scope="col" style="color: white; font-weight: bold">Tên Bài Tập</th>
+                    <th scope="col" style="text-align: center; color: white; font-weight: bold">Số lượt nộp bài</th>
+                    <th scope="col" style="text-align: center; color: white; font-weight: bold">Điểm trung bình</th>
+                    <th scope="col" style="text-align: center; color: white; font-weight: bold">Ngày đăng</th>
+                    <th scope="col" style="text-align: center; color: white; font-weight: bold">Lượt xem</th>
+                    <th scope="col" style="text-align: center; color: white; font-weight: bold">Lượt thích</th>
+                    <th scope="col" style="text-align: center; color: white; font-weight: bold">Trạng Thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Html.DisplayFor(model => model.IdBaiTap)</td>
+                    <td>@Html.DisplayFor(model => model.TenBaiTap)</td>
+                    <td style="text-align: center"> @Html.DisplayFor(model => model.SoLuotNop)</td>
+                    <td style="text-align: center"> @Html.DisplayFor(model => model.DiemTrungBinh)</td>
+                    <td style="text-align: center"> @string.Format("{0:dd/MM/yyyy}", Model.NgayDang)</td>
+                    <td style="text-align: center"> @Html.DisplayFor(model => model.LuotXem)</td>
+                    <td style="text-align: center"> @Html.DisplayFor(model => model.LuotThich)</td>
+                    <td style="text-align: center">@Html.DisplayFor(model => model.TrangThai)</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="border: 1px solid; padding: 10px; max-width: 1100px">
+            <h4 style="font-weight: bold">Thông tin người đăng</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Họ tên
+                        </th>
+                        <th>
+                            Điện thoại
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Ngày sinh
+                        </th>
+                        <th style="text-align: center">
+                            Giới tính
+                        </th>
+                        <th style="text-align: center">
+                            Trang cá nhân
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @tg.HoTenKH
+                        </td>
+                        <td>
+                            @tg.DienThoaiKH
+                        </td>
+                        <td>
+                            @tg.Email
+                        </td>
+                        <td>
+                            @string.Format("{0:dd/MM/yyyy}", tg.NgaySinh)
+                        </td>
+                        <td style="text-align: center">
+                            @tg.GioiTinh
+                        </td>
+                        <td style="text-align: center">
+                            <a href="#">Link</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="">
+                <thead>
+                    <tr class="table-primary">
+                        <th scope="row" style="width: 220px">Câu hỏi</th>
+                        <th style="text-align: center; max-width: 160px;">Đáp án A</th>
+                        <th style="text-align: center; max-width: 160px;">Đáp án B</th>
+                        <th style="text-align: center; max-width: 160px;">Đáp án C</th>
+                        <th style="text-align: center; max-width: 160px;">Đáp án D</th>
+                        <th style="text-align: center; max-width: 160px;">Đáp án Đúng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ct)
+                    {
+                        <tr>
+                            <td>
+                                <input type="text" value="@item.Ques" style="width: 220px; height: 30px" />
+                            </td>
+                            <td style="text-align: center">
+                                <input type="text" value="@item.A" style="max-width: 160px; height: 30px" />
+                            </td>
+                            <td style="text-align: center">
+                                <input type="text" value="@item.B" style="max-width: 160px; height: 30px" />
+                            </td>
+                            <td style="text-align: center">
+                                <input type="text" value="@item.C" style="max-width: 160px; height: 30px" />
+                            </td>
+                            <td style="text-align: center">
+                                <input type="text" value="@item.D" style="max-width: 160px; height: 30px" />
+                            </td>
+                            <td style="text-align: center">
+                                <input type="text" value="@item.Ans" style="max-width: 160px; height: 30px" />
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.IdBaiTap }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </div>
+</div>
+        

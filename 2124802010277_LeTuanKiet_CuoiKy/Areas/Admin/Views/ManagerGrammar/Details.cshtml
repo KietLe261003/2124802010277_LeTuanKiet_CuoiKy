@@ -1,0 +1,113 @@
+﻿@model _2124802010277_LeTuanKiet_CuoiKy.Models.NguPhap
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    NguoiDung tg = ViewBag.TacGia;
+}
+<div class="page-wrapper">
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        @*Xây dựng nội dung ở đây*@
+
+        
+        <div>
+            <h4>Chi tiết ngữ pháp</h4>
+            <hr />
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col" style="color: white; font-weight: bold">Id</th>
+                        <th scope="col" style="color: white; font-weight: bold">Tên</th>
+                        <th scope="col" style="text-align: center; color: white; font-weight: bold">Lượt xem</th>
+                        <th scope="col" style="text-align: center; color: white; font-weight: bold">Lượt thích</th>
+                        <th scope="col" style="text-align: center; color: white; font-weight: bold">Ngày đăng</th>
+                        <th scope="col" style="text-align: center; color: white; font-weight: bold">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.IdNguPhap)</td>
+                        <td>@Html.DisplayFor(model => model.TenNguPhap)</td>
+                        <td style="text-align: center"> @Html.DisplayFor(model => model.LuotXem)</td>
+                        <td style="text-align: center"> @Html.DisplayFor(model => model.LuotThich)</td>
+                        <td style="text-align: center"> @string.Format("{0:dd/MM/yyyy}", Model.NgayDang)</td>
+                        <td style="text-align: center">@Html.DisplayFor(model => model.TrangThai)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="border: 1px solid; padding: 10px">
+                <h4 style="font-weight: bold">Thông tin người đăng</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Họ tên
+                            </th>
+                            <th>
+                                Điện thoại
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th>
+                                Ngày sinh
+                            </th>
+                            <th style="text-align: center">
+                                Giới tính
+                            </th>
+                            <th style="text-align: center">
+                                Trang cá nhân
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @tg.HoTenKH
+                            </td>
+                            <td>
+                                @tg.DienThoaiKH
+                            </td>
+                            <td>
+                                @tg.Email
+                            </td>
+                            <td>
+                                @string.Format("{0:dd/MM/yyyy}", tg.NgaySinh)
+                            </td>
+                            <td style="text-align: center">
+                                @tg.GioiTinh
+                            </td>
+                            <td style="text-align: center">
+                                <a href="#">Link</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.MoTaNgan)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.MoTaNgan)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.NoiDung)
+                </dt>
+
+                <div style="padding: 10px; background-color: white; flex: 0.8;">
+                    @Html.Raw(Model.NoiDung)
+                </div>
+            </dl>
+        </div>
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.IdNguPhap }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </div>
+</div>

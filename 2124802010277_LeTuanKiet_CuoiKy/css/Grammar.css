@@ -1,0 +1,108 @@
+﻿body {
+    background-color: #eee
+}
+.List-card{
+    display: flex;
+    flex-direction: row;
+}
+.card {
+    border: none;
+    border-radius: 10px;
+    width: 350px;
+    height: 400px;
+}
+
+.card:hover {
+    transform: scale(1.1);
+}
+
+.c-details span {
+    font-weight: 300;
+    font-size: 13px
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+    background-color: #eee;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 39px;
+    margin-right: 10px;
+}
+
+.badge span {
+    background-color: #fffbec;
+    width: 60px;
+    height: 25px;
+    padding-bottom: 3px;
+    border-radius: 5px;
+    display: flex;
+    color: #fed85d;
+    justify-content: center;
+    align-items: center
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px
+}
+
+.progress div {
+    background-color: red
+}
+
+.text1 {
+    font-size: 14px;
+    font-weight: 600
+}
+
+.text2 {
+    color: #a5aec0
+}
+
+.SmailDetail {
+    margin-top: 15px;
+    color: black;
+    min-height: 50px;
+    max-height: 200px;
+}
+
+
+/*Detail Grammar*/
+.ContainerDetailGrammar {
+    display: flex;
+    flex-direction: row;
+    padding: 20px 10px 20px 10px;
+    background-color: #eee;
+}
+
+div#navigation {
+    background: #F6F0E0;
+    flex: 0.2;
+    max-height: 1000px; 
+    overflow: auto;
+}
+
+div#navigation ul {
+    margin: 15px 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+div#navigation li {
+    margin-bottom: 5px;
+}
+#navigation > ul>a > li:hover {
+    background-color: #98f5ff;
+}
+
+
+div#extra {
+    padding: 10px;
+    background-color: white;
+    flex: 0.8;
+}
+/*Detail Grammar*/ 

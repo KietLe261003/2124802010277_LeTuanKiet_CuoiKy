@@ -1,0 +1,108 @@
+﻿@model IEnumerable<_2124802010277_LeTuanKiet_CuoiKy.Models.NguPhap>
+@{
+    ViewBag.Title = "ManagerUser";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+<div class="page-wrapper">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="page-breadcrumb bg-white">
+        <div class="row align-items-center">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <h4 class="page-title">Dashboard</h4>
+            </div>
+            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                <div class="d-md-flex">
+                    <ol class="breadcrumb ms-auto">
+                        <li><a href="#" class="fw-normal">Dashboard</a></li>
+                    </ol>
+                    <a href="https://www.wrappixel.com/templates/ampleadmin/" target="_blank"
+                       class="btn btn-danger  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
+                        Upgrade
+                        to Pro
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        @*Xây dựng nội dung ở đây*@
+
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.IdTacGia)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TenNguPhap)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MoTaNgan)
+                </th>
+                <th style="text-align: center">
+                    @Html.DisplayNameFor(model => model.LuotXem)
+                </th>
+                <th style="text-align: center">
+                    @Html.DisplayNameFor(model => model.LuotThich)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TrangThai)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NgayDang)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IdTacGia)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TenNguPhap)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MoTaNgan)
+                    </td>
+               
+                    <td style="text-align: center">
+                        @Html.DisplayFor(modelItem => item.LuotXem)
+                    </td>
+                    <td style="text-align: center">
+                        @Html.DisplayFor(modelItem => item.LuotThich)
+                    </td>
+                    <td>
+                        <select class="tri-state list-box">
+                            <option value="">Not Set</option>
+                            <option selected="selected" value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NgayDang)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.IdNguPhap }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.IdNguPhap }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.IdNguPhap })
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+    </div>
+</div>

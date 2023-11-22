@@ -1,0 +1,228 @@
+﻿@model _2124802010277_LeTuanKiet_CuoiKy.Models.KyThi
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@{
+    ViewBag.Title = "EditExams";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    List<CauHoi> LQuestion = ViewBag.DanhSachCauHoi;
+}
+
+<link rel="stylesheet" href="~/css/CreateExam.css" />
+<div class="page-wrapper">
+
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        @*Xây dựng nội dung ở đây*@
+
+        @using (Html.BeginForm("EditExams", "ManagerExams", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>KyThi</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.IdKyThi)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TenKyThi, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.TenKyThi, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TenKyThi, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div style="border: 2px solid; padding: 20px; border-radius: 5px; margin-bottom: 10px ">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Ngày thi</label>
+                        <div class="col-md-10">
+                            <input type="date" id="ngay" name="Ngay" class="NgayKyThi" value="@string.Format("{0:yyyy-MM-dd}",Model.Ngay.Value)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="content">
+                            <div class="column">
+                                <select name="Hour">
+                                    <option value="Hour" selected disabled hidden>@Model.Ngay.Value.Hour</option>
+                                </select>
+                            </div>
+                            <div class="column">
+                                <select name="Minute">
+                                    <option value="Minute" selected disabled hidden>@Model.Ngay.Value.Minute</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SoThiSinh, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.SoThiSinh, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SoThiSinh, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*Ngày Kết thúc*@
+                <div style="border: 2px solid; padding: 20px; border-radius: 5px ">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Ngày kết thúc</label>
+                        <div class="col-md-10">
+                            <input type="date" id="ngay" name="NgayKetThuc" class="NgayKyThi" value="@string.Format("{0:yyyy-MM-dd}",Model.NgayKetThuc.Value)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="content">
+                            <div class="column">
+                                <select name="HourEnd">
+                                    <option value="Hour" selected disabled hidden>@Model.NgayKetThuc.Value.Hour</option>
+                                </select>
+                            </div>
+                            <div class="column">
+                                <select name="MinuteEnd">
+                                    <option value="Minute" selected disabled hidden>@Model.NgayKetThuc.Value.Minute</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TinhTrang, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.TinhTrang)
+                            @Html.ValidationMessageFor(model => model.TinhTrang, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Exams">
+                    @for (int j = 0; j < LQuestion.Count(); j++)
+                    {
+                        <div id="Exam">
+                            <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                <div class="contenQ">
+                                    <label class="control-label col-md-12">Câu hỏi: </label>
+                                </div>
+                                <div class=" col-md-10" style="background-color: white;">
+                                    <input class="form-control" name="LQuestion[@j].TenCauHoi" value="@LQuestion[j].TenCauHoi" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                <div class="contenQ">
+                                    <label class="control-label col-md-12">Đáp án A: </label>
+                                </div>
+                                <div class="col-md-10" style="background-color: white;">
+                                    <input class="form-control" name="LQuestion[@j].DapAnA" value="@LQuestion[j].DapAnA" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                <div class="contenQ">
+                                    <label class="control-label col-md-12">Đáp án B: </label>
+                                </div>
+                                <div class="col-md-10" style="background-color: white;">
+                                    <input class="form-control" name="LQuestion[@j].DapAnB" value="@LQuestion[j].DapAnB" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                <div class="contenQ">
+                                    <label class="control-label col-md-12">Đáp án C: </label>
+                                </div>
+                                <div class="col-md-10" style="background-color: white;">
+                                    <input class="form-control" name="LQuestion[@j].DapAnC" value="@LQuestion[j].DapAnC" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                <div class="contenQ">
+                                    <label class="control-label col-md-12">Đáp án D: </label>
+                                </div>
+                                <div class="col-md-10" style="background-color: white;">
+                                    <input class="form-control" name="LQuestion[@j].DapAnD" value="@LQuestion[j].DapAnD" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                <div class="contenQ">
+                                    <label class="control-label col-md-12">Đáp án đúng: </label>
+                                </div>
+                                <div class="col-md-10" style="background-color: white;">
+                                    <input class="form-control" name="LQuestion[@j].DapAnDung" value="@LQuestion[j].DapAnDung" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="form-group" style="float: right">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <button class="btn btn-primary" onclick="ThemCauHoi()" style="float: right">Thêm câu hỏi</button>
+</div>
+
+@section Script{
+    <script>
+        var i = '@LQuestion.Count()';
+        i = parseInt(i);
+        i -= 1;
+        const currentTime = document.querySelector("h1"),
+            content = document.querySelector(".content"),
+            selectMenu = document.querySelectorAll("select"),
+            setAlarmBtn = document.querySelector("button");
+
+        for (let i = 24; i > 0; i--) {
+            i = i < 10 ? `0${i}` : i;
+            let option = `<option value="${i}">${i}</option>`;
+            selectMenu[0].firstElementChild.insertAdjacentHTML("afterend", option);
+            selectMenu[2].firstElementChild.insertAdjacentHTML("afterend", option);
+        }
+        selectMenu[0].value = '@Model.Ngay.Value.Hour';
+        selectMenu[2].value = '@Model.NgayKetThuc.Value.Hour';
+        for (let i = 59; i >= 0; i--) {
+            i = i < 10 ? `0${i}` : i;
+            let option = `<option value="${i}">${i}</option>`;
+            selectMenu[1].firstElementChild.insertAdjacentHTML("afterend", option);
+            selectMenu[3].firstElementChild.insertAdjacentHTML("afterend", option);
+        }
+        selectMenu[1].value = '@Model.Ngay.Value.Minute';
+        if (@Model.NgayKetThuc.Value.Minute== 0)
+        selectMenu[3].value = '00';
+        else
+        selectMenu[3].value = '@Model.NgayKetThuc.Value.Minute';
+        function ThemCauHoi() {
+
+            i += 1; // Tăng giá trị i lên 1
+
+            console.log("i sau khi tăng lên 1: " + i);
+
+            var examsForm = document.getElementById('Exams');
+            var examClone = document.getElementById('Exam').cloneNode(true);
+            var inputFields = examClone.getElementsByTagName('input');
+
+            // Cập nhật name của trường input để chứa giá trị mới của i
+            for (var j = 0; j < inputFields.length; j++) {
+                inputFields[j].name = "LQuestion[" + i + "]." + inputFields[j].name.split(".")[1];
+                inputFields[j].value = '';
+            }
+
+            // Thêm bản sao vào Exams
+            examsForm.appendChild(examClone);
+            console.log(examsForm);
+        }
+    </script>
+}
+
+
+
+
+
+
+

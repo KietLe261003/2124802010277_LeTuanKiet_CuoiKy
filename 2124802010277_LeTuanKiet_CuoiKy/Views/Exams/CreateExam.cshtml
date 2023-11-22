@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "CreateExam";
+}
+
+<div class="ContainerCreateExam">
+    <form action="~/Exams/CreateExam" method="post">
+        <div class="form-horizontal">
+            <h4>Thêm kỳ thi</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <label class="control-label col-md-2">Id Kỳ thi</label>
+                <div class="col-md-10">
+                    <input type="text" name="IdKyThi" class="IdKyThi" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">Tên kỳ thi</label>
+                <div class="col-md-10">
+                    <input type="text" name="TenKyThi" class="NameKyThi" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Ngày thi</label>
+                <div class="col-md-10">
+                    <input type="date" id="ngay" name="Ngay" class="NgayKyThi">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="content">
+                    <div class="column">
+                        <select name="Hour">
+                            <option value="Hour" selected disabled hidden>Hour</option>
+                        </select>
+                    </div>
+                    <div class="column">
+                        <select name="Minute">
+                            <option value="Minute" selected disabled hidden>Minute</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Tạo kỳ thi</button>
+        </div>
+    </form>
+</div>
+
+
+<script>
+    const currentTime = document.querySelector("h1"),
+    content = document.querySelector(".content"),
+    selectMenu = document.querySelectorAll("select"),
+    setAlarmBtn = document.querySelector("button");
+    for (let i = 24; i > 0; i--) {
+        i = i < 10 ? `0${i}` : i;
+        let option = `<option value="${i}">${i}</option>`;
+        selectMenu[0].firstElementChild.insertAdjacentHTML("afterend", option);
+    }
+
+    for (let i = 59; i >= 0; i--) {
+        i = i < 10 ? `0${i}` : i;
+        let option = `<option value="${i}">${i}</option>`;
+        selectMenu[1].firstElementChild.insertAdjacentHTML("afterend", option);
+    }
+</script>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

@@ -1,0 +1,59 @@
+﻿@model List<_2124802010277_LeTuanKiet_CuoiKy.Models.BaiTap>
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@{
+    ViewBag.Title = "ListAssi";
+    _2124802010277_LeTuanKiet_CuoiKy.Models.NguoiDung x = new _2124802010277_LeTuanKiet_CuoiKy.Models.NguoiDung();
+    DataTiengAnhEntities db = new DataTiengAnhEntities();
+
+
+    _2124802010277_LeTuanKiet_CuoiKy.Models.Pager p = new _2124802010277_LeTuanKiet_CuoiKy.Models.Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        p = ViewBag.Pager;
+        pageNo = p.CurrentPage;
+    }
+}
+<div class="ContainerExams">
+    <a href="@Url.Action("CreateAssignment","Assignments")" class="btn btn-outline-primary" style="float: right; margin-bottom: 10px">
+        Đăng bài tập
+    </a>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Tên Bài</th>
+                <th scope="col">Ngày Đăng</th>
+                <th scope="col">Tên tác giả</th>
+                <th scope="col" style="text-align: center">Điểm trung bình</th>
+                <th scope="col" style="text-align: center">Số lượt nộp bài</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                x = db.NguoiDungs.FirstOrDefault(n => n.MaKH == item.TacGia);
+                <tr>
+                    <th scope="row"><a href="@Url.Action("TangLuotXem","Assignments", new { id=item.IdBaiTap})">@item.TenBaiTap</a></th>
+                    <td class="DetailExams">@string.Format("{0:dd/MM/yyyy}", item.NgayDang)</td>
+                    <td class="DetailExams">@x.HoTenKH</td>
+                    <td class="DetailExams" style="text-align: center">@item.DiemTrungBinh</td>
+                    <td class="DetailExams" style="text-align: center">@item.SoLuotNop</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="container">
+        <ul class="pagination justify-content-end">
+            @for (int i = p.StartPage; i <= p.EndPage; i++)
+            {
+                <li class="page-item @(i==p.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="~/Assignments/ListAssi?pg=@i">@i</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+<script>
+
+</script>
+

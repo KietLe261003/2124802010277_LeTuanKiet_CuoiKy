@@ -1,0 +1,142 @@
+﻿@model List<_2124802010277_LeTuanKiet_CuoiKy.Models.KyThi>
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@{
+    ViewBag.Title = "Index";
+    DataTiengAnhEntities db = new DataTiengAnhEntities();
+    NguoiDung tmp = (NguoiDung)Session["TaiKhoan"];
+    _2124802010277_LeTuanKiet_CuoiKy.Models.Pager p = new _2124802010277_LeTuanKiet_CuoiKy.Models.Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        p = ViewBag.Pager;
+        pageNo = p.CurrentPage;
+    }
+}
+<div class="ContainerExams">
+    <table class="table">
+        Các kỳ thi sắp/đang diễn ra:
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Mã kỳ thi</th>
+                <th scope="col">Kỳ thi</th>
+                <th scope="col" style="text-align: center">Ngày</th>
+                <th scope="col" style="text-align: center">Giờ</th>
+                <th scope="col" style="text-align: center">Thời gian</th>
+                <th scope="col" style="text-align: center">Số thí sinh tham gia</th>
+                <th scope="col" style="text-align: center">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                if (DateTime.Now <= item.NgayKetThuc)
+                {
+                    <tr>
+                        <th scope="row">@item.IdKyThi</th>
+                        <th class="DetailExams"><a href="@Url.Action("ListQuestion","Exams",new { id = item.IdKyThi})">@item.TenKyThi</a></th>
+                        <td class="DetailExams" style="text-align: center">@string.Format("{0:dd/MM/yyyy}", item.Ngay)</td>
+                        @{
+                            var h = item.Ngay.Value.Hour;
+                            var m = item.Ngay.Value.Minute;
+                            string h1;
+                            var m1 = "";
+                            if (h == 0)
+                            {
+                                h1 = "12";
+                            }
+                            else
+                            {
+                                h1 = h.ToString();
+                            }
+                            if (h < 10)
+                            {
+                                h1 = "0" + h;
+                            }
+                            else
+                            {
+                                h1 = h.ToString();
+                            }
+                            if (m < 10)
+                            {
+                                m1 = "0" + m;
+                            }
+                            else
+                            {
+                                m1 = m.ToString();
+                            }
+                        }
+                        <td class="DetailExams" style="text-align: center">@h1:@m1</td>
+                        @{
+
+                            TimeSpan x = item.NgayKetThuc.Value - item.Ngay.Value;
+                            string formattedTimeSpan = string.Format("{0}d : {1}H : {2}M",
+                             x.Days, x.Hours, x.Minutes, x.Seconds);
+                        }
+                        <td class="DetailExams" style="text-align: center">@formattedTimeSpan</td>
+                        <td class="DetailExams" style="text-align: center">@item.SoThiSinh</td>
+                        <td style="text-align: center">
+                            @if (tmp != null && db.ChiTietThiSinhs.FirstOrDefault(item1 => item1.IdKyThi == item.IdKyThi && item1.IdThiSinh == tmp.MaKH) != null)
+                            {
+                                <button type="button" class="btn btn-success">Đã Đăng ký</button>
+                            }
+                            else
+                            {
+                                <a class="btn btn-primary" href="@Url.Action("DangKyThi","Exams",new { IdKyThi=item.IdKyThi})">
+                                    Đăng ký
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+
+            }
+        </tbody>
+    </table>
+    <table class="table">
+        Các kỳ thi đã diễn ra:
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Mã kỳ thi</th>
+                <th scope="col">Kỳ thi</th>
+                <th scope="col" style="text-align: center">Ngày</th>
+                <th scope="col" style="text-align: center">Giờ</th>
+                <th scope="col" style="text-align: center">Số thí sinh tham gia</th>
+                <th scope="col">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                if (item.NgayKetThuc < DateTime.Now)
+                {
+                    <tr>
+                        <th scope="col">@item.IdKyThi</th>
+                        <th class="DetailExams"><a href="@Url.Action("ListQuestion","Exams",new { id = item.IdKyThi})">@item.TenKyThi</a></th>
+                        <td class="DetailExams" style="text-align: center">@item.Ngay</td>
+                        <td class="DetailExams" style="text-align: center">@string.Format("{0:dd/MM/yyyy}", item.Ngay)</td>
+                        
+                        <td class="DetailExams" style="text-align: center">@db.ChiTietThiSinhs.Where(x=> x.IdKyThi==item.IdKyThi).ToList().Count()</td>
+                        <td>
+                            <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">
+                                Tham Gia lại
+                            </button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="container">
+        <ul class="pagination justify-content-end">
+            @for (int i = p.StartPage; i <= p.EndPage; i++)
+            {
+                <li class="page-item @(i==p.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="~/Exams/Index?pg=@i">@i</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+<script>
+    
+</script>

@@ -1,0 +1,142 @@
+﻿@model _2124802010277_LeTuanKiet_CuoiKy.Models.KyThi
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@{
+    ViewBag.Title = "EditExams";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+    List<CauHoi> LQuestion = ViewBag.DanhSachCauHoi;
+}
+
+<link rel="stylesheet" href="~/css/CreateExam.css"/>
+<div class="page-wrapper">
+
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        @*Xây dựng nội dung ở đây*@
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>KyThi</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.IdKyThi)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TenKyThi, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TenKyThi, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TenKyThi, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Ngay, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Ngay, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Ngay, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SoThiSinh, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SoThiSinh, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SoThiSinh, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NgayKetThuc, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.NgayKetThuc, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NgayKetThuc, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TinhTrang, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.TinhTrang)
+                        @Html.ValidationMessageFor(model => model.TinhTrang, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            @for (int i = 0; i < LQuestion.Count; i++)
+            {
+                <div id="Exams">
+                    <div id="Exam">
+                        <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                            <div class="contenQ">
+                                <label class="control-label col-md-12">Câu hỏi: </label>
+                            </div>
+                            <div class="col-md-10" style="background-color: white;">
+                                <input class="form-control" name="LQuestion[@i].TenCauHoi" value="@LQuestion[i].TenCauHoi" />
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                            <div class="contenQ">
+                                <label class="control-label col-md-12">Đáp án A: </label>
+                            </div>
+                            <div class="col-md-10" style="background-color: white;">
+                                <input class="form-control" name="LQuestion[@i].DapAnA" value="@LQuestion[i].DapAnA" />
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                            <div class="contenQ">
+                                <label class="control-label col-md-12">Đáp án B: </label>
+                            </div>
+                            <div class="col-md-10" style="background-color: white;">
+                                <input class="form-control" name="LQuestion[@i].DapAnB" value="@LQuestion[i].DapAnB" />
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                            <div class="contenQ">
+                                <label class="control-label col-md-12">Đáp án C: </label>
+                            </div>
+                            <div class="col-md-10" style="background-color: white;">
+                                <input class="form-control" name="LQuestion[@i].DapAnC" value="@LQuestion[i].DapAnC" />
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                            <div class="contenQ">
+                                <label class="control-label col-md-12">Đáp án D: </label>
+                            </div>
+                            <div class="col-md-10" style="background-color: white;">
+                                <input class="form-control" name="LQuestion[@i].DapAnD" value="@LQuestion[i].DapAnD" />
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                            <div class="contenQ">
+                                <label class="control-label col-md-12">Đáp án đúng: </label>
+                            </div>
+                            <div class="col-md-10" style="background-color: white;">
+                                <input class="form-control" name="LQuestion[@i].DapAnDung" value="@LQuestion[i].DapAnDung" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+
+
+
+
+
+

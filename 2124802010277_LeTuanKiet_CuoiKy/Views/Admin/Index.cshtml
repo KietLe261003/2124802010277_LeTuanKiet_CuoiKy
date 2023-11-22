@@ -1,0 +1,339 @@
+﻿@{
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+    var SoLuongNguPhap = ViewBag.SoLuongNguPhap;
+    var SoLuongBaiTap = ViewBag.SoLuongBaiTap;
+    var SoLuongKyThi = ViewBag.SoluongKyThi;
+
+    List<_2124802010277_LeTuanKiet_CuoiKy.Models.NguoiDung> Top10 = ViewBag.Top10;
+
+
+}
+
+<!-- Page wrapper  -->
+<!-- ============================================================== -->
+<div class="page-wrapper">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="page-breadcrumb bg-white">
+        <div class="row align-items-center">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <h4 class="page-title">Dashboard</h4>
+            </div>
+            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                <div class="d-md-flex">
+                    <ol class="breadcrumb ms-auto">
+                        <li><a href="#" class="fw-normal">Dashboard</a></li>
+                    </ol>
+                    <a href="https://www.wrappixel.com/templates/ampleadmin/" target="_blank"
+                       class="btn btn-danger  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
+                        Upgrade
+                        to Pro
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        <!-- ============================================================== -->
+        <!-- Three charts -->
+        <!-- ============================================================== -->
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-12">
+                <a href="~/Admin/ManagerGrammar">
+                    <div class="white-box analytics-info">
+                        <h3 class="box-title">Số lượng ngữ pháp</h3>
+                        <ul class="list-inline two-part d-flex align-items-center mb-0">
+                            <li>
+                                <div id="sparklinedash">
+                                    <canvas width="67" height="30"
+                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                                </div>
+                            </li>
+                            <li class="ms-auto"><span class="counter text-success">@SoLuongNguPhap</span></li>
+                        </ul>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <a href="~/Admin/ManagerAssignment">
+                    <div class="white-box analytics-info">
+                        <h3 class="box-title">Số lượng Bài tập</h3>
+                        <ul class="list-inline two-part d-flex align-items-center mb-0">
+                            <li>
+                                <div id="sparklinedash2">
+                                    <canvas width="67" height="30"
+                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                                </div>
+                            </li>
+                            <li class="ms-auto"><span class="counter text-purple">@SoLuongBaiTap</span></li>
+                        </ul>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <a href="~/Admin/ManagerExams">
+                    <div class="white-box analytics-info">
+                        <h3 class="box-title">Số các kỳ thi</h3>
+                        <ul class="list-inline two-part d-flex align-items-center mb-0">
+                            <li>
+                                <div id="sparklinedash3">
+                                    <canvas width="67" height="30"
+                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                                </div>
+                            </li>
+                            <li class="ms-auto">
+                                <span class="counter text-info">@SoLuongKyThi</span>
+                            </li>
+                        </ul>
+                    </div>
+                    </a>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- PRODUCTS YEARLY SALES -->
+        <!-- ============================================================== -->
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <div class="white-box">
+                    <h3 class="box-title">Thống kê các kỳ thi trong tháng qua</h3>
+                    
+                    <div>
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- RECENT SALES -->
+        <!-- ============================================================== -->
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <div class="d-md-flex mb-3">
+                        <h3 class="box-title mb-0">Top Thí sinh có điểm cao nhất hệ thống</h3>   
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table no-wrap">
+                            <thead>
+                                <tr>
+                                    <th class="border-top-0">Xếp hạng</th>
+                                    <th class="border-top-0">Tên</th>
+                                    <th class="border-top-0">Ngày Sinh</th>
+                                    <th class="border-top-0" style="text-align: center">Điểm</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 1; i <= Top10.Count; i++)
+                                {
+
+                                    <tr>
+                                        <td>@i</td>
+                                        <td class="txt-oflo">
+                                                
+                                                <a href="javascript:void(0)" class="d-flex align-items-center">
+                                                    <img src="@Top10[i-1].HinhDaiDien" alt="" class="img-circle" style="max-height: 40px; min-width: 40px">
+                                                    <div class="ms-2">
+                                                        <span class="text-dark">
+                                                            @Top10[i-1].HoTenKH 
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                        </td>
+                                        <td class="txt-oflo">@string.Format("{0:dd/MM/yyyy}", Top10[i-1].NgaySinh)</td>
+                                        <td style="text-align: center"><span class="text-success" >@Top10[i-1].DiemKyThi</span></td>
+                                    </tr>
+                                }
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- Recent Comments -->
+        <!-- ============================================================== -->
+        <div class="row">
+            <!-- .col -->
+            
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="card white-box p-0">
+                    <div class="card-heading">
+                        <h3 class="box-title mb-0">Chat Listing</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="chatonline">
+                            <li>
+                                <div class="call-chat">
+                                    <button class="btn btn-success text-white btn-circle btn" type="button">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                    <button class="btn btn-info btn-circle btn" type="button">
+                                        <i class="far fa-comments text-white"></i>
+                                    </button>
+                                </div>
+                                <a href="javascript:void(0)" class="d-flex align-items-center">
+                                    <img src="~/css/AdminPage/plugins/images/users/varun.jpg" alt="user-img" class="img-circle">
+                                    <div class="ms-2">
+                                        <span class="text-dark">
+                                            Varun Dhavan <small class="d-block text-success d-block">online</small>
+                                        </span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <div class="call-chat">
+                                    <button class="btn btn-success text-white btn-circle btn" type="button">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                    <button class="btn btn-info btn-circle btn" type="button">
+                                        <i class="far fa-comments text-white"></i>
+                                    </button>
+                                </div>
+                                <a href="javascript:void(0)" class="d-flex align-items-center">
+                                    <img src="~/css/AdminPage/plugins/images/users/genu.jpg" alt="user-img" class="img-circle">
+                                    <div class="ms-2">
+                                        <span class="text-dark">
+                                            Genelia
+                                            Deshmukh <small class="d-block text-warning">Away</small>
+                                        </span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <div class="call-chat">
+                                    <button class="btn btn-success text-white btn-circle btn" type="button">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                    <button class="btn btn-info btn-circle btn" type="button">
+                                        <i class="far fa-comments text-white"></i>
+                                    </button>
+                                </div>
+                                <a href="javascript:void(0)" class="d-flex align-items-center">
+                                    <img src="~/css/AdminPage/plugins/images/users/ritesh.jpg" alt="user-img" class="img-circle">
+                                    <div class="ms-2">
+                                        <span class="text-dark">
+                                            Ritesh
+                                            Deshmukh <small class="d-block text-danger">Busy</small>
+                                        </span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <div class="call-chat">
+                                    <button class="btn btn-success text-white btn-circle btn" type="button">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                    <button class="btn btn-info btn-circle btn" type="button">
+                                        <i class="far fa-comments text-white"></i>
+                                    </button>
+                                </div>
+                                <a href="javascript:void(0)" class="d-flex align-items-center">
+                                    <img src="~/css/AdminPage/plugins/images/users/arijit.jpg" alt="user-img" class="img-circle">
+                                    <div class="ms-2">
+                                        <span class="text-dark">
+                                            Arijit
+                                            Sinh <small class="d-block text-muted">Offline</small>
+                                        </span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <div class="call-chat">
+                                    <button class="btn btn-success text-white btn-circle btn" type="button">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                    <button class="btn btn-info btn-circle btn" type="button">
+                                        <i class="far fa-comments text-white"></i>
+                                    </button>
+                                </div>
+                                <a href="javascript:void(0)" class="d-flex align-items-center">
+                                    <img src="~/css/AdminPage/plugins/images/users/govinda.jpg" alt="user-img"
+                                         class="img-circle">
+                                    <div class="ms-2">
+                                        <span class="text-dark">
+                                            Govinda
+                                            Star <small class="d-block text-success">online</small>
+                                        </span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <div class="call-chat">
+                                    <button class="btn btn-success text-white btn-circle btn" type="button">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                    <button class="btn btn-info btn-circle btn" type="button">
+                                        <i class="far fa-comments text-white"></i>
+                                    </button>
+                                </div>
+                                <a href="javascript:void(0)" class="d-flex align-items-center">
+                                    <img src="~/css/AdminPage/plugins/images/users/hritik.jpg" alt="user-img" class="img-circle">
+                                    <div class="ms-2">
+                                        <span class="text-dark">
+                                            John
+                                            Abraham<small class="d-block text-success">online</small>
+                                        </span>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Container fluid  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <footer class="footer text-center">
+        2021 © Ample Admin brought to you by <a href="https://www.wrappixel.com/">wrappixel.com</a>
+    </footer>
+    <!-- ============================================================== -->
+    <!-- End footer -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Page wrapper  -->
+<!-- ============================================================== -->
+
+@section Script{
+    <script>
+        const ctx = document.getElementById('myChart');
+        var labels = @Html.Raw(Json.Encode(ViewBag.ChartMonth));
+        var data = @Html.Raw(Json.Encode(ViewBag.DtChartMonth));
+        console.log(data);
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '# Số lượng kỳ thi',
+                    data: data,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}
+

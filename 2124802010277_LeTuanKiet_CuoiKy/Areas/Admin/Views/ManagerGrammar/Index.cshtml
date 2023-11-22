@@ -1,0 +1,75 @@
+﻿@model IEnumerable<_2124802010277_LeTuanKiet_CuoiKy.Models.NguPhap>
+@{
+    ViewBag.Title = "ManagerUser";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="page-wrapper">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="page-breadcrumb bg-white">
+        <div class="row align-items-center">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <h4 class="page-title">Dashboard</h4>
+            </div>
+            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                <div class="d-md-flex" style="float: right">
+                    <select class="form-select-bg-size" aria-label="Default select example" id="Fillter">
+                        <option value="-1">Tất cả</option>
+                        <option value="0">Chưa duyệt</option>
+                        <option value="1">Đã duyệt</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        @*Xây dựng nội dung ở đây*@
+        <div id="ListGrammar">
+            @Html.Action("ListGrammar", "ManagerGrammar")
+        </div>
+    </div>
+</div>
+@section Script{
+    <script>
+        $('body').on('click', '.btnHot', function (e) {
+            e.preventDefault();
+            var btn = $(this);
+            var id = btn.data("id");
+            $.ajax({
+                url: '/Admin/ManagerGrammar/ActiveGrammar',
+                type: 'POST',
+                data: { id: id },
+                success: function (rs) {
+                    if (rs.success) {
+                        if (rs.isActive) {
+                            btn.html("<i class='fa fa-check text-success'></i>")
+                        }
+                        else {
+                            btn.html("<i class='fas fa-times text-danger'></i>")
+                        }
+                    }
+                }
+            });
+        });
+
+        document.getElementById('Fillter').addEventListener('change', function () {
+            var op = this.value;
+            $.ajax({
+                url: '/Admin/ManagerGrammar/ListGrammar',
+                type: 'GET',
+                data: { id: op },
+                success: function (data) {
+                    $("#ListGrammar").html(data);
+                },
+            });
+        });
+    </script>
+}

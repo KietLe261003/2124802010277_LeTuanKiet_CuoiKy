@@ -1,0 +1,30 @@
+﻿@model IEnumerable<int>
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@{ 
+    DataTiengAnhEntities db = new DataTiengAnhEntities();
+    var id = ViewBag.NowId;
+    int NowId = (int)id;
+}
+<ul class="list-unstyled mb-0">
+    @foreach (var item in Model)
+    {
+        var UserChat = db.Messages.FirstOrDefault(x => x.RoomId == item && x.IdNguoiDung != NowId);
+        var User = db.NguoiDungs.FirstOrDefault(x => x.MaKH == UserChat.IdNguoiDung);
+
+        if (User != null)
+        {
+            <li class="p-2 border-bottom" style="background-color: #eee;">
+                <a href="~/Chat/Index?id=@item" class="d-flex justify-content-between">
+                    <div class="d-flex flex-row">
+                        <img src="@User.HinhDaiDien" alt="avatar" 
+                             class="" style="min-height: 60px; max-height: 60px; min-width: 60px; max-width: 60px; border-radius: 30px; margin-right: 10px">
+                        <div class="pt-1">
+                            <p class="fw-bold mb-0">@User.HoTenKH</p>
+                            <p class="small text-muted">Hello, Are you there?</p>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        }
+    }
+</ul>

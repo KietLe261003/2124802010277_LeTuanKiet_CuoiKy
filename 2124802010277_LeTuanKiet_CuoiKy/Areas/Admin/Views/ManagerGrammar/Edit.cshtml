@@ -1,0 +1,134 @@
+﻿@model _2124802010277_LeTuanKiet_CuoiKy.Models.NguPhap
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    NguoiDung tg = ViewBag.TacGia;
+}
+<div class="page-wrapper">
+    <div class="container-fluid">
+        @*Xây dựng nội dung ở đây*@
+        <div>
+            <h4>Chi tiết ngữ pháp</h4>
+            <hr />
+            <form action="/Admin/ManagerGrammar/Edit" method="post">
+                <table class="table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col" style="color: white; font-weight: bold">Id</th>
+                            <th scope="col" style="color: white; font-weight: bold">Tên</th>
+                            <th scope="col" style="text-align: center; color: white; font-weight: bold">Lượt xem</th>
+                            <th scope="col" style="text-align: center; color: white; font-weight: bold">Lượt thích</th>
+                            <th scope="col" style="text-align: center; color: white; font-weight: bold">Ngày đăng</th>
+                            <th scope="col" style="text-align: center; color: white; font-weight: bold">Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Html.DisplayFor(model => model.IdNguPhap)</td>
+                            <td>@Html.DisplayFor(model => model.TenNguPhap)</td>
+                            <td style="text-align: center"> @Html.DisplayFor(model => model.LuotXem)</td>
+                            <td style="text-align: center"> @Html.DisplayFor(model => model.LuotThich)</td>
+                            <td style="text-align: center"> @string.Format("{0:dd/MM/yyyy}", Model.NgayDang)</td>
+                            <td style="text-align: center">
+                                <select name="TrangThai" class="tri-state list-box">
+                                    @if (Model.TrangThai == false)
+                                    {
+                                        <option value="true">True</option>
+                                        <option selected="selected" value="false">False</option>
+                                    }
+                                    else
+                                    {
+                                        <option selected="selected" value="true">True</option>
+                                        <option value="false">False</option>
+                                    }
+
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="border: 1px solid; padding: 10px">
+                    <h4 style="font-weight: bold">Thông tin người đăng</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Họ tên
+                                </th>
+                                <th>
+                                    Điện thoại
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                                <th>
+                                    Ngày sinh
+                                </th>
+                                <th style="text-align: center">
+                                    Giới tính
+                                </th>
+                                <th style="text-align: center">
+                                    Trang cá nhân
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    @tg.HoTenKH
+                                </td>
+                                <td>
+                                    @tg.DienThoaiKH
+                                </td>
+                                <td>
+                                    @tg.Email
+                                </td>
+                                <td>
+                                    @string.Format("{0:dd/MM/yyyy}", tg.NgaySinh)
+                                </td>
+                                <td style="text-align: center">
+                                    @tg.GioiTinh
+                                </td>
+                                <td style="text-align: center">
+                                    <a href="#">Link</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.MoTaNgan)
+                    </dt>
+
+                    <dd>
+                        <input class="form-control text-box single-line" name="MoTaNgan" type="text" value="@Model.MoTaNgan">
+                    </dd>
+                </dl>
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Nội dung</label>
+                    <textarea name="NoiDung" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Nhập nội dung">
+                        @Html.Raw(Model.NoiDung)
+                    </textarea>
+                    <input type="hidden" name="id" value="@Model.IdNguPhap" />
+                </div>
+                <div style="float: right">
+                    <button class="btn btn-primary" type="submit">Lưu</button>
+                </div>
+            </form>
+        </div>
+
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+
+    </div>
+</div>
+@section Script{
+    <script>
+        CKEDITOR.replace("NoiDung");
+    </script>
+}
+

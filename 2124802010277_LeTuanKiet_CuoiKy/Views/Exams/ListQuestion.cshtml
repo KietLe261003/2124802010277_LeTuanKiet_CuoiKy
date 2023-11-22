@@ -1,0 +1,234 @@
+﻿@model List<_2124802010277_LeTuanKiet_CuoiKy.Models.CauHoi>
+@using Newtonsoft.Json
+@{
+    ViewBag.Title = "Index";
+    _2124802010277_LeTuanKiet_CuoiKy.Models.BaiTap Bt = ViewBag.BaiTap;
+    var cauHoiList = Model.Select(cauHoi => new
+    {
+        cauHoi.IdBoCauHoi,
+        cauHoi.TenCauHoi,
+        cauHoi.DapAnA,
+        cauHoi.DapAnB,
+        cauHoi.DapAnC,
+        cauHoi.DapAnD,
+        cauHoi.DapAnDung,
+    }).ToList();
+
+    var cauHoiJson = Newtonsoft.Json.JsonConvert.SerializeObject(cauHoiList);
+    var IdKyThi = ViewBag.IdKyThi;
+}
+<div class="container mt-5">
+    <div class="d-flex justify-content-center row">
+        <div class="col-md-10 col-lg-10">
+            <div class="border">
+                <div class="question bg-white p-3 border-bottom">
+                    <div class="d-flex flex-row justify-content-between align-items-center mcq">
+                        <h4>Câu hỏi cho bài kiểm tra</h4><span id="IdQuestion"></span>
+                    </div>
+                </div>
+                <div class="question bg-white p-3 border-bottom">
+                    <div class="d-flex flex-row align-items-center question-title">
+                        <h3 class="text-danger">Q.</h3>
+                        <h5 class="mt-1 ml-2" id="Question"></h5>
+                    </div>
+                    <div style="display: flex; flex-direction: row; align-items: center; justify-content: center">
+                        <div class="ans ml-2">
+                            <label class="radio">
+                                <input type="radio" name="ans" id="valuA" onclick="ChooseUser()"> <span id="ansA"></span>
+                            </label>
+                        </div>
+                        <div class="ans ml-2">
+                            <label class="radio">
+                                <input type="radio" name="ans" id="valuB" onclick="ChooseUser()"> <span id="ansB"></span>
+                            </label>
+                        </div>
+                        <div class="ans ml-2">
+                            <label class="radio">
+                                <input type="radio" name="ans" id="valuC" onclick="ChooseUser()"> <span id="ansC"></span>
+                            </label>
+                        </div>
+                        <div class="ans ml-2">
+                            <label class="radio">
+                                <input type="radio" name="ans" id="valuD" onclick="ChooseUser()"> <span id="ansD"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-row justify-content-between align-items-center p-3 bg-white">
+                    <button class="btn btn-primary d-flex align-items-center btn-danger" type="button" onclick="getSelectAnswerPrevious()">
+                        <i class="fa fa-angle-left mt-1 mr-1"></i>&nbsp;previous
+                    </button>
+                    <button class="btn btn-primary border-success align-items-center btn-success" type="button" onclick="getSelectedAnswerNext()">
+                        Next<i class="fa fa-angle-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button onclick="End()" style="height: 50px; width: 150px; background-color: blue; float: right">
+    Nộp bài
+</button>
+@*<div class="container">
+
+        <div class="row">
+
+            <div class="four col-md-3">
+                <div class="counter-box colored">
+                    <i class="fa fa-thumbs-o-up"></i>
+                    <span class="counter">@Bt.LuotThich</span>
+                    <p>Lượt thích</p>
+                </div>
+            </div>
+            <div class="four col-md-3">
+                <div class="counter-box">
+                    <i class="fa fa-group"></i>
+                    <span class="counter">@Bt.LuotXem</span>
+                    <p>Lượt làm bài</p>
+                </div>
+            </div>
+            <div class="four col-md-3">
+                <div class="counter-box">
+                    <i class="fa  fa-shopping-cart"></i>
+                    <span class="counter">@Bt.DiemTrungBinh</span>
+                    <p>Điểm trung bình</p>
+                </div>
+            </div>
+            <div class="four col-md-3">
+                <div class="counter-box">
+                    <i class="fa  fa-user"></i>
+                    <span class="counter">1563</span>
+                    <p>Tỷ lệ >= 8</p>
+                </div>
+            </div>
+        </div>
+    </div>*@
+<script>
+    var id = 0;
+    var Lquestion = @Html.Raw(cauHoiJson);
+
+    var AnsUser = [];
+    var Point = [];
+    console.log("haha");
+    console.log(Lquestion);
+
+    @* set data cho html start *@
+    var Q = document.getElementById('Question').innerHTML = Lquestion[0].TenCauHoi;
+    var x = document.getElementById('ansA').innerHTML = Lquestion[0].DapAnA;
+    var y = document.getElementById('valuA').value = Lquestion[0].DapAnA;
+
+    var x1 = document.getElementById('ansB').innerHTML = Lquestion[0].DapAnB;
+    var y1 = document.getElementById('valuB').value = Lquestion[0].DapAnB;
+
+    var x2 = document.getElementById('ansC').innerHTML = Lquestion[0].DapAnC;
+    var y2 = document.getElementById('valuC').value = Lquestion[0].DapAnC;
+
+    var x3 = document.getElementById('ansD').innerHTML = Lquestion[0].DapAnD;
+    var y3 = document.getElementById('valuD').value = Lquestion[0].DapAnD;
+
+    var idQ = document.getElementById('IdQuestion').innerHTML = 1 + " of " + Lquestion.length;
+    @*set data cho html end*@
+
+    @*xử lý nút next và previous start*@
+    function getSelectedAnswerNext() {
+        var selectedAnswer = document.querySelector('input[name="ans"]:checked');
+        if (selectedAnswer) {
+            selectedAnswer.checked = false;
+        }
+
+        //Xóa background khi bấm nút tiếp theo
+        var labels = document.querySelectorAll('.radio');
+
+        // Thay đổi nền màu của các thẻ label thành màu trắng
+        for (var i = 0; i < labels.length; i++) {
+            labels[i].style.backgroundColor = 'white';
+            //console.log(labels[i]);
+        }
+        //Xét lại câu hỏi
+        if (id == Lquestion.length-1)
+            id = Lquestion.length-1;
+        else
+            id += 1;
+
+        //console.log(id);
+        var Q = document.getElementById('Question').innerHTML = Lquestion[id].TenCauHoi;
+        var x = document.getElementById('ansA').innerHTML = Lquestion[id].DapAnA;
+        var y = document.getElementById('valuA').value = Lquestion[id].DapAnA;
+        var x1 = document.getElementById('ansB').innerHTML = Lquestion[id].DapAnB;
+        var y1 = document.getElementById('valuB').value = Lquestion[id].DapAnB;
+        var x2 = document.getElementById('ansC').innerHTML = Lquestion[id].DapAnC;
+        var y2 = document.getElementById('valuC').value = Lquestion[id].DapAnC;
+        var x3 = document.getElementById('ansD').innerHTML = Lquestion[id].DapAnD;
+        var y3 = document.getElementById('valuD').value = Lquestion[id].DapAnD;
+        var idQ = document.getElementById('IdQuestion').innerHTML = id + 1 + " of " + Lquestion.length;
+        if (AnsUser[id] != null) {
+            var H = document.getElementById(AnsUser[id]);
+            H.checked = true;
+        }
+
+    }
+    function getSelectAnswerPrevious() {
+        var selectedAnswer = document.querySelector('input[name="ans"]:checked');
+        if (selectedAnswer) {
+            selectedAnswer.checked = false;
+        }
+
+        //Xóa background khi bấm nút tiếp theo
+        var labels = document.querySelectorAll('.radio');
+
+        // Thay đổi nền màu của các thẻ label thành màu trắng
+        for (var i = 0; i < labels.length; i++) {
+            labels[i].style.backgroundColor = 'white';
+            //console.log(labels[i]);
+        }
+        //Xét lại câu hỏi
+        if (id == 0)
+            id = 0;
+        else
+            id -= 1;
+        var Q = document.getElementById('Question').innerHTML = Lquestion[id].TenCauHoi;
+        var x = document.getElementById('ansA').innerHTML = Lquestion[id].DapAnA;
+        var y = document.getElementById('valuA').value = Lquestion[id].DapAnA;
+        var x1 = document.getElementById('ansB').innerHTML = Lquestion[id].DapAnB;
+        var y1 = document.getElementById('valuB').value = Lquestion[id].DapAnB;
+        var x2 = document.getElementById('ansC').innerHTML = Lquestion[id].DapAnC;
+        var y2 = document.getElementById('valuC').value = Lquestion[id].DapAnC;
+        var x3 = document.getElementById('ansD').innerHTML = Lquestion[id].DapAnD;
+        var y3 = document.getElementById('valuD').value = Lquestion[id].DapAnD;
+        var idQ = document.getElementById('IdQuestion').innerHTML = id + 1 + " of " + Lquestion.length;
+        if (AnsUser[id] != null) {
+            var H = document.getElementById(AnsUser[id]);
+            H.checked = true;
+        }
+    }
+    @* xử lý nút next và previous end *@
+
+    function ChooseUser() {
+        var selectedAnswer = document.querySelector('input[name="ans"]:checked');
+        if (selectedAnswer) {
+            AnsUser[id] = selectedAnswer.id;
+            Point[id] = selectedAnswer.value;
+        }
+    }
+
+    function End() {
+        var pointUser = 0;
+        var Wr = 0;
+        var ChuaLam = 0;
+        for (let i = 0; i < Lquestion.length; i++) {
+            //console.log(Point[i] + ' ' + Lquestion[i].DapAnDung);
+            if (Point[i] != null && Point[i] == Lquestion[i].DapAnDung) {
+                pointUser++;
+            }
+            if (Point[i] != null && Point[i] != Lquestion[i].DapAnDung) {
+                //console.log(Point[i] + ' ' + Lquestion[i].DapAnDung);
+                Wr++;
+                console.log(Point[i] + ' ' + Lquestion[i].DapAnDung);
+            }
+            if (Point[i] == null)
+                ChuaLam++;
+        }
+        window.location.href = '/Exams/ShowPoint?Acp=' + pointUser + '&Wr=' + Wr + '&AllQues=' + Lquestion.length + '&ChuaLam=' + ChuaLam;
+        //console.log(pointUser);
+    }
+</script>

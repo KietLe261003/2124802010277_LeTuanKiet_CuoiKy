@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "AddGrammar";
+}
+<div class="ContrainerAddGrammar"
+     style="
+        padding: 50px 30px 50px 30px;
+    ">
+    <form method="post">
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Tên ngữ pháp</label>
+            <input name="TenNguPhap" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Nhập tên loại kiến thức bạn muốn chia sẻ">
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Mô tả ngắn gọn</label>
+            <textarea name="MoTa" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Mô tả ngắn gọn kiến thức bạn muốn nói khoảng 40 chữ cái"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Nội dung</label>
+            <textarea name="NoiDung" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Nhập nội dung"></textarea>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3">Gửi</button>
+        </div>
+    </form>
+</div>
+@section scripts{
+    <script>
+        CKEDITOR.replace("NoiDung");
+    </script>
+}

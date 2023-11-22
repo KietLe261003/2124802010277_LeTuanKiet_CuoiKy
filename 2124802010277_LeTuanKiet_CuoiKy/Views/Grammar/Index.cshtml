@@ -1,0 +1,78 @@
+﻿@model List<_2124802010277_LeTuanKiet_CuoiKy.Models.NguPhap>
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@{
+    ViewBag.Title = "Index";
+    List<_2124802010277_LeTuanKiet_CuoiKy.Models.NguoiDung> TaiKhoan = ViewBag.TaiKhoan;
+    _2124802010277_LeTuanKiet_CuoiKy.Models.NguoiDung x = new _2124802010277_LeTuanKiet_CuoiKy.Models.NguoiDung();
+
+    Pager p = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        p = ViewBag.Pager;
+        pageNo = p.CurrentPage;
+    }
+}
+<div style="float: right">
+    <a class="btn btn-primary" href="~/Grammar/AddGrammar" role="button">Thêm tài liệu</a>
+</div>
+<div class="ContainerGrammar">
+    <div class="List-card">
+        <div class="container mt-5 mb-3">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    x = TaiKhoan.FirstOrDefault(n => n.MaKH == item.IdTacGia);
+                    if (x.HinhDaiDien == null)
+                    {
+                        x.HinhDaiDien = "~/images/logo.png";
+                    }
+                    <div class="col-md-4" style="margin-bottom: 15px;">
+                        <a href="@Url.Action("IncreaseView","Grammar", new { id =item.IdNguPhap})">
+                            <div class="card p-3 mb-2">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex flex-row align-items-center">
+                                        <div class="icon">
+                                            <img src="@x.HinhDaiDien" style="min-width: 50px; max-width: 50px; min-height: 50px; max-height: 50px; border-radius: 15px">
+                                        </div>
+                                        <div class="ms-2 c-details">
+                                            <h6 class="mb-0"> @x.HoTenKH</h6>
+                                            <span>@item.NgayDang</span>
+                                        </div>
+                                    </div>
+                                    <div class="badge"> <span>Tác giả</span> </div>
+                                </div>
+                                <p class="SmailDetail">
+                                    @item.MoTaNgan
+                                </p>
+                                <div class="mt-5">
+                                    <h3 class="heading" style="font-weight: bold;">@item.TenNguPhap</h3>
+                                    <div class="mt-5">
+                                        <div class="mt-3"> <span class="text1">@item.LuotXem lượt xem <span class="text2">@item.LuotThich lượt thích</span></span> </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container1">
+    <ul class="pagination" style="justify-content: center">
+        @for (int i = p.StartPage; i <= p.EndPage; i++)
+        {
+            <li class="page-item @(i==p.CurrentPage ? "active" : "")">
+                <a class="page-link" href="~/Grammar/Index?pg=@i">@i</a>
+            </li>
+        }
+    </ul>
+</div>
+@section scripts{
+    <script>
+        var ThongBaoThem = '@ViewBag.ThongBaoThem';
+        if (ThongBaoThem != "")
+            alert(ThongBaoThem);
+    </script>
+}

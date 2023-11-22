@@ -1,0 +1,77 @@
+﻿@model IEnumerable<_2124802010277_LeTuanKiet_CuoiKy.Models.ChiTietBaiTap>
+@{
+    ViewBag.Title = "ShowPoint";
+   
+    var Chosse = ViewBag.tmp;
+    List<string> Chosse1 = Chosse;
+}
+<div class="ContainerWait">
+    <div class="wrapper" style="margin-top: 50px">
+        <!-- <img src="./pngtree-alarm-clock-cartoon-cartoon-cartoon-alarm-clock-png-image_479554.jpg" alt="clock">
+        <h1 id="time">00:00:00 PM</h1> -->
+        <div class="card text-center">
+            <div class="card-header">Tổng điểm của bạn là @ViewBag.Diem</div>
+            <div class="card-body">
+                <h5 class="card-title">Tổng số câu hỏi: @ViewBag.SoCauHoi</h5>
+                <p class="card-text">Số câu đúng: @ViewBag.SoCauDung</p>
+                <p class="card-text">Số câu sai: @ViewBag.SoCauSai</p>
+                <p class="card-text">Số câu Chưa làm: @ViewBag.SoCauChuaLam</p>
+            </div>
+            <div class="card-footer text-muted">2 days ago</div>
+        </div>
+    </div>
+    <div style="margin-top: 20px; display: flex; flex-direction: column">
+        <h2>Đáp án</h2>
+        <table class="table align-middle mb-0 bg-white">
+            <thead class="bg-light">
+                <tr>
+                    <th>Câu hỏi</th>
+                    <th>Đáp án A</th>
+                    <th>Đáp án B</th>
+                    <th>Đáp án C</th>
+                    <th>Đáp án D</th>
+                    <th>Đáp án Đúng</th>
+                    <th>Đáp án Bạn chọn</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    var item = Model.ElementAt(i);
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">@item.Ques</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">@item.A</p>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">@item.B</p>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">@item.C</p>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">@item.D</p>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">@item.Ans</p>
+                        </td>
+                        @if (i < Chosse1.Count() && Chosse1[i] != "")
+                        {
+                            <td>@Chosse1[i]</td>
+                        }
+                        else
+                        {
+                            <td>Chưa làm </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

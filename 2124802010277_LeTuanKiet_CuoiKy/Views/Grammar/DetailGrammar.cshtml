@@ -1,0 +1,21 @@
+﻿@model _2124802010277_LeTuanKiet_CuoiKy.Models.NguPhap
+@{
+    ViewBag.Title = "DetailGrammar";
+    List<_2124802010277_LeTuanKiet_CuoiKy.Models.NguPhap> MucLuc = ViewBag.MucLuc;
+}
+<div class="ContainerDetailGrammar">
+    <div id="navigation" style="margin-right: 10px">
+        <p style="text-align: center"><strong>Mục lục</strong></p>
+        @Html.Action("MucLuc", "Grammar")
+    </div>
+    <div id="extra">
+        @Html.Raw(Model.NoiDung)
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var ul = $('#navigation ul');
+        ul.scrollTop(ul[0].scrollHeight);
+    });
+</script>

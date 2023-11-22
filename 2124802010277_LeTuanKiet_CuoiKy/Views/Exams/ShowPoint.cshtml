@@ -1,0 +1,21 @@
+﻿@model _2124802010277_LeTuanKiet_CuoiKy.Models.ChiTietThiSinh
+@{
+    ViewBag.Title = "ShowPoint";
+    int SoCauHoi=ViewBag.SoCauHoi;
+}
+<div class="ContainerWait">
+    <div class="wrapper">
+        <!-- <img src="./pngtree-alarm-clock-cartoon-cartoon-cartoon-alarm-clock-png-image_479554.jpg" alt="clock">
+    <h1 id="time">00:00:00 PM</h1> -->
+        <div class="card text-center">
+            <div class="card-header">Tổng điểm của bạn là @Model.Diem</div>
+            <div class="card-body">
+                <h5 class="card-title">Tổng số câu hỏi: @SoCauHoi</h5>
+                <p class="card-text">Số câu đúng: @Model.Dung</p>
+                <p class="card-text">Số câu sai: @Model.Sai</p>
+                <p class="card-text">Số câu Chưa làm: @Model.ChuaLam</p>
+            </div>
+            <div class="card-footer text-muted">2 days ago</div>
+        </div>
+    </div>
+</div>

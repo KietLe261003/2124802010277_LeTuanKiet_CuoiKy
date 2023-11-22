@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Wait";
+    var KiemTra = ViewBag.KiemTra;
+}
+<div class="ContainerWait">
+    <h2 style="color: black">Kỳ thi chưa bắt đầu vui lòng đợi</h2>
+    <div class="wrapper">
+            <img src="~/images/pngtree-alarm-clock-cartoon-cartoon-cartoon-alarm-clock-png-image_479554.jpg" alt="clock">
+            <h1 id="time">00:00:00 PM</h1>
+    </div>
+</div>
+@section scripts{
+    <script>
+        setInterval(() => {
+            console.log("Hhaha");
+            let date = new Date(),
+                h = date.getHours(),
+                m = date.getMinutes(),
+                s = date.getSeconds(),
+                ampm = "AM";
+            if (h >= 12) {
+                h = h - 12;
+                ampm = "PM";
+            }
+            h = h == 0 ? h = 12 : h;
+            h = h < 10 ? "0" + h : h;
+            m = m < 10 ? "0" + m : m;
+            s = s < 10 ? "0" + s : s;
+            let setTime = document.querySelector("h1");
+            setTime.innerHTML = `${h}:${m}:${s} ${ampm}`;
+        }, 1000);
+    </script>
+}
+
+

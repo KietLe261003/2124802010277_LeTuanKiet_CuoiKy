@@ -1,0 +1,118 @@
+﻿@model IEnumerable<_2124802010277_LeTuanKiet_CuoiKy.Models.NguoiDung>
+@{
+    ViewBag.Title = "ManagerUser";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+<div class="page-wrapper">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="page-breadcrumb bg-white">
+        <div class="row align-items-center">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <h4 class="page-title">Dashboard</h4>
+            </div>
+            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                <div class="d-md-flex">
+                    <ol class="breadcrumb ms-auto">
+                        <li><a href="#" class="fw-normal">Dashboard</a></li>
+                    </ol>
+                    <a href="https://www.wrappixel.com/templates/ampleadmin/" target="_blank"
+                       class="btn btn-danger  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
+                        Upgrade
+                        to Pro
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        @*Xây dựng nội dung ở đây*@
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.HoTenKH)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DiaChiKH)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DienThoaiKH)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TenDN)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MatKhau)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NgaySinh)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GioiTinh)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Admin)
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HoTenKH)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiaChiKH)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DienThoaiKH)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TenDN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MatKhau)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NgaySinh)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GioiTinh)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        <select class="tri-state list-box">
+                            <option value="">Not Set</option>
+                            <option value="true">True</option>
+                            <option selected="selected" value="false">False</option>
+                        </select>
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.MaKH }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.MaKH }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.MaKH })
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+
+    </div>
+</div>

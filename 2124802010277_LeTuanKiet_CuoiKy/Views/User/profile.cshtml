@@ -1,0 +1,51 @@
+﻿@model _2124802010277_LeTuanKiet_CuoiKy.Models.NguoiDung
+@{
+    ViewBag.Title = "profile";
+}
+<link rel="stylesheet" href="~/css/Profile.css" />
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img src="@Model.HinhDaiDien" class="rounded-3" style="width: 150px;"alt="Avatar" />
+                <span class="text-black-50"></span><span> </span></div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile Settings</h4>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels">Họ tên khách hàng</label><input type="text" class="form-control" placeholder="Họ tên khách hàng" value="@Model.HoTenKH"></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12"><label class="labels">Số điện thoại</label><input type="text" class="form-control" placeholder="enter phone number" value="@Model.DienThoaiKH"></div>
+                    <div class="col-md-12"><label class="labels">Địa chỉ</label><input type="text" class="form-control" placeholder="enter address line 1" value="@Model.DiaChiKH"></div>
+                    <div class="col-md-12"><label class="labels">Tên Đăng Nhập</label><input type="text" class="form-control" placeholder="enter address line 2" value="@Model.TenDN"></div>
+                    <div class="col-md-12"><label class="labels">Mật Khẩu</label><input type="text" class="form-control" placeholder="enter address line 2" value="@Model.MatKhau"></div>
+                    <div class="col-md-12"><label class="labels">Ngày Sinh</label><input type="text" class="form-control" placeholder="enter address line 2" value="@Model.NgaySinh"></div>
+                    <div class="col-md-12"><label class="labels">Địa chỉ Email</label><input type="text" class="form-control" placeholder="enter email id" value="@Model.Email"></div>
+                    @{ 
+                        var gt = (Model.GioiTinh == true) ? "Nam" : "Nữ";
+                     }
+                    <div class="col-md-12"><label class="labels">Giới tính</label><input type="text" class="form-control" placeholder="education" value="@gt"></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6"><label class="labels">Điểm trong mỗi kỳ thi</label><input type="text" class="form-control" placeholder="country" value=""></div>
+                    <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
+                </div>
+                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center experience"><span>Edit Experience</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br>
+                <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text" class="form-control" placeholder="experience" value=""></div> <br>
+                <div class="col-md-12"><label class="labels">Additional Details</label><input type="text" class="form-control" placeholder="additional details" value=""></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
