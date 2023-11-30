@@ -41,7 +41,7 @@
                 </tr>
             </tbody>
         </table>
-        <div style="border: 1px solid; padding: 10px; max-width: 1100px">
+        <div style="border: 1px solid; padding: 10px;">
             <h4 style="font-weight: bold">Thông tin người đăng</h4>
             <table class="table">
                 <thead>
@@ -84,49 +84,52 @@
                             @tg.GioiTinh
                         </td>
                         <td style="text-align: center">
-                            <a href="#">Link</a>
+                            <a href="~/User/profile?id=@tg.MaKH">Link</a>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <table class="">
-                <thead>
-                    <tr class="table-primary">
-                        <th scope="row" style="width: 220px">Câu hỏi</th>
-                        <th style="text-align: center; max-width: 160px;">Đáp án A</th>
-                        <th style="text-align: center; max-width: 160px;">Đáp án B</th>
-                        <th style="text-align: center; max-width: 160px;">Đáp án C</th>
-                        <th style="text-align: center; max-width: 160px;">Đáp án D</th>
-                        <th style="text-align: center; max-width: 160px;">Đáp án Đúng</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in ct)
-                    {
-                        <tr>
-                            <td>
-                                <input type="text" value="@item.Ques" style="width: 220px; height: 30px" />
-                            </td>
-                            <td style="text-align: center">
-                                <input type="text" value="@item.A" style="max-width: 160px; height: 30px" />
-                            </td>
-                            <td style="text-align: center">
-                                <input type="text" value="@item.B" style="max-width: 160px; height: 30px" />
-                            </td>
-                            <td style="text-align: center">
-                                <input type="text" value="@item.C" style="max-width: 160px; height: 30px" />
-                            </td>
-                            <td style="text-align: center">
-                                <input type="text" value="@item.D" style="max-width: 160px; height: 30px" />
-                            </td>
-                            <td style="text-align: center">
-                                <input type="text" value="@item.Ans" style="max-width: 160px; height: 30px" />
-                            </td>
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center">
+                <table class="" style="width: 100%; border-collapse: collapse; text-align: center">
+                    <thead>
+                        <tr class="table-primary">
+                            <th scope="row" style="width: 300px">Câu hỏi</th>
+                            <th style="text-align: center; max-width: 160px;">Đáp án A</th>
+                            <th style="text-align: center; max-width: 160px;">Đáp án B</th>
+                            <th style="text-align: center; max-width: 160px;">Đáp án C</th>
+                            <th style="text-align: center; max-width: 160px;">Đáp án D</th>
+                            <th style="text-align: center; max-width: 160px;">Đáp án Đúng</th>
                         </tr>
-                    }
+                    </thead>
+                    <tbody>
+                        @foreach (var item in ct)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="text" value="@item.Ques" style="width: 300px; height: 30px" />
+                                </td>
+                                <td style="text-align: center">
+                                    <input type="text" value="@item.A" style="max-width: 160px; height: 30px" />
+                                </td>
+                                <td style="text-align: center">
+                                    <input type="text" value="@item.B" style="max-width: 160px; height: 30px" />
+                                </td>
+                                <td style="text-align: center">
+                                    <input type="text" value="@item.C" style="max-width: 160px; height: 30px" />
+                                </td>
+                                <td style="text-align: center">
+                                    <input type="text" value="@item.D" style="max-width: 160px; height: 30px" />
+                                </td>
+                                <td style="text-align: center">
+                                    <input type="text" value="@item.Ans" style="max-width: 160px; height: 30px" />
+                                </td>
+                            </tr>
+                        }
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+            
         </div>
 
         <p>

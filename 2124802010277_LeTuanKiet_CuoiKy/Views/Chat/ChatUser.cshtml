@@ -1,0 +1,131 @@
+﻿@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@model IEnumerable<Message>
+@{
+    var Name = ViewBag.Name;
+    var Id = ViewBag.Id;
+    DataTiengAnhEntities db = new DataTiengAnhEntities();
+}
+@if (Model != null)
+{
+    <ul class="list-unstyled" style="max-height: 650px; max-height: 650px; overflow: auto" id="body-message">
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                if (item.IdNguoiDung == Id)
+                {
+                    <li class="d-flex justify-content-between mb-4">
+                        <div class="w-100 h-auto">
+                            <div class="card-header d-flex justify-content-between p-3">
+                                <p class="fw-bold mb-0">@Name</p>
+                                <p class="text-muted small mb-0"><i class="far fa-clock"></i> @item.Gio</p>
+                            </div>
+                            <div class="card-body" style="background-color: #87CEFA">
+                                <p class="mb-0">
+                                    @item.NoiDung
+                                </p>
+                            </div>
+                        </div>
+                        <img src="@db.NguoiDungs.FirstOrDefault(x=> x.MaKH==item.IdNguoiDung).HinhDaiDien" alt="avatar"
+                             style="min-height: 50px; max-height: 50px; min-width: 50px; max-width: 50px; border-radius: 20px; margin-left: 5px">
+                    </li>
+                }
+                else
+                {
+                    <li class="d-flex justify-content-between mb-4">
+                        <img src="@db.NguoiDungs.FirstOrDefault(x=> x.MaKH==item.IdNguoiDung).HinhDaiDien" alt="avatar"
+                             style="min-height: 50px; max-height: 50px; min-width: 50px; max-width: 50px; border-radius: 20px; margin-right: 5px">
+                        <div class="w-100 h-auto">
+                            <div class="card-header d-flex justify-content-between p-3">
+                                <p class="fw-bold mb-0">@db.NguoiDungs.FirstOrDefault(x => x.MaKH == item.IdNguoiDung).HoTenKH</p>
+                                <p class="text-muted small mb-0"><i class="far fa-clock"></i> @item.Gio</p>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">
+                                    @item.NoiDung
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+        }
+    </ul>
+    <div class="form-outline">
+        <input type="text" class="" id="txtMessage" rows="4" style="width: 93.8%; height: 40px" />
+        <button type="button" class="btn btn-info btn-rounded float-end" id="btnSend">Send</button>
+    </div>
+}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    var name = '@ViewBag.Name';
+    var IdUser = '@ViewBag.Id';
+    var Hinh = '@ViewBag.Hinh';
+    var IdRoom = '@ViewBag.IdRoom';
+    $(function () {
+    var chat = $.connection.Chat;
+    console.log(chat);
+    loadClient(chat);
+    $.connection.hub.start().done(function () {
+    chat.server.connect(name);
+    chat.server.joinRoom(IdRoom);
+    $('#btnSend').click(function () {
+    var mess = $('#txtMessage').val();
+    chat.server.message(name, mess, IdRoom, IdUser, Hinh);
+    $('#txtMessage').val('').focus('');
+    });
+    });
+
+    })
+    function scrollToBottom() {
+    var container = document.getElementById("body-message");
+    container.scrollTop = container.scrollHeight;
+    }
+    scrollToBottom();
+    function loadClient(chat) {
+    chat.client.message = function (name, msg,id,Img) {
+    var currentDate = new Date();  // Tạo đối tượng Date
+    var formattedDate = currentDate.toLocaleDateString();
+    if (id == IdUser) {
+    var ms = `<li class="d-flex justify-content-between mb-4">
+        <div class="w-100 h-auto">
+            <div class="card-header d-flex justify-content-between p-3">
+                <p class="fw-bold mb-0">`+ name + `</p>
+                <p class="text-muted small mb-0"><i class="far fa-clock"></i> `+ formattedDate + `</p>
+            </div>
+            <div class="card-body" style="background-color: #87CEFA">
+                <p class="mb-0">
+                    `+ msg + `
+                </p>
+            </div>
+        </div>
+        <img src="`+ Img + `" alt="avatar"
+             style="min-height: 50px; max-height: 50px; min-width: 50px; max-width: 50px; border-radius: 20px; margin-left: 5px">
+    </li>`;
+    console.log(ms);
+    $("#body-message").append(ms);
+    scrollToBottom();
+    }
+    else {
+    var ms = `<li class="d-flex justify-content-between mb-4">
+        <img src="`+ Img +`" alt="avatar"
+             style="min-height: 50px; max-height: 50px; min-width: 50px; max-width: 50px; border-radius: 20px; margin-right: 5px">
+        <div class="w-100 h-auto">
+            <div class="card-header d-flex justify-content-between p-3">
+                <p class="fw-bold mb-0">`+ name + `</p>
+                <p class="text-muted small mb-0"><i class="far fa-clock"></i> `+ formattedDate +`</p>
+            </div>
+            <div class="card-body">
+                <p class="mb-0">
+                    `+ msg +`
+                </p>
+            </div>
+        </div>
+    </li>`
+    console.log(ms);
+    $("#body-message").append(ms);
+    scrollToBottom();
+    }
+    };
+    }
+    </script>

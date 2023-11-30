@@ -1,9 +1,13 @@
 ﻿@model IEnumerable<_2124802010277_LeTuanKiet_CuoiKy.Models.NguPhap>
+@{ 
+    int i = 1;
+}
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
     <tr>
+        <th>ID</th>
         <th>
             @Html.DisplayNameFor(model => model.IdTacGia)
         </th>
@@ -28,6 +32,7 @@
     @foreach (var item in Model)
     {
         <tr>
+            <td>@item.IdNguPhap</td>
             <td>
                 @Html.DisplayFor(modelItem => item.IdTacGia)
             </td>
@@ -52,9 +57,21 @@
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.IdNguPhap }) |
                 @Html.ActionLink("Details", "Details", new { id = item.IdNguPhap }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.IdNguPhap })
+                <a href="#" onclick="DeleteGrammar(@item.IdNguPhap)" style="text-decoration: none; color: #2cabe3; ">Delete</a>
             </td>
         </tr>
     }
 
 </table>
+<script>
+    
+    function DeleteGrammar(id) {
+        var z = confirm("Bạn có muốn xóa hay không");
+        if (z) {
+            window.location.href = "Delete?id=" + id + "";
+        }
+        else {
+
+        }
+    }
+</script>

@@ -10,9 +10,9 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
     {
         DataTiengAnhEntities db = new DataTiengAnhEntities();
         // GET: Assignments
-        public ActionResult Index()
+        public ActionResult Index(int id)
         {
-            int id = (int)Session["Id"];
+            //int id = (int)Session["Id"];
             var x = db.BaiTaps.FirstOrDefault(item => item.IdBaiTap == id);
             List<ChiTietBaiTap> tmp = db.ChiTietBaiTaps.Where(item => item.IdBaiTap == id).ToList();
             ViewBag.BaiTap = x;
@@ -27,11 +27,20 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
                 x.LuotXem += 1;
                 db.SaveChanges();
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index",new { id=id});
         }
-        public ActionResult ListAssi(int pg=1)
+        public ActionResult ListAssi(string KeyWork,int pg=1)
         {
             List<BaiTap> ds = db.BaiTaps.ToList();
+            if(!String.IsNullOrEmpty(KeyWork))
+            {
+                int idbt=0;
+                if(int.TryParse(KeyWork, out int number))
+                {
+                    idbt = int.Parse(KeyWork);
+                }    
+                ds = db.BaiTaps.Where(item => item.TenBaiTap.Contains(KeyWork) || item.IdBaiTap==idbt).ToList();
+            }    
             const int pageSize = 20;
             if (pg < 1)
                 pg = 1;

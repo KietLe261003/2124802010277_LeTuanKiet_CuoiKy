@@ -5,10 +5,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var Name = ViewBag.Name;
     var Id = ViewBag.Id;
-    
+    int Menu = 0;
+    int TypeRoom = (int)ViewBag.TypeRoom;
+    if (ViewBag.Menu != null)
+    {
+        Menu = (int)ViewBag.Menu;
+    }
+    int IdBt = (int)ViewBag.IdBt;
     DataTiengAnhEntities db = new DataTiengAnhEntities();
 }
-<section style="background-color: #eee;min-height: 720px; max-height: 720px">
+<section style="background-color: #eee;min-height: 800px; max-height: 800px">
     <div class="">
         <div class="row">
             <div class="col-md-6 col-md-5 col-xl-3">
@@ -28,59 +34,40 @@
                             max-width: 350px;
                             ">
                     <div class="card-body">
-                        @Html.Action("ListRoom", "Chat")
+                        @Html.Action("ListRoom", "Chat", new { TypeRoom=TypeRoom})
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-7 col-xl-9" style="max-height: 700px; max-height: 700px;">
-                <ul class="list-unstyled" style="max-height: 650px; max-height: 650px; overflow: auto" id="body-message">
-                    @if (Model != null)
-                    {
-                        foreach (var item in Model)
-                        {
-                            if (item.IdNguoiDung == Id)
-                            {
-                                <li class="d-flex justify-content-between mb-4">
-                                    <div class="w-100 h-auto">
-                                        <div class="card-header d-flex justify-content-between p-3">
-                                            <p class="fw-bold mb-0">@Name</p>
-                                            <p class="text-muted small mb-0"><i class="far fa-clock"></i> @item.Gio</p>
-                                        </div>
-                                        <div class="card-body" style="background-color: #87CEFA">
-                                            <p class="mb-0">
-                                                @item.NoiDung
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <img src="@db.NguoiDungs.FirstOrDefault(x=> x.MaKH==item.IdNguoiDung).HinhDaiDien" alt="avatar"
-                                         style="min-height: 50px; max-height: 50px; min-width: 50px; max-width: 50px; border-radius: 20px; margin-left: 5px">
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="d-flex justify-content-between mb-4">
-                                    <img src="@db.NguoiDungs.FirstOrDefault(x=> x.MaKH==item.IdNguoiDung).HinhDaiDien" alt="avatar"
-                                         style="min-height: 50px; max-height: 50px; min-width: 50px; max-width: 50px; border-radius: 20px; margin-right: 5px">
-                                    <div class="w-100 h-auto">
-                                        <div class="card-header d-flex justify-content-between p-3">
-                                            <p class="fw-bold mb-0">@db.NguoiDungs.FirstOrDefault(x => x.MaKH == item.IdNguoiDung).HoTenKH</p>
-                                            <p class="text-muted small mb-0"><i class="far fa-clock"></i> @item.Gio</p>
-                                        </div>
-                                        <div class="card-body">
-                                            <p class="mb-0">
-                                                @item.NoiDung
-                                            </p>
-                                        </div>
-                                    </div>
-                                </li>
-                            }
-                        }
-                    }
-                </ul>
-                <div class="form-outline">
-                    <input type="text" class="" id="txtMessage" rows="4" style="width: 93.8%; height: 40px" />
-                    <button type="button" class="btn btn-info btn-rounded float-end" id="btnSend">Send</button>
-                </div>
+            
+            <div class="col-md-6 col-lg-7 col-xl-9" style="max-height: 800px; max-height: 800px;">
+                @if (TypeRoom == 2)
+                {
+                    <ul class="nav justify-content-center nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="~/Chat/Index?Menu=1&id=@ViewBag.IdRoom&TypeRoom=@TypeRoom">Chat</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Chat/Index?Menu=2&id=@ViewBag.IdRoom&TypeRoom=@TypeRoom">Bài tập</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Điểm</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#">Tệp</a>
+                        </li>
+                    </ul>
+                }
+
+                @if (Menu == 1)
+                {
+                    @Html.Action("ChatUser", "Chat", new {IdRoom=ViewBag.IdRoom ,tmp = Model })
+                }
+                else
+                {
+                    @Html.Action("BaiTap", "Chat", new {RoomId=ViewBag.IdRoom, IdBt=IdBt })
+                }
+
+
             </div>
         </div>
     </div>
@@ -89,69 +76,11 @@
 
 @section scripts{
     <script>
-        var name = '@ViewBag.Name';
-        var IdUser = '@ViewBag.Id';
-        var Hinh = '@ViewBag.Hinh';
-        var IdRoom = '@ViewBag.IdRoom';
-        $(function () {
-            var chat = $.connection.Chat;
-            console.log(chat);
-            loadClient(chat);
-            $.connection.hub.start().done(function () {
-                chat.server.connect(name);
-                chat.server.joinRoom(IdRoom);
-                $('#btnSend').click(function () {
-                    var mess = $('#txtMessage').val();
-                    chat.server.message(name, mess, IdRoom, IdUser, Hinh);
-                    $('#txtMessage').val('').focus('');
-                });
-            });
-
-        })
-
-        function loadClient(chat) {
-            chat.client.message = function (name, msg,id,Img) {
-                var currentDate = new Date();  // Tạo đối tượng Date
-                var formattedDate = currentDate.toLocaleDateString();
-                if (id == IdUser) {
-                    var ms = `<li class="d-flex justify-content-between mb-4">
-                                    <div class="w-100 h-auto">
-                                        <div class="card-header d-flex justify-content-between p-3">
-                                            <p class="fw-bold mb-0">`+ name + `</p>
-                                            <p class="text-muted small mb-0"><i class="far fa-clock"></i> `+ formattedDate + `</p>
-                                        </div>
-                                        <div class="card-body" style="background-color: #87CEFA">
-                                            <p class="mb-0">
-                                                `+ msg + `
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <img src="`+ Img + `" alt="avatar"
-                                         style="min-height: 50px; max-height: 50px; min-width: 50px; max-width: 50px; border-radius: 20px; margin-left: 5px">
-                                </li>`;
-                    console.log(ms);
-                    $("#body-message").append(ms);
-                }
-                else {
-                    var ms = `<li class="d-flex justify-content-between mb-4">
-                                    <img src="`+ Img +`" alt="avatar"
-                                         style="min-height: 50px; max-height: 50px; min-width: 50px; max-width: 50px; border-radius: 20px; margin-right: 5px">
-                                    <div class="w-100 h-auto">
-                                        <div class="card-header d-flex justify-content-between p-3">
-                                            <p class="fw-bold mb-0">`+ name + `</p>
-                                            <p class="text-muted small mb-0"><i class="far fa-clock"></i> `+ formattedDate +`</p>
-                                        </div>
-                                        <div class="card-body">
-                                            <p class="mb-0">
-                                               `+ msg +`
-                                            </p>
-                                        </div>
-                                    </div>
-                                </li>`
-                    console.log(ms);
-                    $("#body-message").append(ms);
-                }
-            };
-        }
+        CKEDITOR.replace('NoiDung', {
+             width: ['100%'], height: ['450px']
+        });
+        CKEDITOR.replace('NoiDung1', {
+            width: ['100%'], height: ['450px']
+        });
     </script>
 }

@@ -13,11 +13,20 @@
         pageNo = p.CurrentPage;
     }
 }
-<div style="float: right">
-    <a class="btn btn-primary" href="~/Grammar/AddGrammar" role="button">Thêm tài liệu</a>
-</div>
 <div class="ContainerGrammar">
-    <div class="List-card">
+    <div style="display: flex; flex-direction: row-reverse; margin-bottom: 15px">
+        <a href="~/Grammar/AddGrammar" class="btn btn-outline-primary" style="margin-left: 20px; height: 45px; display: flex; align-items: center; justify-content: center">
+            Thêm tài liệu
+        </a>
+        <form class="input-group" style="display: flex; flex-direction: row-reverse">
+            <button type="submit" class="btn btn-outline-primary" data-mdb-ripple-init
+                    style="height: 45px; border-radius: 5px">
+                search
+            </button>
+            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="KeyWork" style="max-width: 30%" />
+        </form>
+    </div>
+    <div class="List-card" style="padding-left: 5%">
         <div class="container mt-5 mb-3">
             <div class="row">
                 @foreach (var item in Model)

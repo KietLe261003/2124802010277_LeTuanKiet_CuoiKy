@@ -1,0 +1,268 @@
+﻿@model IEnumerable<_2124802010277_LeTuanKiet_CuoiKy.Models.BaiTapRoom>
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@{ 
+    DataTiengAnhEntities db = new DataTiengAnhEntities();
+    int IdRoom = (int)ViewBag.RoomId;
+    int i = 0;
+    int IdBaiTap = (int)ViewBag.IdBaiTap;
+}
+
+<style>
+    .list-group-item{
+        margin-bottom: 10px;
+        height: 70px;
+    }
+    div#container {
+        text-align: left
+    }
+    div#navigation {
+        background: #F6F0E0;
+    }
+
+    div#navigation ul {
+        margin: 15px 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    div#navigation li {
+        margin-bottom: 5px;
+    }
+
+    div#extra {
+        background: #CCC8B3;
+    }
+    div#container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+
+    div#wrapper {
+       flex: 55%;
+    }
+    div#content {
+        margin: 0 20px
+    }
+    div#navigation {
+       flex: 15%;
+    }
+    div#extra {
+        flex: 30%;
+    }
+</style>
+<div>
+    <a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true" style="margin-bottom: 30px" id="BtnCreate">Tạo bài tập</a>
+    <div class="list-group list-group-light">
+        @foreach (var item in Model)
+        {
+            BaiTapRoom tmp = item;
+            <a href="~/Chat/Index?Menu=2&id=@IdRoom&TypeRoom=2&IdBt=@item.IdBTRoom" class="list-group-item list-group-item-action px-3 border-0 active" aria-current="true">
+                @item.Ten
+            </a>
+        }
+    </div>
+</div>
+@if(IdBaiTap!=0)
+{
+    var Btr = db.BaiTapRooms.FirstOrDefault(item => item.IdBTRoom == IdBaiTap);
+    <div class="modal" id="BaiTap">
+        <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center">
+            <div class="" style="width: 70%">
+                <div class="modal-content">
+                    <form action="@Url.Action("ThemBaiTap", "Chat")" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="IdRoom" value="@IdRoom" />
+                        <div class="modal-header">
+                            <h5 class="modal-title">Bài tập</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" style="height: 700px">
+                            <div id="container">
+                                <div id="navigation">
+                                    <p><strong>Đính kèm file</strong></p>
+                                    <ul>
+                                        @{
+                                            List<FileMotaBtRoom> fl = db.FileMotaBtRooms.Where(x => x.IdBtRoom == Btr.IdBTRoom).ToList();
+                                            if (fl != null)
+                                            {
+                                                foreach (var x in fl)
+                                                {
+                                                    var UrlTuongDoi = "/File/OtherFile/";
+                                                    int end = x.File.Length;
+                                                    int start = UrlTuongDoi.Length;
+                                                    string fileName = x.File.Substring(start, end - start);
+                                                    <li>
+                                                        <a href="@Url.Action("DownloadFile","Chat", new { filename=x.File})">@fileName</a>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                                <div id="wrapper">
+                                    <div class="form-group" style="padding: 0 20px">
+                                        <label style="font-weight: bold">Tên Bài Tập</label>
+                                        <input type="text" disabled name="Ten" class="form-control" value="@Btr.Ten">
+                                    </div>
+                                    <div class="form-group" id="content" style="height: 100%">
+                                        <p><strong>Nội dung và mô tả</strong></p>
+                                        <textarea name="NoiDung1" disabled class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Nhập nội dung" style="height: 100%">
+                                            @Html.Raw(Btr.NoiDungBaiTap)
+                                        </textarea>
+                                    </div>
+                                </div>
+                                <div id="extra">
+                                    <p><strong>Cài đặt</strong></p>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Ngày Bắt Đầu</label>
+                                            <input type="text" disabled name="DateStart" class="form-control" value="@string.Format("{0:yyyy-MM-dd HH:mm:ss}", Btr.NgayBatDau)">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Hạn Chót</label>
+                                            <input type="text" disabled name="DateStart" class="form-control" value="@string.Format("{0:yyyy-MM-dd HH:mm:ss}", Btr.NgayKetThuc)">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <input type="file" multiple class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="BtnClose1">Close</button>
+                            <button type="submit" class="btn btn-primary">Nộp bài</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function ShowBaiTap() {
+            var bt = document.getElementById('BaiTap');
+            bt.style.display='block';
+        }
+        ShowBaiTap();
+        document.getElementById('BtnClose1').addEventListener('click', function () {
+            var bt = document.getElementById('BaiTap');
+            bt.style.display = 'none';
+        });
+    </script>
+}
+
+<div class="modal">
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center">
+        <div class="" style="width: 70%">
+            <div class="modal-content">
+                <form action="@Url.Action("ThemBaiTap","Chat")" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="IdRoom" value="@IdRoom" />
+                    <div class="modal-header">
+                        <h5 class="modal-title">Bài tập</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" style="height: 700px">
+                        <div id="container">
+                            <div id="navigation">
+                                <p><strong>Đính kèm file</strong></p>
+                                <ul>
+                                    <li><input type="file" name="fileList[@i]" value="" /></li>
+                                    <li>
+                                        <button type="button" class="btn btn-primary" style="width: 100%">+</button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div id="wrapper">
+                                <div class="form-group" style="padding: 0 20px">
+                                    <label style="font-weight: bold">Tên Bài Tập</label>
+                                    <input type="text" name="Ten" class="form-control">
+                                </div>
+                                <div class="form-group" id="content" style="height: 100%">
+                                    <p><strong>Nội dung và mô tả</strong></p>
+                                    <textarea name="NoiDung" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Nhập nội dung" style="height: 100%"></textarea>
+                                </div>
+                            </div>
+                            <div id="extra">
+                                <p><strong>Cài đặt</strong></p>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label style="font-weight: bold">Ngày Bắt Đầu</label>
+                                        <input type="date" name="DateStart" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="content" style="width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: center">
+                                            <div class="column">
+                                                <select name="HourStart">
+                                                    <option value="Hour" selected disabled hidden>Hour</option>
+                                                </select>
+                                            </div>
+                                            <div class="column">
+                                                <select name="MinuteStart">
+                                                    <option value="Minute" selected disabled hidden>Minute</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label style="font-weight: bold">Hạn Chót</label>
+                                        <input type="date" name="DateEnd" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="content" style="width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: center">
+                                            <div class="column">
+                                                <select name="HourEnd">
+                                                    <option value="Hour" selected disabled hidden>Hour</option>
+                                                </select>
+                                            </div>
+                                            <div class="column">
+                                                <select name="MinuteEnd">
+                                                    <option value="Minute" selected disabled hidden>Minute</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="BtnClose">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var btn = document.getElementById('BtnCreate');
+    btn.addEventListener('click', function () {
+        $('.modal').show();
+    });
+    document.getElementById('BtnClose').addEventListener('click', function () {
+        $('.modal').hide();
+    });
+    var i = 0;
+    var selectMenu = document.querySelectorAll("select");
+    console.log(selectMenu);
+    for (let i = 24; i > 0; i--) {
+        i = i < 10 ? `0${i}` : i;
+        let option = `<option value="${i}">${i}</option>`;
+        selectMenu[0].firstElementChild.insertAdjacentHTML("afterend", option);
+        selectMenu[2].firstElementChild.insertAdjacentHTML("afterend", option);
+    }
+
+    for (let i = 59; i >= 0; i--) {
+        i = i < 10 ? `0${i}` : i;
+        let option = `<option value="${i}">${i}</option>`;
+        selectMenu[1].firstElementChild.insertAdjacentHTML("afterend", option);
+        selectMenu[3].firstElementChild.insertAdjacentHTML("afterend", option);
+    }
+</script>

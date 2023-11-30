@@ -1,0 +1,155 @@
+﻿@model _2124802010277_LeTuanKiet_CuoiKy.Models.BaiTapRoom
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@{ 
+    DataTiengAnhEntities db = new DataTiengAnhEntities();
+    int IdRoom = ViewBag.IdRoom;
+    //var i = 0;
+}
+<style>
+    .list-group-item {
+        margin-bottom: 10px;
+        height: 70px;
+    }
+
+    div#container {
+        text-align: left
+    }
+
+    div#navigation {
+        background: #F6F0E0;
+    }
+
+        div#navigation ul {
+            margin: 15px 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        div#navigation li {
+            margin-bottom: 5px;
+        }
+
+    div#extra {
+        background: #CCC8B3;
+    }
+
+    div#container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+
+    div#wrapper {
+        flex: 55%;
+    }
+
+    div#content {
+        margin: 0 20px
+    }
+
+    div#navigation {
+        flex: 15%;
+    }
+
+    div#extra {
+        flex: 30%;
+    }
+</style>
+<div class="modal">
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center">
+        <div class="" style="width: 70%">
+            <div class="modal-content">
+                <form action="@Url.Action("ThemBaiTap", "Chat")" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="IdRoom" value="@IdRoom" />
+                    <div class="modal-header">
+                        <h5 class="modal-title">Bài tập</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" style="height: 700px">
+                        <div id="container">
+                            <div id="navigation">
+                                <p><strong>Đính kèm file</strong></p>
+                                <ul>
+                                    @{
+                                        List<FileMotaBtRoom> fl = db.FileMotaBtRooms.Where(x => x.IdBtRoom == Model.IdBTRoom).ToList();
+                                        if (fl != null)
+                                        {
+                                            foreach (var x in fl)
+                                            {
+                                                var UrlTuongDoi = "/File/OtherFile/";
+                                                int end = x.File.Length;
+                                                int start = UrlTuongDoi.Length;
+                                                string fileName = x.File.Substring(start, end - start);
+                                                <li>
+                                                    <a href="@Url.Action("DownloadFile","Chat")">@fileName</a>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                            <div id="wrapper">
+                                <div class="form-group" style="padding: 0 20px">
+                                    <label style="font-weight: bold">Tên Bài Tập</label>
+                                    <input type="text" disabled name="Ten" class="form-control">
+                                </div>
+                                <div class="form-group" id="content" style="height: 100%">
+                                    <p><strong>Nội dung và mô tả</strong></p>
+                                    <textarea name="NoiDung" disabled class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Nhập nội dung" style="height: 100%">
+                                        @Html.Raw(Model.NoiDungBaiTap)
+                                    </textarea>
+                                </div>
+                            </div>
+                            <div id="extra">
+                                <p><strong>Cài đặt</strong></p>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label style="font-weight: bold">Ngày Bắt Đầu</label>
+                                        <input type="text" disabled name="DateStart" class="form-control" value="@string.Format("{0:dd/MM/yyyy}", Model.NgayBatDau)">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="content" style="width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: center">
+                                            <div class="column">
+                                                <input value="@Model.NgayBatDau.Value.Hour"/>
+                                            </div>
+                                            <div class="column">
+                                                <input value="@Model.NgayBatDau.Value.Minute" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label style="font-weight: bold">Hạn Chót</label>
+                                        <input type="text" disabled name="DateStart" class="form-control" value="@string.Format("{0:dd/MM/yyyy}", Model.NgayKetThuc)">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="content" style="width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: center">
+                                            <div class="column">
+                                                <input value="@Model.NgayKetThuc.Value.Hour" />
+                                            </div>
+                                            <div class="column">
+                                                 <input value="@Model.NgayKetThuc.Value.Minute" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="BtnClose">Close</button>
+                        <button type="submit" class="btn btn-primary">Nộp bài</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.modal').show();
+    document.getElementById('BtnClose').addEventListener('click', function () {
+        $('.modal').hide();
+    });
+</script>

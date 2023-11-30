@@ -6,10 +6,10 @@
 
 }
 <h4 style="color: red">@bug</h4>
-<div style="padding: 50px 30px 50px 30px;">
-    @using (Html.BeginForm("CreateAssignment", "Assignments", FormMethod.Post, new { style = "margin-left: 120px;" } ))
+<div style="">
+    @using (Html.BeginForm("CreateAssignment", "Assignments", FormMethod.Post, new { style = "" } ))
     {
-        <div class="form-group">
+        <div class="form-group" style="display: flex; flex-direction: column; margin-left: 150px">
             <label class="control-label col-md-2">
                 Tên bài tập
             </label>
@@ -17,46 +17,49 @@
                 <input class="form-control" name="TenBaiTap" value="@TenBaiTap"/>
             </div>
         </div>
-        <table>
-            <!-- Thêm các dòng và cột cho bảng của bạn -->
-            <tr>
-                <th>STT</th>
-                <th>Câu hỏi</th>
-                <th>Đáp án A</th>
-                <th>Đáp án B</th>
-                <th>Đáp án C</th>
-                <th>Đáp án D</th>
-                <th>Câu trả lời</th>
-            </tr>
-            @for (int i = 0; i < 50; i++)
-            {
-                if (i<Model.Count)
+        <div class="form-group" style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 50px">
+            <table width="100%" >
+                <!-- Thêm các dòng và cột cho bảng của bạn -->
+                <tr>
+                    <th>STT</th>
+                    <th>Câu hỏi</th>
+                    <th>Đáp án A</th>
+                    <th>Đáp án B</th>
+                    <th>Đáp án C</th>
+                    <th>Đáp án D</th>
+                    <th>Câu trả lời</th>
+                </tr>
+                @for (int i = 0; i < 50; i++)
                 {
-                    <tr>
-                        <td>@i</td>
-                        <td><input type="text" name="ListCauHoi[@i].Ques" value="@Model[i].Ques" /></td>
-                        <td><input type="text" name="ListCauHoi[@i].A"  value="@Model[i].A"/></td>
-                        <td><input type="text" name="ListCauHoi[@i].B" value="@Model[i].B"/></td>
-                        <td><input type="text" name="ListCauHoi[@i].C" value="@Model[i].C"/></td>
-                        <td><input type="text" name="ListCauHoi[@i].D" value="@Model[i].D" /></td>
-                        <td><input type="text" name="ListCauHoi[@i].Ans" value="@Model[i].Ans"/></td>
-                    </tr>
-                }
-                else
-                {
-                    <tr>
-                        <td>@i</td>
-                        <td><input type="text" name="ListCauHoi[@i].Ques"/></td>
-                        <td><input type="text" name="ListCauHoi[@i].A" /></td>
-                        <td><input type="text" name="ListCauHoi[@i].B" /></td>
-                        <td><input type="text" name="ListCauHoi[@i].C" /></td>
-                        <td><input type="text" name="ListCauHoi[@i].D" /></td>
-                        <td><input type="text" name="ListCauHoi[@i].Ans" /></td>
-                    </tr>
-                }
+                    if (i < Model.Count)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td><input type="text" name="ListCauHoi[@i].Ques" value="@Model[i].Ques" style="width: 100%" /></td>
+                            <td><input type="text" name="ListCauHoi[@i].A" value="@Model[i].A" style="width: 100%" /></td>
+                            <td><input type="text" name="ListCauHoi[@i].B" value="@Model[i].B" style="width: 100%" /></td>
+                            <td><input type="text" name="ListCauHoi[@i].C" value="@Model[i].C" style="width: 100%" /></td>
+                            <td><input type="text" name="ListCauHoi[@i].D" value="@Model[i].D" style="width: 100%"/></td>
+                            <td><input type="text" name="ListCauHoi[@i].Ans" value="@Model[i].Ans" /></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td><input type="text" name="ListCauHoi[@i].Ques" style="width: 100%" /></td>
+                            <td><input type="text" name="ListCauHoi[@i].A" style="width: 100%" /></td>
+                            <td><input type="text" name="ListCauHoi[@i].B" style="width: 100%" /></td>
+                            <td><input type="text" name="ListCauHoi[@i].C" style="width: 100%" /></td>
+                            <td><input type="text" name="ListCauHoi[@i].D" style="width: 100%" /></td>
+                            <td><input type="text" name="ListCauHoi[@i].Ans"  /></td>
+                        </tr>
+                    }
 
-            }
-        </table>
+                }
+            </table>
+        </div>
+       
 
         <input type="submit" value="Gửi Dữ Liệu" style="float: right"/>
     }

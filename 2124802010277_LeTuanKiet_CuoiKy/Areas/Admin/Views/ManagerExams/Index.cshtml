@@ -14,11 +14,13 @@
                 <h4 class="page-title">Danh Sách các kỳ thi</h4>
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <div class="d-md-flex">
-                    <ol class="breadcrumb ms-auto">
-                        <li><a href="#" class="fw-normal"></a></li>
-                    </ol>
-                    <a href="@Url.Action("CreateExams","ManagerExams")" 
+                <div class="d-md-flex" style="align-items: center">
+                    <form class="input-group" >
+                        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="KeyWork"/>
+                        <button type="submit" class="btn btn-outline-primary" data-mdb-ripple-init 
+                                style="height: 35px">search</button>
+                    </form>
+                    <a href="@Url.Action("CreateExams","ManagerExams")"
                        class="btn btn-danger  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
                         Tạo kỳ thi
                     </a>
@@ -36,54 +38,71 @@
     <div class="container-fluid">
         @*Xây dựng nội dung ở đây*@
 
-
-        <table class="table">
-            <tr>
-                <th style="text-align: center">
-                    @Html.DisplayNameFor(model => model.IdKyThi)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TenKyThi)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Ngay)
-                </th>
-                <th style="text-align: center">
-                    @Html.DisplayNameFor(model => model.SoThiSinh)
-                </th>
-                <th style="text-align: center">
-                    @Html.DisplayNameFor(model => model.TinhTrang)
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model)
-            {
+        @if (Model.Count() >0)
+        {
+            <table class="table">
                 <tr>
-                    <td style="text-align: center">
-                        @Html.DisplayFor(modelItem => item.IdKyThi)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TenKyThi)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Ngay)
-                    </td>
-                    <td style="text-align: center">
-                        @Html.DisplayFor(modelItem => item.SoThiSinh)
-                    </td>
-                    <td style="text-align: center">
-                        @Html.DisplayFor(modelItem => item.TinhTrang)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "EditExams", new { id = item.IdKyThi }) |
-                        @Html.ActionLink("Detail", "DetailExams", new { id = item.IdKyThi }) |
-                        @Html.ActionLink("Delete", "DeleteExams", new { id = item.IdKyThi })
-                    </td>
+                    <th style="text-align: center">
+                        @Html.DisplayNameFor(model => model.IdKyThi)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TenKyThi)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Ngay)
+                    </th>
+                    <th style="text-align: center">
+                        @Html.DisplayNameFor(model => model.SoThiSinh)
+                    </th>
+                    <th style="text-align: center">
+                        @Html.DisplayNameFor(model => model.TinhTrang)
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </table>
 
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="text-align: center">
+                            @Html.DisplayFor(modelItem => item.IdKyThi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TenKyThi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Ngay)
+                        </td>
+                        <td style="text-align: center">
+                            @Html.DisplayFor(modelItem => item.SoThiSinh)
+                        </td>
+                        <td style="text-align: center">
+                            @Html.DisplayFor(modelItem => item.TinhTrang)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "EditExams", new { id = item.IdKyThi }) |
+                            @Html.ActionLink("Detail", "DetailExams", new { id = item.IdKyThi }) |
+                            @Html.ActionLink("Delete", "DeleteExams", new { id = item.IdKyThi })
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <main style="
+                text-align: center; 
+                display: flex; 
+                flex-direction: column;
+                min-height: 500px;
+                justify-content: center;
+                  ">
+                <h1>Sorry!</h1>
+                <p>
+                    Chúng tôi không tìm thấy cuộc thi nào bạn muốn tìm
+                </p>
+                <a href="@Url.Action("Index","ManagerExams")">Xem tất cả</a>
+            </main>
+        }
     </div>
 </div>
 

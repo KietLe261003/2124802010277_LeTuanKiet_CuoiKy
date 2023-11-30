@@ -12,17 +12,15 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ChiTietBaiTap
+    public partial class ChiTietBaiTapRoom
     {
-        public Nullable<int> IdBaiTap { get; set; }
-        public string Ques { get; set; }
-        public string A { get; set; }
-        public string B { get; set; }
-        public string C { get; set; }
-        public string D { get; set; }
-        public string Ans { get; set; }
-        public int IdChiTietBaiTap { get; set; }
+        public int IdChiTiet { get; set; }
+        public Nullable<int> IdNguoiNop { get; set; }
+        public Nullable<int> IdBTRoom { get; set; }
+        public string FileNop { get; set; }
+        public Nullable<System.DateTime> NgayNop { get; set; }
+        public Nullable<double> Diem { get; set; }
     
-        public virtual BaiTap BaiTap { get; set; }
+        public virtual BaiTapRoom BaiTapRoom { get; set; }
     }
 }

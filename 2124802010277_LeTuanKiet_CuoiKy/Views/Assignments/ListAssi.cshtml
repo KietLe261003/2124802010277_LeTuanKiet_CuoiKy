@@ -15,9 +15,19 @@
     }
 }
 <div class="ContainerExams">
-    <a href="@Url.Action("CreateAssignment","Assignments")" class="btn btn-outline-primary" style="float: right; margin-bottom: 10px">
-        Đăng bài tập
-    </a>
+    <div style="display: flex; flex-direction: row-reverse; margin-bottom: 15px">
+        <a href="@Url.Action("CreateAssignment","Assignments")" class="btn btn-outline-primary" style="margin-left: 20px; height: 45px; display: flex; align-items: center; justify-content: center">
+            Đăng bài tập
+        </a>
+        <form class="input-group" style="display: flex; flex-direction: row-reverse">
+            <button type="submit" class="btn btn-outline-primary" data-mdb-ripple-init
+                    style="height: 45px; border-radius: 5px">
+                search
+            </button>
+            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="KeyWork" style="max-width: 30%" />
+        </form>
+    </div>
+    
     <table class="table">
         <thead class="thead-dark">
             <tr>

@@ -1,0 +1,82 @@
+﻿@model _2124802010277_LeTuanKiet_CuoiKy.Models.NguPhap
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>NguPhap</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IdTacGia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IdTacGia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TenNguPhap)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TenNguPhap)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoTaNgan)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoTaNgan)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoiDung)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoiDung)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LuotXem)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LuotXem)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LuotThich)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LuotThich)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrangThai)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrangThai)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NgayDang)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NgayDang)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -25,15 +25,18 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<NguPhap> NguPhaps { get; set; }
-        public virtual DbSet<ChiTietBaiTap> ChiTietBaiTaps { get; set; }
         public virtual DbSet<BaiTap> BaiTaps { get; set; }
         public virtual DbSet<CauHoi> CauHois { get; set; }
+        public virtual DbSet<ChiTietBaiTap> ChiTietBaiTaps { get; set; }
         public virtual DbSet<ChiTietThiSinh> ChiTietThiSinhs { get; set; }
-        public virtual DbSet<NguoiDung> NguoiDungs { get; set; }
         public virtual DbSet<KyThi> KyThis { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
+        public virtual DbSet<NguoiDung> NguoiDungs { get; set; }
+        public virtual DbSet<NguPhap> NguPhaps { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
+        public virtual DbSet<BaiTapRoom> BaiTapRooms { get; set; }
+        public virtual DbSet<ChiTietBaiTapRoom> ChiTietBaiTapRooms { get; set; }
+        public virtual DbSet<FileMotaBtRoom> FileMotaBtRooms { get; set; }
     }
 }

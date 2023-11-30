@@ -12,25 +12,29 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BaiTap
+    public partial class BaiTapRoom
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public BaiTap()
+        public BaiTapRoom()
         {
-            this.ChiTietBaiTaps = new HashSet<ChiTietBaiTap>();
+            this.ChiTietBaiTapRooms = new HashSet<ChiTietBaiTapRoom>();
+            this.FileMotaBtRooms = new HashSet<FileMotaBtRoom>();
         }
     
-        public int IdBaiTap { get; set; }
-        public string TenBaiTap { get; set; }
-        public Nullable<int> TacGia { get; set; }
-        public Nullable<int> SoLuotNop { get; set; }
+        public int IdBTRoom { get; set; }
+        public string Ten { get; set; }
+        public Nullable<System.DateTime> NgayBatDau { get; set; }
+        public Nullable<System.DateTime> NgayKetThuc { get; set; }
         public Nullable<System.DateTime> NgayDang { get; set; }
+        public Nullable<int> IdRoom { get; set; }
+        public Nullable<double> TyLeNop { get; set; }
+        public Nullable<double> DiemCaoNhat { get; set; }
         public Nullable<double> DiemTrungBinh { get; set; }
-        public Nullable<int> LuotThich { get; set; }
-        public Nullable<int> LuotXem { get; set; }
-        public Nullable<bool> TrangThai { get; set; }
+        public string NoiDungBaiTap { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ChiTietBaiTap> ChiTietBaiTaps { get; set; }
+        public virtual ICollection<ChiTietBaiTapRoom> ChiTietBaiTapRooms { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FileMotaBtRoom> FileMotaBtRooms { get; set; }
     }
 }

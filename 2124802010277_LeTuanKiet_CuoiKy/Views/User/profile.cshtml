@@ -3,49 +3,112 @@
     ViewBag.Title = "profile";
 }
 <link rel="stylesheet" href="~/css/Profile.css" />
-<div class="container rounded bg-white mt-5 mb-5">
-    <div class="row">
-        <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                <img src="@Model.HinhDaiDien" class="rounded-3" style="width: 150px;"alt="Avatar" />
-                <span class="text-black-50"></span><span> </span></div>
-        </div>
-        <div class="col-md-5 border-right">
-            <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="text-right">Profile Settings</h4>
+<div style="background-color: #DDDDDD; padding: 20px">
+    <form action="@Url.Action("profile", "User")" method="post">
+        <div class="container rounded bg-white mt-5 mb-5">
+            <div class="row">
+                <div class="col-md-3 border-right">
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                        <img src="@Model.HinhDaiDien" class="rounded-3" style="width: 150px;" id="avt" alt="Avatar" />
+                        <span class="text-black-50"></span><span> </span>
+                        <div class="form-group" style="margin-top: 10px">
+                            <label class="control-label col-md-2" style="min-width: 100%">
+                                <button type="button" onclick="OpenCkfinder()">Chọn ảnh</button>
+                            </label>
+                            <div class="col-md-10">
+                                <input type="hidden" class="form-control" name="nd.MaKH" value="@Model.MaKH" />
+                                <input type="hidden" class="form-control" name="nd.HinhDaiDien" value="@Model.HinhDaiDien" id="HinhDaiDien"/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="row mt-2">
-                    <div class="col-md-6"><label class="labels">Họ tên khách hàng</label><input type="text" class="form-control" placeholder="Họ tên khách hàng" value="@Model.HoTenKH"></div>
+                <div class="col-md-5 border-right">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right">Trang cá nhân</h4>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <label class="labels">Họ tên </label>
+                                <input name="nd.HoTenKH" type="text" class="form-control" placeholder="Họ tên khách hàng" value="@Model.HoTenKH">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <label class="labels">Số điện thoại</label>
+                                <input type="text" class="form-control" placeholder="enter phone number" name="nd.DienThoaiKH" value="@Model.DienThoaiKH">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Địa chỉ</label>
+                                <input type="text" class="form-control" placeholder="enter address line 1" name="nd.DiaChiKH" value="@Model.DiaChiKH">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Tên Đăng Nhập</label>
+                                <input readonly name="nd.TenDN" type="text" class="form-control" placeholder="enter address line 2" value="@Model.TenDN">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Mật Khẩu</label>
+                                <input type="text" name="nd.MatKhau" class="form-control" placeholder="enter address line 2" value="@Model.MatKhau">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Ngày Sinh</label>
+                                <input name="nd.NgaySinh" type="date" class="form-control" placeholder="enter address line 2" value="@string.Format("{0:yyyy-MM-dd}", Model.NgaySinh)">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Địa chỉ Email</label>
+                                <input name="nd.Email" type="text" class="form-control" placeholder="enter email id" value="@Model.Email">
+                            </div>
+                            <div class="col-md-12" style="margin-top: 10px">
+                                <label class="labels">Giới tính</label>
+                                @if (Model.GioiTinh == true)
+                                {
+                                    <select name="nd.GioiTinh">
+                                        <option value="true" selected="selected">Nam</option>
+                                        <option value="false">Nữ</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select name="nd.GioiTinh">
+                                        <option value="true">Nam</option>
+                                        <option value="false" selected="selected">Nữ</option>
+                                    </select>
+                                }
+                            
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <label class="labels">Điểm trong qua các kỳ thi</label>
+                                <input readonly type="text" name="nd.DiemKyThi" class="form-control" placeholder="country" value="@Model.DiemKyThi">
+                            </div>
+                            <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
+                        </div>
+                        <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Lưu trang cá nhân</button></div>
+                    </div>
                 </div>
-                <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Số điện thoại</label><input type="text" class="form-control" placeholder="enter phone number" value="@Model.DienThoaiKH"></div>
-                    <div class="col-md-12"><label class="labels">Địa chỉ</label><input type="text" class="form-control" placeholder="enter address line 1" value="@Model.DiaChiKH"></div>
-                    <div class="col-md-12"><label class="labels">Tên Đăng Nhập</label><input type="text" class="form-control" placeholder="enter address line 2" value="@Model.TenDN"></div>
-                    <div class="col-md-12"><label class="labels">Mật Khẩu</label><input type="text" class="form-control" placeholder="enter address line 2" value="@Model.MatKhau"></div>
-                    <div class="col-md-12"><label class="labels">Ngày Sinh</label><input type="text" class="form-control" placeholder="enter address line 2" value="@Model.NgaySinh"></div>
-                    <div class="col-md-12"><label class="labels">Địa chỉ Email</label><input type="text" class="form-control" placeholder="enter email id" value="@Model.Email"></div>
-                    @{ 
-                        var gt = (Model.GioiTinh == true) ? "Nam" : "Nữ";
-                     }
-                    <div class="col-md-12"><label class="labels">Giới tính</label><input type="text" class="form-control" placeholder="education" value="@gt"></div>
+                <div class="col-md-4">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center experience"><span>Edit Experience</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br>
+                        <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text" class="form-control" placeholder="experience" value=""></div> <br>
+                        <div class="col-md-12"><label class="labels">Additional Details</label><input type="text" class="form-control" placeholder="additional details" value=""></div>
+                    </div>
                 </div>
-                <div class="row mt-3">
-                    <div class="col-md-6"><label class="labels">Điểm trong mỗi kỳ thi</label><input type="text" class="form-control" placeholder="country" value=""></div>
-                    <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
-                </div>
-                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center experience"><span>Edit Experience</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br>
-                <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text" class="form-control" placeholder="experience" value=""></div> <br>
-                <div class="col-md-12"><label class="labels">Additional Details</label><input type="text" class="form-control" placeholder="additional details" value=""></div>
-            </div>
-        </div>
-    </div>
+    </form>
 </div>
-</div>
-</div>
-
+@section scripts{
+    <script>
+        function OpenCkfinder() {
+            var finder = new CKFinder();
+            finder.selectActionFunction = SetUrlHinhAnh;
+            finder.popup();
+        }
+        function SetUrlHinhAnh(fileUrl) {
+            $('#HinhDaiDien').val(fileUrl);
+            var img = document.getElementById('avt');
+            img.src = fileUrl;
+        }
+    </script>
+}  

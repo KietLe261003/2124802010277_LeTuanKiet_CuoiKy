@@ -106,7 +106,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
                 if (kh != null)
                 {
                     Session["TaiKhoan"] = kh;
-                    return RedirectToAction("profile");
+                    return RedirectToAction("Index","Home");
                 }
                 else
                 {
@@ -122,9 +122,33 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
             NguoiDung nd = (NguoiDung)Session["TaiKhoan"];
             if(nd==null)
             {
-                RedirectToAction("DangNhap");
+                return RedirectToAction("DangNhap");
             }   
             return View(nd);
+        }
+        [HttpPost]
+        public ActionResult profile(NguoiDung nd)
+        {
+            //NguoiDung nd = (NguoiDung)Session["TaiKhoan"];
+            NguoiDung nd1 = db.NguoiDungs.FirstOrDefault(item => item.MaKH==nd.MaKH);
+            nd1.HoTenKH = nd.HoTenKH;
+            nd1.DiaChiKH = nd.DiaChiKH;
+            nd1.DienThoaiKH = nd.DienThoaiKH;
+            nd1.MatKhau = nd.MatKhau;
+            nd1.NgaySinh = nd.NgaySinh;
+            nd1.GioiTinh = nd.GioiTinh;
+            nd1.Email = nd.Email;
+            nd1.HinhDaiDien = nd.HinhDaiDien;
+            db.SaveChanges();
+            if (nd == null)
+            {
+                RedirectToAction("DangNhap");
+            }
+            return View(nd1);
+        }
+        public ActionResult test()
+        {
+            return View();
         }
     }
 }

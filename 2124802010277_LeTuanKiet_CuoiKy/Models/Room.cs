@@ -16,6 +16,6 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Models
     {
         public int RoomId { get; set; }
         public string Name { get; set; }
-        public string Type { get; set; }
+        public Nullable<int> Type { get; set; }
     }
 }

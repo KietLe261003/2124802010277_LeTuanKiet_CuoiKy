@@ -38,7 +38,7 @@
         @*Xây dựng nội dung ở đây*@
 
         <div class="ContainerCreateExam">
-            <form action="~/Admin/ManagerExams/CreateExams" method="post">
+            <form action="~/Admin/ManagerExams/CreateExams" method="post" onsubmit="return checkQuestion()">
                 <div class="form-horizontal">
                     <h4>Thêm kỳ thi</h4>
                     <hr />
@@ -172,7 +172,9 @@
         <div>
             @Html.ActionLink("Back to List", "Index")
         </div>
-
+        <div style="margin-top: 10px">
+            <button onclick="checkQuestion()" class="btn btn-primary">Tạo kỳ thi</button>
+        </div>
     </div>
 </div>
 
@@ -220,17 +222,28 @@
 
         function checkOption(idQ) {
             var Ques = document.querySelectorAll('#Exam');
-
+            var opA = Ques[idQ].querySelector("[name$='.DapAnA']").value;
+            var opB = Ques[idQ].querySelector("[name$='.DapAnB']").value;
+            var opC = Ques[idQ].querySelector("[name$='.DapAnC']").value;
+            var opD = Ques[idQ].querySelector("[name$='.DapAnD']").value;
             var correctAnswer = Ques[idQ].querySelector("[name$='.DapAnDung']").value;
-            console.log(correctAnswer);
+            if (opA != correctAnswer && opB != correctAnswer && opC != correctAnswer && opD != correctAnswer) {
+                alert("Có câu hỏi chưa hợp lệ");
+                return false;
+            }
+            return true;
         }
         function checkQuestion() {
             var Ques = document.querySelectorAll('#Exam');
             for (let i = 0; i < Ques.length; i++) {
-                checkOption(i);
+                if (checkOption(i) == false) {
+                    console.log("ncc");
+                    return false;
+                }    
             }
+            return true;
         }
-        setInterval(checkQuestion,1000);
+        
         //checkQuestion();
     </script>
 }

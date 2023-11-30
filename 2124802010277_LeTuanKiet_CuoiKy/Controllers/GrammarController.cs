@@ -10,9 +10,13 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
     {
         DataTiengAnhEntities db = new DataTiengAnhEntities();
         // GET: Grammar
-        public ActionResult Index(int pg=1)
+        public ActionResult Index(string KeyWork, int pg = 1)
         {
-            List<NguPhap> tmp = db.NguPhaps.Where(item => item.TrangThai==true).ToList();
+            List<NguPhap> tmp = db.NguPhaps.Where(item => item.TrangThai == true).ToList();
+            if (!string.IsNullOrEmpty(KeyWork))
+            {
+                tmp = db.NguPhaps.Where(item => item.TrangThai==true && (item.TenNguPhap.Contains(KeyWork) || db.NguoiDungs.FirstOrDefault(x=>x.MaKH==item.IdTacGia).HoTenKH.Contains(KeyWork))).ToList();
+            }    
             const int PageSize = 9;
             if(pg<1)
             {
@@ -37,6 +41,18 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
                 return RedirectToAction("DangNhap", "User");
             return View();
         }
+
+        public string Truncate(string s, int length)
+        {
+            if (s.Length < length)
+            {
+                return s;
+            }
+            else
+            {
+                return s.Substring(0, length);
+            }
+        }
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult AddGrammar(FormCollection data)
@@ -49,16 +65,19 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
             var sMoTa = data["MoTa"];
 
             np.IdTacGia = sIdTacGia.MaKH;
-            np.TenNguPhap = sTen;
+            np.TenNguPhap = Truncate(sTen,100);
             np.NoiDung = sNoiDung;
             np.MoTaNgan = sMoTa;
             np.LuotXem = 0;
             np.LuotThich = 0;
             np.NgayDang = DateTime.Now;
-            np.TrangThai = false;
+            if (sIdTacGia.Admin == true)
+                np.TrangThai = true;
+            else
+                np.TrangThai = false;
             db.NguPhaps.Add(np);
             db.SaveChanges();
-            TempData["ThongBaoThem"] = "Chúng tôi đã ghi nhận tài liệu của bạn vui lòng chờ kiểm duyệt trong ít phút";
+            TempData["ThongBaoThem"] = "We have recorded your document, please wait for moderation for a few minutes";
             return RedirectToAction("Index");
         }
         /*Xử lý khi thêm 1 ngữ pháp mới kết thúc*/

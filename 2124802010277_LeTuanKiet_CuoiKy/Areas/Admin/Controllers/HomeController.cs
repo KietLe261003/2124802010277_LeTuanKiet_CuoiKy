@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using _2124802010277_LeTuanKiet_CuoiKy.Models;
+using _2124802010277_LeTuanKiet_CuoiKy.App_Start;
 namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
 {
     public class HomeController : Controller
@@ -37,6 +38,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
             }
         }
         // GET: Admin
+        [AdminAuthorize()]
         public ActionResult Index()
         {
             List<NguoiDung> ds = db.NguoiDungs.OrderByDescending(item => item.DiemKyThi).Take(10).ToList();

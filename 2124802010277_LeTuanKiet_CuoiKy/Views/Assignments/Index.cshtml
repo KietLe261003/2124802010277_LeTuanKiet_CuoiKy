@@ -3,6 +3,18 @@
 @{
     ViewBag.Title = "Index";
     _2124802010277_LeTuanKiet_CuoiKy.Models.BaiTap Bt = ViewBag.BaiTap;
+    var cauHoiList = Model.Select(cauHoi => new
+    {
+        cauHoi.IdBaiTap,
+        cauHoi.Ques,
+        cauHoi.A,
+        cauHoi.B,
+        cauHoi.C,
+        cauHoi.D,
+        cauHoi.Ans,
+    }).ToList();
+
+    var cauHoiJson = Newtonsoft.Json.JsonConvert.SerializeObject(cauHoiList);
 }
 <div class="container mt-5">
     <div class="d-flex justify-content-center row">
@@ -57,7 +69,7 @@
     Nộp bài
 </button>
 <div class="container">
-    <div class="row">
+    <div class="row" style="align-items: center; justify-content: center">
         <div class="four col-md-3">
             <div class="counter-box colored">
                 <i class="fa fa-thumbs-o-up"></i>
@@ -73,8 +85,7 @@
             </div>
         </div>
         <div class="four col-md-3">
-            <div class="counter-box">
-                <i class="bi bi-backpack2"></i>
+            <div class="counter-box" style="height: 209px; display: flex; flex-direction: column; align-items: center; justify-content: center">
                 <span class="counter">@Bt.DiemTrungBinh</span>
                 <p>Điểm trung bình</p>
             </div>
@@ -84,11 +95,11 @@
 <script>
     var id = 0;
 
-var Lquestion = @Html.Raw(Json.Encode(Model));
-console.log(Lquestion);
-    var AnsUser = [];
-var Point = [];
-console.log(Lquestion);
+    var Lquestion = @Html.Raw(cauHoiJson);
+    console.log(Lquestion);
+        var AnsUser = [];
+    var Point = [];
+    console.log(Lquestion);
 
     @* set data cho html start *@
     var Q = document.getElementById('Question').innerHTML = Lquestion[0].Ques;

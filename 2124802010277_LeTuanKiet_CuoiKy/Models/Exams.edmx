@@ -19,6 +19,21 @@
           <Property Name="LuotXem" Type="int" />
           <Property Name="TrangThai" Type="bit" />
         </EntityType>
+        <EntityType Name="BaiTapRoom">
+          <Key>
+            <PropertyRef Name="IdBTRoom" />
+          </Key>
+          <Property Name="IdBTRoom" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ten" Type="nvarchar(max)" />
+          <Property Name="NgayBatDau" Type="datetime" />
+          <Property Name="NgayKetThuc" Type="datetime" />
+          <Property Name="NgayDang" Type="datetime" />
+          <Property Name="IdRoom" Type="int" />
+          <Property Name="TyLeNop" Type="float" />
+          <Property Name="DiemCaoNhat" Type="float" />
+          <Property Name="DiemTrungBinh" Type="float" />
+          <Property Name="NoiDungBaiTap" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="CauHoi">
           <Key>
             <PropertyRef Name="IdCauHoi" />
@@ -45,6 +60,17 @@
           <Property Name="Ans" Type="nvarchar(max)" />
           <Property Name="IdChiTietBaiTap" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
+        <EntityType Name="ChiTietBaiTapRoom">
+          <Key>
+            <PropertyRef Name="IdChiTiet" />
+          </Key>
+          <Property Name="IdChiTiet" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdNguoiNop" Type="int" />
+          <Property Name="IdBTRoom" Type="int" />
+          <Property Name="FileNop" Type="varchar(max)" />
+          <Property Name="NgayNop" Type="datetime" />
+          <Property Name="Diem" Type="float" />
+        </EntityType>
         <EntityType Name="ChiTietThiSinh">
           <Key>
             <PropertyRef Name="IdChiTietThiSinh" />
@@ -56,6 +82,14 @@
           <Property Name="Dung" Type="int" />
           <Property Name="Sai" Type="int" />
           <Property Name="ChuaLam" Type="int" />
+        </EntityType>
+        <EntityType Name="FileMotaBtRoom">
+          <Key>
+            <PropertyRef Name="IdFile" />
+          </Key>
+          <Property Name="IdFile" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdBtRoom" Type="int" Nullable="false" />
+          <Property Name="File" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="KyThi">
           <Key>
@@ -101,7 +135,7 @@
           </Key>
           <Property Name="IdNguPhap" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdTacGia" Type="int" />
-          <Property Name="TenNguPhap" Type="nvarchar" MaxLength="50" />
+          <Property Name="TenNguPhap" Type="nvarchar" MaxLength="100" />
           <Property Name="MoTaNgan" Type="nvarchar(max)" />
           <Property Name="NoiDung" Type="nvarchar(max)" />
           <Property Name="LuotXem" Type="int" />
@@ -115,7 +149,7 @@
           </Key>
           <Property Name="RoomId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" />
-          <Property Name="Type" Type="varchar" MaxLength="50" />
+          <Property Name="Type" Type="int" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -139,6 +173,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ChiTietBaiTap_BaiTap">
+          <End Role="BaiTap" Type="Self.BaiTap" Multiplicity="0..1" />
+          <End Role="ChiTietBaiTap" Type="Self.ChiTietBaiTap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaiTap">
+              <PropertyRef Name="IdBaiTap" />
+            </Principal>
+            <Dependent Role="ChiTietBaiTap">
+              <PropertyRef Name="IdBaiTap" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ChiTietBaiTapRoom_BaiTapRoom">
+          <End Role="BaiTapRoom" Type="Self.BaiTapRoom" Multiplicity="0..1" />
+          <End Role="ChiTietBaiTapRoom" Type="Self.ChiTietBaiTapRoom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaiTapRoom">
+              <PropertyRef Name="IdBTRoom" />
+            </Principal>
+            <Dependent Role="ChiTietBaiTapRoom">
+              <PropertyRef Name="IdBTRoom" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ChiTietThiSinh_KyThi">
           <End Role="KyThi" Type="Self.KyThi" Multiplicity="0..1" />
           <End Role="ChiTietThiSinh" Type="Self.ChiTietThiSinh" Multiplicity="*" />
@@ -151,11 +209,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_FileMotaBtRoom_BaiTapRoom">
+          <End Role="BaiTapRoom" Type="Self.BaiTapRoom" Multiplicity="1" />
+          <End Role="FileMotaBtRoom" Type="Self.FileMotaBtRoom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaiTapRoom">
+              <PropertyRef Name="IdBTRoom" />
+            </Principal>
+            <Dependent Role="FileMotaBtRoom">
+              <PropertyRef Name="IdBtRoom" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DataTiengAnhModelStoreContainer">
           <EntitySet Name="BaiTap" EntityType="Self.BaiTap" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BaiTapRoom" EntityType="Self.BaiTapRoom" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CauHoi" EntityType="Self.CauHoi" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChiTietBaiTap" EntityType="Self.ChiTietBaiTap" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ChiTietBaiTapRoom" EntityType="Self.ChiTietBaiTapRoom" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChiTietThiSinh" EntityType="Self.ChiTietThiSinh" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FileMotaBtRoom" EntityType="Self.FileMotaBtRoom" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KyThi" EntityType="Self.KyThi" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Message" EntityType="Self.Message" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NguoiDung" EntityType="Self.NguoiDung" Schema="dbo" store:Type="Tables" />
@@ -166,9 +239,21 @@
             <End Role="KyThi" EntitySet="KyThi" />
             <End Role="CauHoi" EntitySet="CauHoi" />
           </AssociationSet>
+          <AssociationSet Name="FK_ChiTietBaiTap_BaiTap" Association="Self.FK_ChiTietBaiTap_BaiTap">
+            <End Role="BaiTap" EntitySet="BaiTap" />
+            <End Role="ChiTietBaiTap" EntitySet="ChiTietBaiTap" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChiTietBaiTapRoom_BaiTapRoom" Association="Self.FK_ChiTietBaiTapRoom_BaiTapRoom">
+            <End Role="BaiTapRoom" EntitySet="BaiTapRoom" />
+            <End Role="ChiTietBaiTapRoom" EntitySet="ChiTietBaiTapRoom" />
+          </AssociationSet>
           <AssociationSet Name="FK_ChiTietThiSinh_KyThi" Association="Self.FK_ChiTietThiSinh_KyThi">
             <End Role="KyThi" EntitySet="KyThi" />
             <End Role="ChiTietThiSinh" EntitySet="ChiTietThiSinh" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FileMotaBtRoom_BaiTapRoom" Association="Self.FK_FileMotaBtRoom_BaiTapRoom">
+            <End Role="BaiTapRoom" EntitySet="BaiTapRoom" />
+            <End Role="FileMotaBtRoom" EntitySet="FileMotaBtRoom" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -176,14 +261,19 @@
     <edmx:ConceptualModels>
       <Schema Namespace="DataTiengAnhModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="DataTiengAnhEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="sysdiagrams" EntityType="DataTiengAnhModel.sysdiagram" />
-          <EntitySet Name="NguPhaps" EntityType="DataTiengAnhModel.NguPhap" />
-          <EntitySet Name="ChiTietBaiTaps" EntityType="DataTiengAnhModel.ChiTietBaiTap" />
           <EntitySet Name="BaiTaps" EntityType="DataTiengAnhModel.BaiTap" />
           <EntitySet Name="CauHois" EntityType="DataTiengAnhModel.CauHoi" />
+          <EntitySet Name="ChiTietBaiTaps" EntityType="DataTiengAnhModel.ChiTietBaiTap" />
           <EntitySet Name="ChiTietThiSinhs" EntityType="DataTiengAnhModel.ChiTietThiSinh" />
-          <EntitySet Name="NguoiDungs" EntityType="DataTiengAnhModel.NguoiDung" />
           <EntitySet Name="KyThis" EntityType="DataTiengAnhModel.KyThi" />
+          <EntitySet Name="Messages" EntityType="DataTiengAnhModel.Message" />
+          <EntitySet Name="NguoiDungs" EntityType="DataTiengAnhModel.NguoiDung" />
+          <EntitySet Name="NguPhaps" EntityType="DataTiengAnhModel.NguPhap" />
+          <EntitySet Name="sysdiagrams" EntityType="DataTiengAnhModel.sysdiagram" />
+          <AssociationSet Name="FK_ChiTietBaiTap_BaiTap" Association="DataTiengAnhModel.FK_ChiTietBaiTap_BaiTap">
+            <End Role="BaiTap" EntitySet="BaiTaps" />
+            <End Role="ChiTietBaiTap" EntitySet="ChiTietBaiTaps" />
+          </AssociationSet>
           <AssociationSet Name="FK_CauHoi_KyThi" Association="DataTiengAnhModel.FK_CauHoi_KyThi">
             <End Role="KyThi" EntitySet="KyThis" />
             <End Role="CauHoi" EntitySet="CauHois" />
@@ -192,46 +282,19 @@
             <End Role="KyThi" EntitySet="KyThis" />
             <End Role="ChiTietThiSinh" EntitySet="ChiTietThiSinhs" />
           </AssociationSet>
-          <EntitySet Name="Messages" EntityType="DataTiengAnhModel.Message" />
           <EntitySet Name="Rooms" EntityType="DataTiengAnhModel.Room" />
+          <EntitySet Name="BaiTapRooms" EntityType="DataTiengAnhModel.BaiTapRoom" />
+          <EntitySet Name="ChiTietBaiTapRooms" EntityType="DataTiengAnhModel.ChiTietBaiTapRoom" />
+          <AssociationSet Name="FK_ChiTietBaiTapRoom_BaiTapRoom" Association="DataTiengAnhModel.FK_ChiTietBaiTapRoom_BaiTapRoom">
+            <End Role="BaiTapRoom" EntitySet="BaiTapRooms" />
+            <End Role="ChiTietBaiTapRoom" EntitySet="ChiTietBaiTapRooms" />
+          </AssociationSet>
+          <EntitySet Name="FileMotaBtRooms" EntityType="DataTiengAnhModel.FileMotaBtRoom" />
+          <AssociationSet Name="FK_FileMotaBtRoom_BaiTapRoom" Association="DataTiengAnhModel.FK_FileMotaBtRoom_BaiTapRoom">
+            <End Role="BaiTapRoom" EntitySet="BaiTapRooms" />
+            <End Role="FileMotaBtRoom" EntitySet="FileMotaBtRooms" />
+          </AssociationSet>
           </EntityContainer>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="NguPhap">
-          <Key>
-            <PropertyRef Name="IdNguPhap" />
-          </Key>
-          <Property Name="IdNguPhap" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdTacGia" Type="Int32" />
-          <Property Name="TenNguPhap" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MoTaNgan" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="LuotXem" Type="Int32" />
-          <Property Name="LuotThich" Type="Int32" />
-          <Property Name="TrangThai" Type="Boolean" />
-          <Property Name="NgayDang" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="ChiTietBaiTap">
-          <Key>
-            <PropertyRef Name="IdChiTietBaiTap" />
-          </Key>
-          <Property Name="IdBaiTap" Type="Int32" />
-          <Property Name="Ques" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="A" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="B" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="C" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="D" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Ans" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IdChiTietBaiTap" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-        </EntityType>
         <EntityType Name="BaiTap">
           <Key>
             <PropertyRef Name="IdBaiTap" />
@@ -245,6 +308,7 @@
           <Property Name="LuotThich" Type="Int32" />
           <Property Name="LuotXem" Type="Int32" />
           <Property Name="TrangThai" Type="Boolean" />
+          <NavigationProperty Name="ChiTietBaiTaps" Relationship="DataTiengAnhModel.FK_ChiTietBaiTap_BaiTap" FromRole="BaiTap" ToRole="ChiTietBaiTap" />
         </EntityType>
         <EntityType Name="CauHoi">
           <Key>
@@ -260,6 +324,20 @@
           <Property Name="DapAnDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="KyThi" Relationship="DataTiengAnhModel.FK_CauHoi_KyThi" FromRole="CauHoi" ToRole="KyThi" />
         </EntityType>
+        <EntityType Name="ChiTietBaiTap">
+          <Key>
+            <PropertyRef Name="IdChiTietBaiTap" />
+          </Key>
+          <Property Name="IdBaiTap" Type="Int32" />
+          <Property Name="Ques" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="A" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="B" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="C" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="D" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Ans" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IdChiTietBaiTap" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="BaiTap" Relationship="DataTiengAnhModel.FK_ChiTietBaiTap_BaiTap" FromRole="ChiTietBaiTap" ToRole="BaiTap" />
+        </EntityType>
         <EntityType Name="ChiTietThiSinh">
           <Key>
             <PropertyRef Name="IdChiTietThiSinh" />
@@ -272,6 +350,29 @@
           <Property Name="Sai" Type="Int32" />
           <Property Name="ChuaLam" Type="Int32" />
           <NavigationProperty Name="KyThi" Relationship="DataTiengAnhModel.FK_ChiTietThiSinh_KyThi" FromRole="ChiTietThiSinh" ToRole="KyThi" />
+        </EntityType>
+        <EntityType Name="KyThi">
+          <Key>
+            <PropertyRef Name="IdKyThi" />
+          </Key>
+          <Property Name="IdKyThi" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="TenKyThi" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Ngay" Type="DateTime" Precision="3" />
+          <Property Name="SoThiSinh" Type="Int32" />
+          <Property Name="NgayKetThuc" Type="DateTime" Precision="3" />
+          <Property Name="TinhTrang" Type="Boolean" />
+          <NavigationProperty Name="CauHois" Relationship="DataTiengAnhModel.FK_CauHoi_KyThi" FromRole="KyThi" ToRole="CauHoi" />
+          <NavigationProperty Name="ChiTietThiSinhs" Relationship="DataTiengAnhModel.FK_ChiTietThiSinh_KyThi" FromRole="KyThi" ToRole="ChiTietThiSinh" />
+        </EntityType>
+        <EntityType Name="Message">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdNguoiDung" Type="Int32" Nullable="false" />
+          <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Gio" Type="DateTime" Precision="3" />
+          <Property Name="RoomId" Type="Int32" />
         </EntityType>
         <EntityType Name="NguoiDung">
           <Key>
@@ -290,19 +391,42 @@
           <Property Name="HinhDaiDien" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="DiemKyThi" Type="Double" />
         </EntityType>
-        <EntityType Name="KyThi">
+        <EntityType Name="NguPhap">
           <Key>
-            <PropertyRef Name="IdKyThi" />
+            <PropertyRef Name="IdNguPhap" />
           </Key>
-          <Property Name="IdKyThi" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="TenKyThi" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Ngay" Type="DateTime" Precision="3" />
-          <Property Name="SoThiSinh" Type="Int32" />
-          <Property Name="NgayKetThuc" Type="DateTime" Precision="3" />
-          <Property Name="TinhTrang" Type="Boolean" />
-          <NavigationProperty Name="CauHois" Relationship="DataTiengAnhModel.FK_CauHoi_KyThi" FromRole="KyThi" ToRole="CauHoi" />
-          <NavigationProperty Name="ChiTietThiSinhs" Relationship="DataTiengAnhModel.FK_ChiTietThiSinh_KyThi" FromRole="KyThi" ToRole="ChiTietThiSinh" />
+          <Property Name="IdNguPhap" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdTacGia" Type="Int32" />
+          <Property Name="TenNguPhap" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MoTaNgan" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LuotXem" Type="Int32" />
+          <Property Name="LuotThich" Type="Int32" />
+          <Property Name="TrangThai" Type="Boolean" />
+          <Property Name="NgayDang" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_ChiTietBaiTap_BaiTap">
+          <End Type="DataTiengAnhModel.BaiTap" Role="BaiTap" Multiplicity="0..1" />
+          <End Type="DataTiengAnhModel.ChiTietBaiTap" Role="ChiTietBaiTap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaiTap">
+              <PropertyRef Name="IdBaiTap" />
+            </Principal>
+            <Dependent Role="ChiTietBaiTap">
+              <PropertyRef Name="IdBaiTap" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CauHoi_KyThi">
           <End Type="DataTiengAnhModel.KyThi" Role="KyThi" Multiplicity="0..1" />
           <End Type="DataTiengAnhModel.CauHoi" Role="CauHoi" Multiplicity="*" />
@@ -327,70 +451,82 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Message">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdNguoiDung" Type="Int32" Nullable="false" />
-          <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Gio" Type="DateTime" Precision="3" />
-          <Property Name="RoomId" Type="Int32" />
-        </EntityType>
         <EntityType Name="Room">
           <Key>
             <PropertyRef Name="RoomId" />
           </Key>
           <Property Name="RoomId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="Int32" />
         </EntityType>
+        <EntityType Name="BaiTapRoom">
+          <Key>
+            <PropertyRef Name="IdBTRoom" />
+          </Key>
+          <Property Name="IdBTRoom" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ten" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NgayBatDau" Type="DateTime" Precision="3" />
+          <Property Name="NgayKetThuc" Type="DateTime" Precision="3" />
+          <Property Name="NgayDang" Type="DateTime" Precision="3" />
+          <Property Name="IdRoom" Type="Int32" />
+          <Property Name="TyLeNop" Type="Double" />
+          <Property Name="DiemCaoNhat" Type="Double" />
+          <Property Name="DiemTrungBinh" Type="Double" />
+          <Property Name="NoiDungBaiTap" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ChiTietBaiTapRooms" Relationship="DataTiengAnhModel.FK_ChiTietBaiTapRoom_BaiTapRoom" FromRole="BaiTapRoom" ToRole="ChiTietBaiTapRoom" />
+          <NavigationProperty Name="FileMotaBtRooms" Relationship="DataTiengAnhModel.FK_FileMotaBtRoom_BaiTapRoom" FromRole="BaiTapRoom" ToRole="FileMotaBtRoom" />
+        </EntityType>
+        <EntityType Name="ChiTietBaiTapRoom">
+          <Key>
+            <PropertyRef Name="IdChiTiet" />
+          </Key>
+          <Property Name="IdChiTiet" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdNguoiNop" Type="Int32" />
+          <Property Name="IdBTRoom" Type="Int32" />
+          <Property Name="FileNop" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="NgayNop" Type="DateTime" Precision="3" />
+          <Property Name="Diem" Type="Double" />
+          <NavigationProperty Name="BaiTapRoom" Relationship="DataTiengAnhModel.FK_ChiTietBaiTapRoom_BaiTapRoom" FromRole="ChiTietBaiTapRoom" ToRole="BaiTapRoom" />
+        </EntityType>
+        <Association Name="FK_ChiTietBaiTapRoom_BaiTapRoom">
+          <End Type="DataTiengAnhModel.BaiTapRoom" Role="BaiTapRoom" Multiplicity="0..1" />
+          <End Type="DataTiengAnhModel.ChiTietBaiTapRoom" Role="ChiTietBaiTapRoom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaiTapRoom">
+              <PropertyRef Name="IdBTRoom" />
+            </Principal>
+            <Dependent Role="ChiTietBaiTapRoom">
+              <PropertyRef Name="IdBTRoom" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FileMotaBtRoom">
+          <Key>
+            <PropertyRef Name="IdFile" />
+          </Key>
+          <Property Name="IdFile" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdBtRoom" Type="Int32" Nullable="false" />
+          <Property Name="File" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BaiTapRoom" Relationship="DataTiengAnhModel.FK_FileMotaBtRoom_BaiTapRoom" FromRole="FileMotaBtRoom" ToRole="BaiTapRoom" />
+        </EntityType>
+        <Association Name="FK_FileMotaBtRoom_BaiTapRoom">
+          <End Type="DataTiengAnhModel.BaiTapRoom" Role="BaiTapRoom" Multiplicity="1" />
+          <End Type="DataTiengAnhModel.FileMotaBtRoom" Role="FileMotaBtRoom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaiTapRoom">
+              <PropertyRef Name="IdBTRoom" />
+            </Principal>
+            <Dependent Role="FileMotaBtRoom">
+              <PropertyRef Name="IdBtRoom" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="DataTiengAnhModelStoreContainer" CdmEntityContainer="DataTiengAnhEntities">
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="DataTiengAnhModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="definition" ColumnName="definition" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="NguPhaps">
-            <EntityTypeMapping TypeName="DataTiengAnhModel.NguPhap">
-              <MappingFragment StoreEntitySet="NguPhap">
-                <ScalarProperty Name="NgayDang" ColumnName="NgayDang" />
-                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
-                <ScalarProperty Name="LuotThich" ColumnName="LuotThich" />
-                <ScalarProperty Name="LuotXem" ColumnName="LuotXem" />
-                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
-                <ScalarProperty Name="MoTaNgan" ColumnName="MoTaNgan" />
-                <ScalarProperty Name="TenNguPhap" ColumnName="TenNguPhap" />
-                <ScalarProperty Name="IdTacGia" ColumnName="IdTacGia" />
-                <ScalarProperty Name="IdNguPhap" ColumnName="IdNguPhap" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ChiTietBaiTaps">
-            <EntityTypeMapping TypeName="DataTiengAnhModel.ChiTietBaiTap">
-              <MappingFragment StoreEntitySet="ChiTietBaiTap">
-                <ScalarProperty Name="IdChiTietBaiTap" ColumnName="IdChiTietBaiTap" />
-                <ScalarProperty Name="Ans" ColumnName="Ans" />
-                <ScalarProperty Name="D" ColumnName="D" />
-                <ScalarProperty Name="C" ColumnName="C" />
-                <ScalarProperty Name="B" ColumnName="B" />
-                <ScalarProperty Name="A" ColumnName="A" />
-                <ScalarProperty Name="Ques" ColumnName="Ques" />
-                <ScalarProperty Name="IdBaiTap" ColumnName="IdBaiTap" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="BaiTaps">
             <EntityTypeMapping TypeName="DataTiengAnhModel.BaiTap">
               <MappingFragment StoreEntitySet="BaiTap">
@@ -420,6 +556,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ChiTietBaiTaps">
+            <EntityTypeMapping TypeName="DataTiengAnhModel.ChiTietBaiTap">
+              <MappingFragment StoreEntitySet="ChiTietBaiTap">
+                <ScalarProperty Name="IdChiTietBaiTap" ColumnName="IdChiTietBaiTap" />
+                <ScalarProperty Name="Ans" ColumnName="Ans" />
+                <ScalarProperty Name="D" ColumnName="D" />
+                <ScalarProperty Name="C" ColumnName="C" />
+                <ScalarProperty Name="B" ColumnName="B" />
+                <ScalarProperty Name="A" ColumnName="A" />
+                <ScalarProperty Name="Ques" ColumnName="Ques" />
+                <ScalarProperty Name="IdBaiTap" ColumnName="IdBaiTap" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ChiTietThiSinhs">
             <EntityTypeMapping TypeName="DataTiengAnhModel.ChiTietThiSinh">
               <MappingFragment StoreEntitySet="ChiTietThiSinh">
@@ -430,24 +580,6 @@
                 <ScalarProperty Name="Diem" ColumnName="Diem" />
                 <ScalarProperty Name="IdThiSinh" ColumnName="IdThiSinh" />
                 <ScalarProperty Name="IdKyThi" ColumnName="IdKyThi" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="NguoiDungs">
-            <EntityTypeMapping TypeName="DataTiengAnhModel.NguoiDung">
-              <MappingFragment StoreEntitySet="NguoiDung">
-                <ScalarProperty Name="DiemKyThi" ColumnName="DiemKyThi" />
-                <ScalarProperty Name="HinhDaiDien" ColumnName="HinhDaiDien" />
-                <ScalarProperty Name="Admin" ColumnName="Admin" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="GioiTinh" ColumnName="GioiTinh" />
-                <ScalarProperty Name="NgaySinh" ColumnName="NgaySinh" />
-                <ScalarProperty Name="MatKhau" ColumnName="MatKhau" />
-                <ScalarProperty Name="TenDN" ColumnName="TenDN" />
-                <ScalarProperty Name="DienThoaiKH" ColumnName="DienThoaiKH" />
-                <ScalarProperty Name="DiaChiKH" ColumnName="DiaChiKH" />
-                <ScalarProperty Name="HoTenKH" ColumnName="HoTenKH" />
-                <ScalarProperty Name="MaKH" ColumnName="MaKH" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -474,12 +606,93 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="NguoiDungs">
+            <EntityTypeMapping TypeName="DataTiengAnhModel.NguoiDung">
+              <MappingFragment StoreEntitySet="NguoiDung">
+                <ScalarProperty Name="DiemKyThi" ColumnName="DiemKyThi" />
+                <ScalarProperty Name="HinhDaiDien" ColumnName="HinhDaiDien" />
+                <ScalarProperty Name="Admin" ColumnName="Admin" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="GioiTinh" ColumnName="GioiTinh" />
+                <ScalarProperty Name="NgaySinh" ColumnName="NgaySinh" />
+                <ScalarProperty Name="MatKhau" ColumnName="MatKhau" />
+                <ScalarProperty Name="TenDN" ColumnName="TenDN" />
+                <ScalarProperty Name="DienThoaiKH" ColumnName="DienThoaiKH" />
+                <ScalarProperty Name="DiaChiKH" ColumnName="DiaChiKH" />
+                <ScalarProperty Name="HoTenKH" ColumnName="HoTenKH" />
+                <ScalarProperty Name="MaKH" ColumnName="MaKH" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NguPhaps">
+            <EntityTypeMapping TypeName="DataTiengAnhModel.NguPhap">
+              <MappingFragment StoreEntitySet="NguPhap">
+                <ScalarProperty Name="NgayDang" ColumnName="NgayDang" />
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+                <ScalarProperty Name="LuotThich" ColumnName="LuotThich" />
+                <ScalarProperty Name="LuotXem" ColumnName="LuotXem" />
+                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+                <ScalarProperty Name="MoTaNgan" ColumnName="MoTaNgan" />
+                <ScalarProperty Name="TenNguPhap" ColumnName="TenNguPhap" />
+                <ScalarProperty Name="IdTacGia" ColumnName="IdTacGia" />
+                <ScalarProperty Name="IdNguPhap" ColumnName="IdNguPhap" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="DataTiengAnhModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Rooms">
             <EntityTypeMapping TypeName="DataTiengAnhModel.Room">
               <MappingFragment StoreEntitySet="Room">
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="RoomId" ColumnName="RoomId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BaiTapRooms">
+            <EntityTypeMapping TypeName="DataTiengAnhModel.BaiTapRoom">
+              <MappingFragment StoreEntitySet="BaiTapRoom">
+                <ScalarProperty Name="NoiDungBaiTap" ColumnName="NoiDungBaiTap" />
+                <ScalarProperty Name="DiemTrungBinh" ColumnName="DiemTrungBinh" />
+                <ScalarProperty Name="DiemCaoNhat" ColumnName="DiemCaoNhat" />
+                <ScalarProperty Name="TyLeNop" ColumnName="TyLeNop" />
+                <ScalarProperty Name="IdRoom" ColumnName="IdRoom" />
+                <ScalarProperty Name="NgayDang" ColumnName="NgayDang" />
+                <ScalarProperty Name="NgayKetThuc" ColumnName="NgayKetThuc" />
+                <ScalarProperty Name="NgayBatDau" ColumnName="NgayBatDau" />
+                <ScalarProperty Name="Ten" ColumnName="Ten" />
+                <ScalarProperty Name="IdBTRoom" ColumnName="IdBTRoom" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ChiTietBaiTapRooms">
+            <EntityTypeMapping TypeName="DataTiengAnhModel.ChiTietBaiTapRoom">
+              <MappingFragment StoreEntitySet="ChiTietBaiTapRoom">
+                <ScalarProperty Name="Diem" ColumnName="Diem" />
+                <ScalarProperty Name="NgayNop" ColumnName="NgayNop" />
+                <ScalarProperty Name="FileNop" ColumnName="FileNop" />
+                <ScalarProperty Name="IdBTRoom" ColumnName="IdBTRoom" />
+                <ScalarProperty Name="IdNguoiNop" ColumnName="IdNguoiNop" />
+                <ScalarProperty Name="IdChiTiet" ColumnName="IdChiTiet" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FileMotaBtRooms">
+            <EntityTypeMapping TypeName="DataTiengAnhModel.FileMotaBtRoom">
+              <MappingFragment StoreEntitySet="FileMotaBtRoom">
+                <ScalarProperty Name="File" ColumnName="File" />
+                <ScalarProperty Name="IdBtRoom" ColumnName="IdBtRoom" />
+                <ScalarProperty Name="IdFile" ColumnName="IdFile" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

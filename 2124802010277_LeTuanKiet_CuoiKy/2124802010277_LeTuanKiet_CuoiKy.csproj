@@ -147,6 +147,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AdminAuthorize.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -171,10 +172,16 @@
     <Compile Include="Models\BaiTap.cs">
       <DependentUpon>Exams.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BaiTapRoom.cs">
+      <DependentUpon>Exams.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CauHoi.cs">
       <DependentUpon>Exams.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ChiTietBaiTap.cs">
+      <DependentUpon>Exams.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChiTietBaiTapRoom.cs">
       <DependentUpon>Exams.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ChiTietThiSinh.cs">
@@ -196,6 +203,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Exams.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FileMotaBtRoom.cs">
+      <DependentUpon>Exams.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KyThi.cs">
       <DependentUpon>Exams.tt</DependentUpon>
@@ -1758,6 +1768,8 @@
     <Content Include="Areas\Admin\Views\ManagerGrammar\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ManagerGrammar\test.cshtml" />
     <Content Include="Areas\Admin\Views\ManagerAssignment\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\ManagerGrammar\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\ManagerAssignment\Edit.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -2217,11 +2229,18 @@
     <Content Include="Views\Assignments\test.cshtml" />
     <Content Include="Views\Chat\Index.cshtml" />
     <Content Include="Views\Chat\ListRoom.cshtml" />
+    <Content Include="Views\User\test.cshtml" />
+    <Content Include="Views\Chat\Chat.cshtml" />
+    <Content Include="Views\Chat\ChatUser.cshtml" />
+    <Content Include="Views\Chat\BaiTap.cshtml" />
+    <Content Include="Views\Chat\NopBai.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="DATA\" />
+    <Folder Include="File\Image\" />
+    <Folder Include="File\OtherFile\" />
     <Folder Include="icon\" />
     <Folder Include="Views\Login\" />
   </ItemGroup>

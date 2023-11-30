@@ -2,7 +2,7 @@
 <ul class="list-group">
     @foreach (var item in Model)
     {
-        <a href="@Url.Action("DetailGrammar","Grammar",new {id=item.IdNguPhap})" style="color: white">
+        <a href="@Url.Action("IncreaseView","Grammar", new { id =item.IdNguPhap})" style="color: white">
             <li class="list-group-item active">
 
                 @item.TenNguPhap

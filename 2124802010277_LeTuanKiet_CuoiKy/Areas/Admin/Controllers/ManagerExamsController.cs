@@ -10,8 +10,13 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
     {
         // GET: Admin/ManagerExams
         DataTiengAnhEntities db = new DataTiengAnhEntities();
-        public ActionResult Index()
+        public ActionResult Index(string KeyWork)
         {
+            if(!string.IsNullOrEmpty(KeyWork))
+            {
+                List<KyThi> tmp1 = db.KyThis.OrderByDescending(item => item.NgayKetThuc).Where(item=> item.IdKyThi.Contains(KeyWork) || item.TenKyThi.Contains(KeyWork)).ToList();
+                return View(tmp1);
+            }    
             List<KyThi> tmp = db.KyThis.OrderByDescending(item => item.NgayKetThuc).ToList();
             return View(tmp);
         }
