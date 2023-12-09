@@ -1,0 +1,72 @@
+Hướng dẫn làm game DuckHunt:
+
+Đầu tiên tạo BackGround
+	B1: Tạo BackGround cho game, 
+	B2: Tạo xong tô màu bầu trời cho background(có thể vẽ thêm mây gió sau đó)
+	B3: Chỉnh lại kích thước background Height: 800, With: 1000
+	B4: Tạo phòng chơi với kích thước giống background, thêm background sau đó chạy thử
+
+
+Tạo nhân vật Dog
+	B1: Tạo Object xong thêm hình ảnh cho Dog (Chọn 3 hình con chó đang đi và đặt tên hình ảnh là Dog_Walk)
+	B2: Tạo thêm hình ảnh con cho nhảy
+	B3: Tạo thêm hình ảnh cho con chó phát hiện
+Lập trình cho nhân vật Dog
+	B1: Tạo sự kiện Create
+	B2: Trong sự kiện Create thêm 2 Action đó là Di chuyển sang phải với speed là 10 và Gọi 1 Alarm 0 với 2 giây
+	B3: Thêm sự kiện Alarm 0. Trong Alarm 0 ta cho con chó ngừng lại và chuyển sang hình ảnh Con chó đang phát hiện cái gì đó
+	B4: Chỉnh lại tốc độ khung hình di chuyển cho con chó khoảng 0.3 ( Có thể bỏ qua bước này )
+	B5: Trong sự kiện Alarm 0 gọi thêm 1 Action Alarm 1 trong 1 giây (Để gọi hành động cho con chó nhảy lên)
+	B6: Thêm sự kiện Alarm 1
+	B7: Trong sự kiện Alarm 1 gọi 3 Action
+			+Set Vertical_Speed: -20 (Trục tọa độ Y hướng lên trên là âm, xuống dưới là dương)
+			+Set Gravity: 270, 1
+			+Đổi lại hình ảnh nhảy cho con chó
+	B8: Bây giờ khi con chó nhảy xong thì phải cho nó biến mất chính vì vậy trong Alarm 1 mình gọi thêm sự kiện Alarm 2 với khoảng thời gian là 1 giây
+	B9: Trong Alarm 2 mình xóa con chó đi
+	B10: Thêm âm thanh cho con chó
+
+
+Tạo nhân vật vịt
+	B1: Tạo Object Vịt xong thêm hình ảnh
+		+Vịt trái
+		+Vịt phải
+		+Vịt trái trên
+		+Vịt phải trên
+	B2: Chỉnh tốc độc cho con vịt thành 0.2
+	
+	
+	
+Tạo ống ngắm
+	B1: Tạo Object Controller dùng để điều khiển ống ngắm theo con chuột
+	B2: Tạo 1 Hình ảnh ống ngắm (Lưu ý hình ảnh này không đi kèm với Object Controller)
+	B3: Tạo Sự kiện Create cho Object Controller
+	B4: Bên trong sự kiện Create tạo Action Set_Mouse nằm ở mục Extra
+	B5: Thêm Object Controller vào room 
+
+
+Lập trình cho con vịt
+	B1: Tạo sự kiện khi nhấn chuột vào con vịt thì nó sẽ biến mất (trước đó hãy chỉnh hình ảnh Cosshair thành center để nó vào chính giữa con chuột)
+	B2: Chỉnh Modify mask cho con vịt
+	B3: Thêm âm thanh cho con vịt 
+
+Lập trình bắn ra tiếng súng
+	B1: Tạo âm thanh tiếng súng
+	B2: Tạo 1 Object có tên là point hình ảnh của Object này sẽ là 1 ô vuông tô màu và có độ dài chiều cao là 6 và chỉnh center
+	B3: Thêm sự kiện Step cho Object point trong đó thêm 2 biến
+			+Biến 1 tên là x và giá trị của nó là mouse_x
+			+Biển 2 tên là y và giá trị của nó là mouse_y
+			=> để cho cái điểm này luôn đi theo con chuột của chúng ta
+	B4: Cho Object này vào room
+	B5: Thêm sự kiện bấm chuột trái vào Object này thì nó sẽ phát ra tiếng súng
+	B6: Quay lại Object con vịt ở sự kiện khi bị trúng đạn cho con vịt ngừng âm thanh của nó
+	
+Video hướng dẫn: https://drive.google.com/drive/folders/1RSM6m_hVaiw6PuAW_N6m5mFra0DYo5m8
+
+
+
+	
+	
+	
+	
+	

@@ -1,8 +1,16 @@
 ﻿@model IEnumerable<_2124802010277_LeTuanKiet_CuoiKy.Models.KyThi>
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
 @{
     ViewBag.Title = "ManagerExams";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
-    
+    int pg = (int)ViewBag.pg;
+    Pager p = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        p = ViewBag.Pager;
+        pageNo = p.CurrentPage;
+    }
 }
 <div class="page-wrapper">
     <!-- ============================================================== -->
@@ -15,10 +23,12 @@
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <div class="d-md-flex" style="align-items: center">
-                    <form class="input-group" >
-                        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="KeyWork"/>
-                        <button type="submit" class="btn btn-outline-primary" data-mdb-ripple-init 
-                                style="height: 35px">search</button>
+                    <form class="input-group">
+                        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="KeyWork" />
+                        <button type="submit" class="btn btn-outline-primary" data-mdb-ripple-init
+                                style="height: 35px">
+                            search
+                        </button>
                     </form>
                     <a href="@Url.Action("CreateExams","ManagerExams")"
                        class="btn btn-danger  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
@@ -38,7 +48,7 @@
     <div class="container-fluid">
         @*Xây dựng nội dung ở đây*@
 
-        @if (Model.Count() >0)
+        @if (Model.Count() > 0)
         {
             <table class="table">
                 <tr>
@@ -90,8 +100,8 @@
         else
         {
             <main style="
-                text-align: center; 
-                display: flex; 
+                text-align: center;
+                display: flex;
                 flex-direction: column;
                 min-height: 500px;
                 justify-content: center;
@@ -103,6 +113,16 @@
                 <a href="@Url.Action("Index","ManagerExams")">Xem tất cả</a>
             </main>
         }
+    </div>
+    <div class="container">
+        <ul class="pagination justify-content-end">
+            @for (int i = p.StartPage; i <= p.EndPage; i++)
+            {
+                <li class="page-item @(i==p.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="~/Admin/ManagerExams/Index?pg=@i">@i</a>
+                </li>
+            }
+        </ul>
     </div>
 </div>
 

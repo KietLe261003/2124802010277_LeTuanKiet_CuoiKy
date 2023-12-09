@@ -6,29 +6,82 @@
     int NowId = (int)id;
     int TypeRoom = (int)ViewBag.TypeRoom;
 }
+<style>
+    .list-group-item {
+        margin-bottom: 10px;
+        height: 70px;
+    }
+
+    div#container {
+        text-align: left
+    }
+
+    div#navigation {
+        background: #F6F0E0;
+    }
+
+        div#navigation ul {
+            margin: 15px 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        div#navigation li {
+            margin-bottom: 5px;
+        }
+
+    div#extra {
+        background: #CCC8B3;
+    }
+
+    div#container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+
+    div#wrapper {
+        flex: 55%;
+    }
+
+    div#content {
+        margin: 0 20px
+    }
+
+    div#navigation {
+        flex: 15%;
+    }
+
+    div#extra {
+        flex: 30%;
+    }
+</style>
 <div class="input-group rounded mb-3">
     <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
-           aria-describedby="search-addon" />
-    <span class="input-group-text border-0" id="search-addon">
+           aria-describedby="search-addon" id="KeyWorkTabBar" />
+    <button class="input-group-text border-0" id="search-addon" onclick="SearchUserTabBar()">
         <i class="fas fa-search"></i>
-    </span>
+    </button>
+    <input type="hidden" value="@TypeRoom" id="TypeRoom"/>
 </div>
+@{ 
+    var cl = TypeRoom==1 ? "nav-link active": "nav-link";
+    var cl1 = TypeRoom == 1 ? "nav-link" : "nav-link active";
+}
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="~/Chat/Index?TypeRoom=1">Cá nhân</a>
+        <a class="@cl" aria-current="page" href="~/Chat/Index?TypeRoom=1">Cá nhân</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="~/Chat/Index?TypeRoom=2">Lớp học</a>
+        <a class="@cl1" href="~/Chat/Index?TypeRoom=2">Lớp học</a>
     </li>
 </ul>
-
-
-
 
 @if (TypeRoom == 1)
 {
     /*List này dành cho chat cá nhân*/
-    <ul class="list-unstyled mb-0">
+    <ul class="list-unstyled mb-0" id="ListChat1" style="height: 600px; overflow: auto">
         @foreach (var item in Model)
         {
             var UserChat = db.Messages.FirstOrDefault(x => x.RoomId == item && x.IdNguoiDung != NowId);
@@ -51,7 +104,7 @@
             }
         }
         <li class="p-2 border-bottom" style="background-color: #eee; display: flex; align-items: center; justify-content: center; height: 85px ">
-            <button href="#" class="" style="width: 100%; height: 100%; background-color: blueviolet">
+            <button onclick="Show()" class="" style="width: 100%; height: 100%; background-color: blueviolet">
                 +
             </button>
         </li>
@@ -60,11 +113,10 @@
 else
 {
     /*List này dành cho chat cá nhân*/
-<ul class="list-unstyled mb-0">
+<ul class="list-unstyled mb-0" id="ListChat2" style="height: 600px; overflow: auto">
     @foreach (var item in Model)
     {
         var NameRoom = db.Rooms.FirstOrDefault(x => x.RoomId == item).Name;
-
         if (User != null)
         {
             <li class="p-2 border-bottom" style="background-color: #eee;">
@@ -82,9 +134,269 @@ else
         }
     }
     <li class="p-2 border-bottom" style="background-color: #eee; display: flex; align-items: center; justify-content: center; height: 85px ">
-        <button href="#" class="" style="width: 100%; height: 100%; background-color: blueviolet">
+        <button class="" onclick="Show()" style="width: 100%; height: 100%; background-color: blueviolet">
             +
+        </button>
+    </li>
+    <li class="p-2 border-bottom" style="background-color: #eee; display: flex; align-items: center; justify-content: center; height: 85px ">
+        <button class="" onclick="ShowRoom()" style="width: 100%; height: 100%; background-color: blueviolet">
+            Tham gia lớp
         </button>
     </li>
 </ul>
 }
+<div class="modal" id="Add">
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center">
+        <div class="" style="width: 70%">
+            <div class="modal-content">
+                @{ string title = TypeRoom == 1 ? "Tìm Kiếm cuộc trò chuyện mới" : "Tạo một nhóm mới"; }
+                <div class="modal-header">
+                    <h5 class="modal-title">@title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="Hide()"></button>
+                </div>
+                <form action="@Url.Action("CreateRoomType2","Chat")" method="post">
+                    <div class="modal-body" style="height: 700px">
+                        <div id="container">
+                            @if (TypeRoom == 1)
+                            {
+                                <div id="wrapper">
+                                    <div class="form-group" style="padding: 0 20px">
+                                        <label style="font-weight: bold">Tìm tên người dùng</label>
+                                        <div class="input-group rounded mb-3">
+                                            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                                                   aria-describedby="search-addon" id="KeyWork" />
+                                            <button type="button" class="input-group-text border-0" id="search-addon" onclick="SearchUser()">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="content" style="height: 100%">
+                                        <ul id="ListUserFind">
+                                        </ul>
+                                    </div>
+                                </div>
+                            }
+
+                            @if (TypeRoom == 2)
+                            {
+                                <div id="extra">
+                                    <p><strong>Tạo nhóm mới</strong></p>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Tên nhóm</label>
+                                            <input type="text" name="NameNhom" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Mô tả nhóm</label>
+                                            <textarea type="text" name="DetialNhom" class="form-control">
+
+                                                </textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <select name="LoaiNhom">
+                                                <option value="1">Riêng tư</option>
+                                                <option value="0">Công khai</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    @if (TypeRoom == 2)
+                    {
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="Hide()" id="BtnClose">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="AddClass">
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center">
+        <div class="" style="width: 70%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tham gia lớp học bằng mã hoặc theo tên</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="Hide1()"></button>
+                </div>
+                    <div class="modal-body" style="height: 700px">
+                        <div id="container">
+                            <div id="wrapper">
+                                <div class="form-group" style="padding: 0 20px">
+                                    <label style="font-weight: bold">Tìm lớp theo tên</label>
+                                    <div class="input-group rounded mb-3">
+                                        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                                               aria-describedby="search-addon" id="KeyRoom" />
+                                        <button type="button" class="input-group-text border-0" id="search-addon" onclick="SearchRoom()">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="content" style="height: 100%">
+                                    <ul id="ListRoom">
+                                    </ul>
+                                    @*<button type="submit" class="btn btn-primary">Tham gia</button>*@
+                                </div>
+                                
+                            </div>
+                            <div id="extra">
+                                <p><strong>Tham gia thông qua mã nhóm</strong></p>
+                                <form action="@Url.Action("AddMember")" method="post">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Nhập mã nhóm</label>
+                                            <input type="text" name="KeyWork" class="form-control">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Tham gia nhóm</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>  
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var typeRoom = '@TypeRoom';
+    function Show() {
+        var s = document.getElementById('Add');
+        s.style.display = 'block';
+    }
+
+    function Hide() {
+        var s = document.getElementById('Add');
+        s.style.display = 'none';
+    }
+    function Hide1() {
+        var s = document.getElementById('AddClass');
+        s.style.display = 'none';
+    }
+
+    function SearchUserTabBar() {
+        var KeyWork = document.getElementById('KeyWorkTabBar').value;
+        var TypeRoom = document.getElementById('TypeRoom').value;
+        $.ajax({
+            url: '/Chat/FindUserTabar',
+            type: 'POST',
+            data: { KeyWork: KeyWork, TypeRoom: TypeRoom },
+            success: function (res) {
+                if (TypeRoom == 1) {
+                    var IdKh = res.IdKh;
+                    var HinhDaiDien = res.HinhDaiDien;
+                    var HoTen = res.Hoten;
+                    var ListUser = document.getElementById('ListChat1');
+                    ListUser.innerHTML = '';
+                    console.log(IdKh);
+                    for (let i = 0; i < IdKh.length; i++) {
+                        var ms = `<li class="p-2 border-bottom" style="background-color: #eee;">
+                                    <a href="/Chat/CreateRoomType1?IdUserChat=`+ IdKh[i] +`" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img src="`+ HinhDaiDien[i] + `" alt="avatar"
+                                                 class="" style="min-height: 60px; max-height: 60px; min-width: 60px; max-width: 60px; border-radius: 30px; margin-right: 10px">
+                                            <div class="pt-1">
+                                                <p class="fw-bold mb-0">`+ HoTen[i] + `</p>
+                                                <p class="small text-muted">Hello, Are you there?</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>`
+                        $('#ListChat1').append(ms);
+                    }
+                }
+                else {
+                    var Idr = res.IdRoom;
+                    var NameRoom = res.NameRoom;
+                    var ListUser = document.getElementById('ListChat2');
+                    ListUser.innerHTML = '';
+                    for (let i = 0; i < Idr.length; i++) {
+                        var ms = `<li class="p-2 border-bottom" style="background-color: #eee;">
+                                    <a href="/Chat/Index?id=`+Idr[i]+`&TypeRoom=2" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img src="/images/r.png" alt="avatar"
+                                                 class="" style="min-height: 60px; max-height: 60px; min-width: 60px; max-width: 60px; border-radius: 30px; margin-right: 10px">
+                                            <div class="pt-1">
+                                                <p class="fw-bold mb-0">`+ NameRoom[i] +`</p>
+                                                <p class="small text-muted">Hello, Are you there?</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>`
+                        $('#ListChat2').append(ms);
+                    }
+                }
+
+            },
+        });
+    }
+
+    function SearchUser() {
+        var KeyWork = document.getElementById('KeyWork').value;
+        $.ajax({
+            url: '/Chat/FindUser',
+            type: 'POST',
+            data: { KeyWork: KeyWork },
+            success: function (res) {
+                var IdKh = res.IdKh;
+                var HinhDaiDien = res.HinhDaiDien;
+                var HoTen = res.Hoten;
+                var ListUser = document.getElementById('ListUserFind');
+                ListUser.innerHTML = '';
+                for (let i = 0; i < IdKh.length; i++) {
+                    var ms = `<li class="p-2 border-bottom" style="background-color: #eee; margin-bottom: 5px">
+                                            <a href="/Chat/CreateRoomType1?IdUserChat=`+ IdKh[i] +`" class="d-flex justify-content-between">
+                                                <div class="d-flex flex-row">
+                                                    <img src="`+ HinhDaiDien[i] +`" alt="avatar"
+                                                         class="" style="min-height: 60px; max-height: 60px; min-width: 60px; max-width: 60px; border-radius: 30px; margin-right: 10px">
+                                                    <div class="pt-1">
+                                                        <p class="fw-bold mb-0">`+ HoTen[i] +`</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>`
+                    $('#ListUserFind').append(ms);
+                }
+            },
+        });
+    }
+
+    function ShowRoom() {
+        var s = document.getElementById('AddClass');
+        s.style.display = 'block';
+    }
+    function SearchRoom() {
+        var KeyWork = document.getElementById('KeyRoom').value;
+        $.ajax({
+            url: '/Chat/FindRoom',
+            type: 'POST',
+            data: { KeyWork: KeyWork },
+            success: function (res) {
+                var IdR = res.IdR;
+                var NameRoom = res.NameRoom;
+                var ListUser = document.getElementById('ListRoom');
+                ListUser.innerHTML = '';
+                console.log(IdR);
+                for (let i = 0; i < IdR.length; i++) {
+                    var ms = `<li class="p-2 border-bottom" style="background-color: #eee;">
+                                    <a href="/Chat/AddMember1?id=`+ IdR[i] + `&TypeRoom=2" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img src="/images/r.png" alt="avatar"
+                                                 class="" style="min-height: 60px; max-height: 60px; min-width: 60px; max-width: 60px; border-radius: 30px; margin-right: 10px">
+                                            <div class="pt-1">
+                                                <p class="fw-bold mb-0">`+ NameRoom[i] +`</p>
+                                                <p class="small text-muted">Hello, Are you there?</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>`
+                    $('#ListRoom').append(ms);
+                }
+            },
+        });
+    }
+</script>

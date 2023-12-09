@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using _2124802010277_LeTuanKiet_CuoiKy.App_Start;
 using _2124802010277_LeTuanKiet_CuoiKy.Models;
 namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
 {
@@ -10,16 +11,32 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
     {
         // GET: Admin/ManagerExams
         DataTiengAnhEntities db = new DataTiengAnhEntities();
-        public ActionResult Index(string KeyWork)
+        [AdminAuthorize()]
+        public ActionResult Index(string KeyWork,int pg=1)
         {
-            if(!string.IsNullOrEmpty(KeyWork))
+            const int pageSize = 10;
+            if (pg < 1)
+                pg = 1;
+            if (!string.IsNullOrEmpty(KeyWork))
             {
                 List<KyThi> tmp1 = db.KyThis.OrderByDescending(item => item.NgayKetThuc).Where(item=> item.IdKyThi.Contains(KeyWork) || item.TenKyThi.Contains(KeyWork)).ToList();
+                int totalitem1 = tmp1.Count();
+                var pager1 = new Pager(totalitem1, pg, pageSize);
+                int skipPage1 = (pg - 1) * pageSize;
+                ViewBag.Pager = pager1;
+                ViewBag.pg = pg;
                 return View(tmp1);
             }    
             List<KyThi> tmp = db.KyThis.OrderByDescending(item => item.NgayKetThuc).ToList();
-            return View(tmp);
+            int totalitem = tmp.Count();
+            var pager = new Pager(totalitem, pg, pageSize);
+            int skipPage = (pg - 1) * pageSize;
+            ViewBag.Pager = pager;
+            ViewBag.pg = pg;
+            List<KyThi> tmp2 = tmp.Skip(skipPage).Take(pageSize).ToList();
+            return View(tmp2);
         }
+        [AdminAuthorize()]
         public ActionResult CreateExams()
         {
             return View();
@@ -47,6 +64,13 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
             newExam.SoThiSinh = 0;
             newExam.TinhTrang = false;
             db.KyThis.Add(newExam);
+
+            var Ckythi = db.KyThis.FirstOrDefault(item => item.IdKyThi == newExam.IdKyThi);
+            if(tmp==null || string.IsNullOrEmpty(newExam.IdKyThi) || Ckythi!=null || tmp1==null)
+            {
+                return RedirectToAction("Fail");
+            }    
+
             db.SaveChanges();
             //Thêm kỳ thi end
 
@@ -72,6 +96,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
             Session["IdKyThi"] = data["IdKyThi"];
             return RedirectToAction("Index");
         }
+        [AdminAuthorize()]
         public ActionResult DetailExams(string id)
         {
             KyThi tmp = db.KyThis.FirstOrDefault(item => item.IdKyThi == id);
@@ -79,6 +104,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
             ViewBag.ThiSinh = ts;
             return View(tmp);
         }
+        [AdminAuthorize()]
         public ActionResult CongBo(string id)
         {
             KyThi tmp = db.KyThis.FirstOrDefault(item => item.IdKyThi == id);
@@ -112,6 +138,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
             }
             return RedirectToAction("Index");
         }
+        [AdminAuthorize()]
         public ActionResult DeleteExams(string id)
         {
             List<CauHoi> ch = db.CauHois.Where(item => item.IdBoCauHoi == id).ToList();
@@ -131,6 +158,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
+        [AdminAuthorize()]
         public ActionResult EditExams(string id)
         {
             KyThi kt = db.KyThis.FirstOrDefault(item => item.IdKyThi == id);
@@ -138,6 +166,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
             ViewBag.DanhSachCauHoi = tmp;
             return View(kt);
         }
+        [AdminAuthorize()]
         [HttpPost] 
         public ActionResult EditExams(FormCollection f,List<CauHoi> LQuestion)
         {
@@ -169,5 +198,10 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
         /*Quản lý kì thi end*/
+
+        public ActionResult Fail()
+        {
+            return View();
+        }
     }
 }

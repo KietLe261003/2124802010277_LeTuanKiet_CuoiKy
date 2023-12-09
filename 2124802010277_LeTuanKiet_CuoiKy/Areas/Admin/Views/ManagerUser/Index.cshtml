@@ -1,7 +1,17 @@
 ﻿@model IEnumerable<_2124802010277_LeTuanKiet_CuoiKy.Models.NguoiDung>
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
 @{
     ViewBag.Title = "ManagerUser";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    NguoiDung nd = (NguoiDung)ViewBag.nd;
+    string dis = nd.TenDN == "KietLe2" ? "" : "disabled";
+    Pager p = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        p = ViewBag.Pager;
+        pageNo = p.CurrentPage;
+    }
 }
 <div class="page-wrapper">
     <!-- ============================================================== -->
@@ -10,18 +20,17 @@
     <div class="page-breadcrumb bg-white">
         <div class="row align-items-center">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Dashboard</h4>
+                <h4 class="page-title">Danh sách người dùng</h4>
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <div class="d-md-flex">
-                    <ol class="breadcrumb ms-auto">
-                        <li><a href="#" class="fw-normal">Dashboard</a></li>
-                    </ol>
-                    <a href="https://www.wrappixel.com/templates/ampleadmin/" target="_blank"
-                       class="btn btn-danger  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
-                        Upgrade
-                        to Pro
-                    </a>
+                    <form action="@Url.Action("Index","ManagerUser")" style="display: flex; flex-direction: row; width: 100%">
+                        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="KeyWork" id="KeyWork" />
+                        <button type="submit" id="btnSearch" class="btn btn-outline-primary" data-mdb-ripple-init
+                                style="height: 35px">
+                            search
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -97,21 +106,70 @@
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
                     <td>
-                        <select class="tri-state list-box">
-                            <option value="">Not Set</option>
-                            <option value="true">True</option>
-                            <option selected="selected" value="false">False</option>
-                        </select>
+                        @if (item.TenDN == "KietLe2")
+                        {
+                            <select class="tri-state list-box" disabled>
+                                <option value="true" selected="selected">True</option>
+                            </select>
+                        }
+                        else if (item.Admin == true)
+                        {
+                            <select class="tri-state list-box" onchange="SetAdmin(@item.MaKH,this.value)" @dis>
+                                <option value="true" selected="selected">True</option>
+                                <option value="false">False</option>
+                            </select>
+                        }
+                        else
+                        {
+                            <select class="tri-state list-box" onchange="SetAdmin(@item.MaKH, this.value)" @dis>
+                                <option value="true">True</option>
+                                <option value="false" selected="selected">False</option>
+                            </select>
+                        }
                     </td>
                     <td>
-                        @Html.ActionLink("Details", "Details", new { id = item.MaKH }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.MaKH })
+                        @if (nd.MaKH == 23)
+                        {
+                            <button type="button" class="btn btn-outline-warning" data-mdb-ripple-init data-mdb-ripple-color="dark" onclick="DeleteUser(@item.MaKH)">Xóa</button>
+                        }
+                        else
+                        {
+                            if (item.TenDN != "KietLe2" && item.Admin == false)
+                            {
+                                <button type="button" class="btn btn-warning" data-mdb-ripple-init data-mdb-ripple-color="dark" onclick="DeleteUser(@item.MaKH)">Xóa</button>
+                            }
+                        }
+
                     </td>
                 </tr>
             }
 
         </table>
-
-
+    </div>
+    <div class="container">
+        <ul class="pagination justify-content-end">
+            @for (int i = p.StartPage; i <= p.EndPage; i++)
+            {
+                <li class="page-item @(i==p.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="~/Admin/ManagerUser/Index?pg=@i">@i</a>
+                </li>
+            }
+        </ul>
     </div>
 </div>
+<script>
+    function SetAdmin(idUser, ValuAdmin) {
+        window.location.href = "/Admin/ManagerUser/SetAdmin?IdUser=" + idUser + "&valu=" + ValuAdmin + "";
+    }
+    function DeleteUser(idUser) {
+        console.log(idUser);
+        var xacNhan = confirm("Bạn muốn xóa người dùng này không?");
+
+        // Nếu người dùng nhấn OK trong hộp thoại xác nhận
+        if (xacNhan) {
+            window.location.href = "/Admin/ManagerUser/Delete?IdUser="+ idUser +"";
+        } else {
+            
+        }
+    }
+</script>

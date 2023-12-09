@@ -146,6 +146,11 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
             }
             return View(nd1);
         }
+        public ActionResult LogOut()
+        {
+            Session["TaiKhoan"]=null;
+            return RedirectToAction("Index", "Home");
+        }
         public ActionResult test()
         {
             return View();

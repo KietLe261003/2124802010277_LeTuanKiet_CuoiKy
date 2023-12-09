@@ -67,9 +67,18 @@
           <Property Name="IdChiTiet" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdNguoiNop" Type="int" />
           <Property Name="IdBTRoom" Type="int" />
-          <Property Name="FileNop" Type="varchar(max)" />
+          <Property Name="FileNop" Type="nvarchar(max)" />
           <Property Name="NgayNop" Type="datetime" />
-          <Property Name="Diem" Type="float" />
+          <Property Name="Diem" Type="int" />
+        </EntityType>
+        <EntityType Name="ChiTietPhong">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaKH" Type="int" />
+          <Property Name="IdPhong" Type="int" />
+          <Property Name="ChuPhong" Type="bit" />
         </EntityType>
         <EntityType Name="ChiTietThiSinh">
           <Key>
@@ -148,8 +157,10 @@
             <PropertyRef Name="RoomId" />
           </Key>
           <Property Name="RoomId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar(max)" />
           <Property Name="Type" Type="int" />
+          <Property Name="IdJoin" Type="varchar" MaxLength="50" />
+          <Property Name="MoTa" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -197,6 +208,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ChiTietPhong_Room">
+          <End Role="Room" Type="Self.Room" Multiplicity="0..1" />
+          <End Role="ChiTietPhong" Type="Self.ChiTietPhong" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room">
+              <PropertyRef Name="RoomId" />
+            </Principal>
+            <Dependent Role="ChiTietPhong">
+              <PropertyRef Name="IdPhong" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ChiTietThiSinh_KyThi">
           <End Role="KyThi" Type="Self.KyThi" Multiplicity="0..1" />
           <End Role="ChiTietThiSinh" Type="Self.ChiTietThiSinh" Multiplicity="*" />
@@ -227,6 +250,7 @@
           <EntitySet Name="CauHoi" EntityType="Self.CauHoi" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChiTietBaiTap" EntityType="Self.ChiTietBaiTap" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChiTietBaiTapRoom" EntityType="Self.ChiTietBaiTapRoom" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ChiTietPhong" EntityType="Self.ChiTietPhong" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChiTietThiSinh" EntityType="Self.ChiTietThiSinh" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileMotaBtRoom" EntityType="Self.FileMotaBtRoom" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KyThi" EntityType="Self.KyThi" Schema="dbo" store:Type="Tables" />
@@ -247,6 +271,10 @@
             <End Role="BaiTapRoom" EntitySet="BaiTapRoom" />
             <End Role="ChiTietBaiTapRoom" EntitySet="ChiTietBaiTapRoom" />
           </AssociationSet>
+          <AssociationSet Name="FK_ChiTietPhong_Room" Association="Self.FK_ChiTietPhong_Room">
+            <End Role="Room" EntitySet="Room" />
+            <End Role="ChiTietPhong" EntitySet="ChiTietPhong" />
+          </AssociationSet>
           <AssociationSet Name="FK_ChiTietThiSinh_KyThi" Association="Self.FK_ChiTietThiSinh_KyThi">
             <End Role="KyThi" EntitySet="KyThi" />
             <End Role="ChiTietThiSinh" EntitySet="ChiTietThiSinh" />
@@ -262,39 +290,44 @@
       <Schema Namespace="DataTiengAnhModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="DataTiengAnhEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="BaiTaps" EntityType="DataTiengAnhModel.BaiTap" />
+          <EntitySet Name="BaiTapRooms" EntityType="DataTiengAnhModel.BaiTapRoom" />
           <EntitySet Name="CauHois" EntityType="DataTiengAnhModel.CauHoi" />
           <EntitySet Name="ChiTietBaiTaps" EntityType="DataTiengAnhModel.ChiTietBaiTap" />
+          <EntitySet Name="ChiTietBaiTapRooms" EntityType="DataTiengAnhModel.ChiTietBaiTapRoom" />
+          <EntitySet Name="ChiTietPhongs" EntityType="DataTiengAnhModel.ChiTietPhong" />
           <EntitySet Name="ChiTietThiSinhs" EntityType="DataTiengAnhModel.ChiTietThiSinh" />
+          <EntitySet Name="FileMotaBtRooms" EntityType="DataTiengAnhModel.FileMotaBtRoom" />
           <EntitySet Name="KyThis" EntityType="DataTiengAnhModel.KyThi" />
           <EntitySet Name="Messages" EntityType="DataTiengAnhModel.Message" />
           <EntitySet Name="NguoiDungs" EntityType="DataTiengAnhModel.NguoiDung" />
           <EntitySet Name="NguPhaps" EntityType="DataTiengAnhModel.NguPhap" />
+          <EntitySet Name="Rooms" EntityType="DataTiengAnhModel.Room" />
           <EntitySet Name="sysdiagrams" EntityType="DataTiengAnhModel.sysdiagram" />
           <AssociationSet Name="FK_ChiTietBaiTap_BaiTap" Association="DataTiengAnhModel.FK_ChiTietBaiTap_BaiTap">
             <End Role="BaiTap" EntitySet="BaiTaps" />
             <End Role="ChiTietBaiTap" EntitySet="ChiTietBaiTaps" />
           </AssociationSet>
+          <AssociationSet Name="FK_ChiTietBaiTapRoom_BaiTapRoom" Association="DataTiengAnhModel.FK_ChiTietBaiTapRoom_BaiTapRoom">
+            <End Role="BaiTapRoom" EntitySet="BaiTapRooms" />
+            <End Role="ChiTietBaiTapRoom" EntitySet="ChiTietBaiTapRooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FileMotaBtRoom_BaiTapRoom" Association="DataTiengAnhModel.FK_FileMotaBtRoom_BaiTapRoom">
+            <End Role="BaiTapRoom" EntitySet="BaiTapRooms" />
+            <End Role="FileMotaBtRoom" EntitySet="FileMotaBtRooms" />
+          </AssociationSet>
           <AssociationSet Name="FK_CauHoi_KyThi" Association="DataTiengAnhModel.FK_CauHoi_KyThi">
             <End Role="KyThi" EntitySet="KyThis" />
             <End Role="CauHoi" EntitySet="CauHois" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChiTietPhong_Room" Association="DataTiengAnhModel.FK_ChiTietPhong_Room">
+            <End Role="Room" EntitySet="Rooms" />
+            <End Role="ChiTietPhong" EntitySet="ChiTietPhongs" />
           </AssociationSet>
           <AssociationSet Name="FK_ChiTietThiSinh_KyThi" Association="DataTiengAnhModel.FK_ChiTietThiSinh_KyThi">
             <End Role="KyThi" EntitySet="KyThis" />
             <End Role="ChiTietThiSinh" EntitySet="ChiTietThiSinhs" />
           </AssociationSet>
-          <EntitySet Name="Rooms" EntityType="DataTiengAnhModel.Room" />
-          <EntitySet Name="BaiTapRooms" EntityType="DataTiengAnhModel.BaiTapRoom" />
-          <EntitySet Name="ChiTietBaiTapRooms" EntityType="DataTiengAnhModel.ChiTietBaiTapRoom" />
-          <AssociationSet Name="FK_ChiTietBaiTapRoom_BaiTapRoom" Association="DataTiengAnhModel.FK_ChiTietBaiTapRoom_BaiTapRoom">
-            <End Role="BaiTapRoom" EntitySet="BaiTapRooms" />
-            <End Role="ChiTietBaiTapRoom" EntitySet="ChiTietBaiTapRooms" />
-          </AssociationSet>
-          <EntitySet Name="FileMotaBtRooms" EntityType="DataTiengAnhModel.FileMotaBtRoom" />
-          <AssociationSet Name="FK_FileMotaBtRoom_BaiTapRoom" Association="DataTiengAnhModel.FK_FileMotaBtRoom_BaiTapRoom">
-            <End Role="BaiTapRoom" EntitySet="BaiTapRooms" />
-            <End Role="FileMotaBtRoom" EntitySet="FileMotaBtRooms" />
-          </AssociationSet>
-          </EntityContainer>
+        </EntityContainer>
         <EntityType Name="BaiTap">
           <Key>
             <PropertyRef Name="IdBaiTap" />
@@ -309,6 +342,23 @@
           <Property Name="LuotXem" Type="Int32" />
           <Property Name="TrangThai" Type="Boolean" />
           <NavigationProperty Name="ChiTietBaiTaps" Relationship="DataTiengAnhModel.FK_ChiTietBaiTap_BaiTap" FromRole="BaiTap" ToRole="ChiTietBaiTap" />
+        </EntityType>
+        <EntityType Name="BaiTapRoom">
+          <Key>
+            <PropertyRef Name="IdBTRoom" />
+          </Key>
+          <Property Name="IdBTRoom" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ten" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NgayBatDau" Type="DateTime" Precision="3" />
+          <Property Name="NgayKetThuc" Type="DateTime" Precision="3" />
+          <Property Name="NgayDang" Type="DateTime" Precision="3" />
+          <Property Name="IdRoom" Type="Int32" />
+          <Property Name="TyLeNop" Type="Double" />
+          <Property Name="DiemCaoNhat" Type="Double" />
+          <Property Name="DiemTrungBinh" Type="Double" />
+          <Property Name="NoiDungBaiTap" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ChiTietBaiTapRooms" Relationship="DataTiengAnhModel.FK_ChiTietBaiTapRoom_BaiTapRoom" FromRole="BaiTapRoom" ToRole="ChiTietBaiTapRoom" />
+          <NavigationProperty Name="FileMotaBtRooms" Relationship="DataTiengAnhModel.FK_FileMotaBtRoom_BaiTapRoom" FromRole="BaiTapRoom" ToRole="FileMotaBtRoom" />
         </EntityType>
         <EntityType Name="CauHoi">
           <Key>
@@ -338,6 +388,28 @@
           <Property Name="IdChiTietBaiTap" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="BaiTap" Relationship="DataTiengAnhModel.FK_ChiTietBaiTap_BaiTap" FromRole="ChiTietBaiTap" ToRole="BaiTap" />
         </EntityType>
+        <EntityType Name="ChiTietBaiTapRoom">
+          <Key>
+            <PropertyRef Name="IdChiTiet" />
+          </Key>
+          <Property Name="IdChiTiet" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdNguoiNop" Type="Int32" />
+          <Property Name="IdBTRoom" Type="Int32" />
+          <Property Name="FileNop" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NgayNop" Type="DateTime" Precision="3" />
+          <Property Name="Diem" Type="Int32" />
+          <NavigationProperty Name="BaiTapRoom" Relationship="DataTiengAnhModel.FK_ChiTietBaiTapRoom_BaiTapRoom" FromRole="ChiTietBaiTapRoom" ToRole="BaiTapRoom" />
+        </EntityType>
+        <EntityType Name="ChiTietPhong">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaKH" Type="Int32" />
+          <Property Name="IdPhong" Type="Int32" />
+          <Property Name="ChuPhong" Type="Boolean" />
+          <NavigationProperty Name="Room" Relationship="DataTiengAnhModel.FK_ChiTietPhong_Room" FromRole="ChiTietPhong" ToRole="Room" />
+        </EntityType>
         <EntityType Name="ChiTietThiSinh">
           <Key>
             <PropertyRef Name="IdChiTietThiSinh" />
@@ -350,6 +422,15 @@
           <Property Name="Sai" Type="Int32" />
           <Property Name="ChuaLam" Type="Int32" />
           <NavigationProperty Name="KyThi" Relationship="DataTiengAnhModel.FK_ChiTietThiSinh_KyThi" FromRole="ChiTietThiSinh" ToRole="KyThi" />
+        </EntityType>
+        <EntityType Name="FileMotaBtRoom">
+          <Key>
+            <PropertyRef Name="IdFile" />
+          </Key>
+          <Property Name="IdFile" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdBtRoom" Type="Int32" Nullable="false" />
+          <Property Name="File" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BaiTapRoom" Relationship="DataTiengAnhModel.FK_FileMotaBtRoom_BaiTapRoom" FromRole="FileMotaBtRoom" ToRole="BaiTapRoom" />
         </EntityType>
         <EntityType Name="KyThi">
           <Key>
@@ -405,6 +486,17 @@
           <Property Name="TrangThai" Type="Boolean" />
           <Property Name="NgayDang" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="Room">
+          <Key>
+            <PropertyRef Name="RoomId" />
+          </Key>
+          <Property Name="RoomId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="IdJoin" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MoTa" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ChiTietPhongs" Relationship="DataTiengAnhModel.FK_ChiTietPhong_Room" FromRole="Room" ToRole="ChiTietPhong" />
+        </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -427,67 +519,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CauHoi_KyThi">
-          <End Type="DataTiengAnhModel.KyThi" Role="KyThi" Multiplicity="0..1" />
-          <End Type="DataTiengAnhModel.CauHoi" Role="CauHoi" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="KyThi">
-              <PropertyRef Name="IdKyThi" />
-            </Principal>
-            <Dependent Role="CauHoi">
-              <PropertyRef Name="IdBoCauHoi" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ChiTietThiSinh_KyThi">
-          <End Type="DataTiengAnhModel.KyThi" Role="KyThi" Multiplicity="0..1" />
-          <End Type="DataTiengAnhModel.ChiTietThiSinh" Role="ChiTietThiSinh" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="KyThi">
-              <PropertyRef Name="IdKyThi" />
-            </Principal>
-            <Dependent Role="ChiTietThiSinh">
-              <PropertyRef Name="IdKyThi" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Room">
-          <Key>
-            <PropertyRef Name="RoomId" />
-          </Key>
-          <Property Name="RoomId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="Int32" />
-        </EntityType>
-        <EntityType Name="BaiTapRoom">
-          <Key>
-            <PropertyRef Name="IdBTRoom" />
-          </Key>
-          <Property Name="IdBTRoom" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Ten" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="NgayBatDau" Type="DateTime" Precision="3" />
-          <Property Name="NgayKetThuc" Type="DateTime" Precision="3" />
-          <Property Name="NgayDang" Type="DateTime" Precision="3" />
-          <Property Name="IdRoom" Type="Int32" />
-          <Property Name="TyLeNop" Type="Double" />
-          <Property Name="DiemCaoNhat" Type="Double" />
-          <Property Name="DiemTrungBinh" Type="Double" />
-          <Property Name="NoiDungBaiTap" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ChiTietBaiTapRooms" Relationship="DataTiengAnhModel.FK_ChiTietBaiTapRoom_BaiTapRoom" FromRole="BaiTapRoom" ToRole="ChiTietBaiTapRoom" />
-          <NavigationProperty Name="FileMotaBtRooms" Relationship="DataTiengAnhModel.FK_FileMotaBtRoom_BaiTapRoom" FromRole="BaiTapRoom" ToRole="FileMotaBtRoom" />
-        </EntityType>
-        <EntityType Name="ChiTietBaiTapRoom">
-          <Key>
-            <PropertyRef Name="IdChiTiet" />
-          </Key>
-          <Property Name="IdChiTiet" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdNguoiNop" Type="Int32" />
-          <Property Name="IdBTRoom" Type="Int32" />
-          <Property Name="FileNop" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="NgayNop" Type="DateTime" Precision="3" />
-          <Property Name="Diem" Type="Double" />
-          <NavigationProperty Name="BaiTapRoom" Relationship="DataTiengAnhModel.FK_ChiTietBaiTapRoom_BaiTapRoom" FromRole="ChiTietBaiTapRoom" ToRole="BaiTapRoom" />
-        </EntityType>
         <Association Name="FK_ChiTietBaiTapRoom_BaiTapRoom">
           <End Type="DataTiengAnhModel.BaiTapRoom" Role="BaiTapRoom" Multiplicity="0..1" />
           <End Type="DataTiengAnhModel.ChiTietBaiTapRoom" Role="ChiTietBaiTapRoom" Multiplicity="*" />
@@ -500,15 +531,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="FileMotaBtRoom">
-          <Key>
-            <PropertyRef Name="IdFile" />
-          </Key>
-          <Property Name="IdFile" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdBtRoom" Type="Int32" Nullable="false" />
-          <Property Name="File" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="BaiTapRoom" Relationship="DataTiengAnhModel.FK_FileMotaBtRoom_BaiTapRoom" FromRole="FileMotaBtRoom" ToRole="BaiTapRoom" />
-        </EntityType>
         <Association Name="FK_FileMotaBtRoom_BaiTapRoom">
           <End Type="DataTiengAnhModel.BaiTapRoom" Role="BaiTapRoom" Multiplicity="1" />
           <End Type="DataTiengAnhModel.FileMotaBtRoom" Role="FileMotaBtRoom" Multiplicity="*" />
@@ -518,6 +540,42 @@
             </Principal>
             <Dependent Role="FileMotaBtRoom">
               <PropertyRef Name="IdBtRoom" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CauHoi_KyThi">
+          <End Type="DataTiengAnhModel.KyThi" Role="KyThi" Multiplicity="0..1" />
+          <End Type="DataTiengAnhModel.CauHoi" Role="CauHoi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KyThi">
+              <PropertyRef Name="IdKyThi" />
+            </Principal>
+            <Dependent Role="CauHoi">
+              <PropertyRef Name="IdBoCauHoi" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ChiTietPhong_Room">
+          <End Type="DataTiengAnhModel.Room" Role="Room" Multiplicity="0..1" />
+          <End Type="DataTiengAnhModel.ChiTietPhong" Role="ChiTietPhong" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room">
+              <PropertyRef Name="RoomId" />
+            </Principal>
+            <Dependent Role="ChiTietPhong">
+              <PropertyRef Name="IdPhong" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ChiTietThiSinh_KyThi">
+          <End Type="DataTiengAnhModel.KyThi" Role="KyThi" Multiplicity="0..1" />
+          <End Type="DataTiengAnhModel.ChiTietThiSinh" Role="ChiTietThiSinh" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KyThi">
+              <PropertyRef Name="IdKyThi" />
+            </Principal>
+            <Dependent Role="ChiTietThiSinh">
+              <PropertyRef Name="IdKyThi" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -539,6 +597,22 @@
                 <ScalarProperty Name="TacGia" ColumnName="TacGia" />
                 <ScalarProperty Name="TenBaiTap" ColumnName="TenBaiTap" />
                 <ScalarProperty Name="IdBaiTap" ColumnName="IdBaiTap" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BaiTapRooms">
+            <EntityTypeMapping TypeName="DataTiengAnhModel.BaiTapRoom">
+              <MappingFragment StoreEntitySet="BaiTapRoom">
+                <ScalarProperty Name="NoiDungBaiTap" ColumnName="NoiDungBaiTap" />
+                <ScalarProperty Name="DiemTrungBinh" ColumnName="DiemTrungBinh" />
+                <ScalarProperty Name="DiemCaoNhat" ColumnName="DiemCaoNhat" />
+                <ScalarProperty Name="TyLeNop" ColumnName="TyLeNop" />
+                <ScalarProperty Name="IdRoom" ColumnName="IdRoom" />
+                <ScalarProperty Name="NgayDang" ColumnName="NgayDang" />
+                <ScalarProperty Name="NgayKetThuc" ColumnName="NgayKetThuc" />
+                <ScalarProperty Name="NgayBatDau" ColumnName="NgayBatDau" />
+                <ScalarProperty Name="Ten" ColumnName="Ten" />
+                <ScalarProperty Name="IdBTRoom" ColumnName="IdBTRoom" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -570,6 +644,28 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ChiTietBaiTapRooms">
+            <EntityTypeMapping TypeName="DataTiengAnhModel.ChiTietBaiTapRoom">
+              <MappingFragment StoreEntitySet="ChiTietBaiTapRoom">
+                <ScalarProperty Name="Diem" ColumnName="Diem" />
+                <ScalarProperty Name="NgayNop" ColumnName="NgayNop" />
+                <ScalarProperty Name="FileNop" ColumnName="FileNop" />
+                <ScalarProperty Name="IdBTRoom" ColumnName="IdBTRoom" />
+                <ScalarProperty Name="IdNguoiNop" ColumnName="IdNguoiNop" />
+                <ScalarProperty Name="IdChiTiet" ColumnName="IdChiTiet" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ChiTietPhongs">
+            <EntityTypeMapping TypeName="DataTiengAnhModel.ChiTietPhong">
+              <MappingFragment StoreEntitySet="ChiTietPhong">
+                <ScalarProperty Name="ChuPhong" ColumnName="ChuPhong" />
+                <ScalarProperty Name="IdPhong" ColumnName="IdPhong" />
+                <ScalarProperty Name="MaKH" ColumnName="MaKH" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ChiTietThiSinhs">
             <EntityTypeMapping TypeName="DataTiengAnhModel.ChiTietThiSinh">
               <MappingFragment StoreEntitySet="ChiTietThiSinh">
@@ -580,6 +676,15 @@
                 <ScalarProperty Name="Diem" ColumnName="Diem" />
                 <ScalarProperty Name="IdThiSinh" ColumnName="IdThiSinh" />
                 <ScalarProperty Name="IdKyThi" ColumnName="IdKyThi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FileMotaBtRooms">
+            <EntityTypeMapping TypeName="DataTiengAnhModel.FileMotaBtRoom">
+              <MappingFragment StoreEntitySet="FileMotaBtRoom">
+                <ScalarProperty Name="File" ColumnName="File" />
+                <ScalarProperty Name="IdBtRoom" ColumnName="IdBtRoom" />
+                <ScalarProperty Name="IdFile" ColumnName="IdFile" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -639,6 +744,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Rooms">
+            <EntityTypeMapping TypeName="DataTiengAnhModel.Room">
+              <MappingFragment StoreEntitySet="Room">
+                <ScalarProperty Name="MoTa" ColumnName="MoTa" />
+                <ScalarProperty Name="IdJoin" ColumnName="IdJoin" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RoomId" ColumnName="RoomId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="DataTiengAnhModel.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">
@@ -650,53 +766,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Rooms">
-            <EntityTypeMapping TypeName="DataTiengAnhModel.Room">
-              <MappingFragment StoreEntitySet="Room">
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="RoomId" ColumnName="RoomId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BaiTapRooms">
-            <EntityTypeMapping TypeName="DataTiengAnhModel.BaiTapRoom">
-              <MappingFragment StoreEntitySet="BaiTapRoom">
-                <ScalarProperty Name="NoiDungBaiTap" ColumnName="NoiDungBaiTap" />
-                <ScalarProperty Name="DiemTrungBinh" ColumnName="DiemTrungBinh" />
-                <ScalarProperty Name="DiemCaoNhat" ColumnName="DiemCaoNhat" />
-                <ScalarProperty Name="TyLeNop" ColumnName="TyLeNop" />
-                <ScalarProperty Name="IdRoom" ColumnName="IdRoom" />
-                <ScalarProperty Name="NgayDang" ColumnName="NgayDang" />
-                <ScalarProperty Name="NgayKetThuc" ColumnName="NgayKetThuc" />
-                <ScalarProperty Name="NgayBatDau" ColumnName="NgayBatDau" />
-                <ScalarProperty Name="Ten" ColumnName="Ten" />
-                <ScalarProperty Name="IdBTRoom" ColumnName="IdBTRoom" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ChiTietBaiTapRooms">
-            <EntityTypeMapping TypeName="DataTiengAnhModel.ChiTietBaiTapRoom">
-              <MappingFragment StoreEntitySet="ChiTietBaiTapRoom">
-                <ScalarProperty Name="Diem" ColumnName="Diem" />
-                <ScalarProperty Name="NgayNop" ColumnName="NgayNop" />
-                <ScalarProperty Name="FileNop" ColumnName="FileNop" />
-                <ScalarProperty Name="IdBTRoom" ColumnName="IdBTRoom" />
-                <ScalarProperty Name="IdNguoiNop" ColumnName="IdNguoiNop" />
-                <ScalarProperty Name="IdChiTiet" ColumnName="IdChiTiet" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="FileMotaBtRooms">
-            <EntityTypeMapping TypeName="DataTiengAnhModel.FileMotaBtRoom">
-              <MappingFragment StoreEntitySet="FileMotaBtRoom">
-                <ScalarProperty Name="File" ColumnName="File" />
-                <ScalarProperty Name="IdBtRoom" ColumnName="IdBtRoom" />
-                <ScalarProperty Name="IdFile" ColumnName="IdFile" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          </EntityContainerMapping>
+        </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

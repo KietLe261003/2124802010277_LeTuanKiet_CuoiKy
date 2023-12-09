@@ -164,6 +164,7 @@
     <Compile Include="Controllers\ExamsController.cs" />
     <Compile Include="Controllers\GrammarController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PlanController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -182,6 +183,9 @@
       <DependentUpon>Exams.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ChiTietBaiTapRoom.cs">
+      <DependentUpon>Exams.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChiTietPhong.cs">
       <DependentUpon>Exams.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ChiTietThiSinh.cs">
@@ -395,6 +399,7 @@
     <Content Include="css\icomoon.css" />
     <Content Include="css\Login.css" />
     <Content Include="css\owl.carousel.min.css" />
+    <Content Include="css\Plan.css" />
     <Content Include="css\Profile.css" />
     <Content Include="css\responsive.css" />
     <Content Include="css\style.css" />
@@ -1770,6 +1775,7 @@
     <Content Include="Areas\Admin\Views\ManagerAssignment\Details.cshtml" />
     <Content Include="Areas\Admin\Views\ManagerGrammar\Delete.cshtml" />
     <Content Include="Areas\Admin\Views\ManagerAssignment\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ManagerExams\Fail.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -2234,6 +2240,14 @@
     <Content Include="Views\Chat\ChatUser.cshtml" />
     <Content Include="Views\Chat\BaiTap.cshtml" />
     <Content Include="Views\Chat\NopBai.cshtml" />
+    <Content Include="Views\Chat\BaiNop.cshtml" />
+    <Content Include="Views\Chat\Diem.cshtml" />
+    <Content Include="Views\Chat\ChamDiem.cshtml" />
+    <Content Include="Views\Chat\FileUser.cshtml" />
+    <Content Include="Views\Chat\DetailRoom.cshtml" />
+    <Content Include="Views\Chat\ThongBaoThatBai.cshtml" />
+    <Content Include="Views\Exams\DaThi.cshtml" />
+    <Content Include="Views\Plan\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

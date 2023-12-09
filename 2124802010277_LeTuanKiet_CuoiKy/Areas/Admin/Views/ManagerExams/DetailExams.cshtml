@@ -104,16 +104,17 @@
                             @Html.DisplayFor(modelItem => item.ChuaLam)
                         </td>
                         <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.IdChiTietThiSinh }) |
-                            @Html.ActionLink("Details", "Details", new { id = item.IdChiTietThiSinh }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.IdChiTietThiSinh })
                         </td>
                     </tr>
                 }
             </table>
-            <div style="float: right">
-                <a class="btn btn-primary" href="@Url.Action("CongBo","ManagerExams",new { id=Model.IdKyThi})">Công bố</a>
-            </div>
+            @if (Model.TinhTrang == false)
+            {
+                <div style="float: right">
+                    <a class="btn btn-primary" href="@Url.Action("CongBo","ManagerExams",new { id=Model.IdKyThi})">Công bố</a>
+                </div>
+            }
+
         </div>
     </div>
 

@@ -12,7 +12,5 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
         {
             return View();
         }
-
-        
     }
 }

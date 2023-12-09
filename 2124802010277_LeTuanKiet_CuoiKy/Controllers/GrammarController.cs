@@ -9,10 +9,45 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
     public class GrammarController : Controller
     {
         DataTiengAnhEntities db = new DataTiengAnhEntities();
+        public List<NguPhap> FilterG(int op)
+        {
+            NguoiDung nd = (NguoiDung)Session["TaiKhoan"];
+            List<NguPhap> tmp = db.NguPhaps.Where(item => item.TrangThai == true).ToList();
+            if(op==1)
+            {
+                tmp = db.NguPhaps.OrderByDescending(item => item.NgayDang).Where(item => item.TrangThai == true).ToList();
+            }    
+            else if(op==2)
+            {
+                tmp = db.NguPhaps.OrderBy(item => item.NgayDang).Where(item => item.TrangThai == true).ToList();
+            }  
+            else if(op==3)
+            {
+                tmp = db.NguPhaps.OrderByDescending(item => item.LuotXem).Where(item => item.TrangThai == true).ToList();
+            }  
+            else if(op==4)
+            {
+                tmp = db.NguPhaps.OrderBy(item => item.LuotXem).Where(item => item.TrangThai == true).ToList();
+            }    
+            else if(op==5)
+            {
+                if(nd!=null)
+                {
+                    tmp = db.NguPhaps.Where(item => item.IdTacGia == nd.MaKH).ToList();
+                }    
+            }    
+            return tmp;
+        }
         // GET: Grammar
-        public ActionResult Index(string KeyWork, int pg = 1)
+        public ActionResult Index(string KeyWork, int pg = 1,int fillter=0)
         {
             List<NguPhap> tmp = db.NguPhaps.Where(item => item.TrangThai == true).ToList();
+
+            if(fillter!=0)
+            {
+                tmp = FilterG(fillter);
+            }    
+
             if (!string.IsNullOrEmpty(KeyWork))
             {
                 tmp = db.NguPhaps.Where(item => item.TrangThai==true && (item.TenNguPhap.Contains(KeyWork) || db.NguoiDungs.FirstOrDefault(x=>x.MaKH==item.IdTacGia).HoTenKH.Contains(KeyWork))).ToList();
@@ -25,9 +60,13 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
             int totalPage = tmp.Count();
             Pager p = new Pager(totalPage,pg,PageSize);
             int skipPage = (pg - 1) * PageSize;
-            List<NguPhap> tmp1 = tmp.OrderBy(item => item.IdNguPhap).Skip(skipPage).Take(PageSize).ToList();
+            List<NguPhap> tmp1 = tmp.Skip(skipPage).Take(PageSize).ToList();
+            if (fillter==0)
+            {
+                tmp1 = tmp.OrderBy(item => item.IdNguPhap).Skip(skipPage).Take(PageSize).ToList();
+            }    
             ViewBag.Pager = p;
-   
+            ViewBag.fillter = fillter;
             ViewBag.TaiKhoan = db.NguoiDungs.ToList();
             if (TempData["ThongBaoThem"] != null)
                 ViewBag.ThongBaoThem = TempData["ThongBaoThem"];

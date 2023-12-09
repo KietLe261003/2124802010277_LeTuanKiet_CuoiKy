@@ -86,6 +86,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
         }
         public ActionResult ListQuestion(string id)
         {
+
             List<CauHoi> tmp = LayBoCauHoi(id);
             KyThi check = db.KyThis.FirstOrDefault(item => item.IdKyThi==id);
             if(Session["TaiKhoan"]==null)
@@ -98,10 +99,15 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
             {
                 return RedirectToAction("ChuaDangKy");
             }
+            if(check1.Diem!=null)
+            {
+                return RedirectToAction("DaThi");
+            }    
             if (check.Ngay>DateTime.Now)
             {
                 return RedirectToAction("Wait");
             }
+
             Session["IdKyThi"] = id;
             return View(tmp);
         }
@@ -120,7 +126,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
             ChiTietThiSinh tmp = new ChiTietThiSinh();
             tmp.IdKyThi = IdKythi;
             tmp.IdThiSinh = nd.MaKH;
-            tmp.Diem = 0;
+           
             db.ChiTietThiSinhs.Add(tmp);
 
             KyThi kt = db.KyThis.FirstOrDefault(item => item.IdKyThi==IdKythi);
@@ -163,6 +169,10 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
                 return View(tmp);
             }    
             
+        }
+        public ActionResult DaThi()
+        {
+            return View();
         }
         /*Trang thi đấu end*/
     }

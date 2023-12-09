@@ -112,7 +112,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Controllers
                 }    
             }
             db.SaveChanges();
-            return RedirectToAction("CreateAssignment");
+            return RedirectToAction("ListAssi");
         }
 
        /* Show điểm của người dùng*/

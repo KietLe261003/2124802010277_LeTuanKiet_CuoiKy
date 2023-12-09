@@ -1,37 +1,44 @@
 ﻿@model IEnumerable<_2124802010277_LeTuanKiet_CuoiKy.Models.BaiTapRoom>
 @using _2124802010277_LeTuanKiet_CuoiKy.Models
-@{ 
+@{
     DataTiengAnhEntities db = new DataTiengAnhEntities();
     int IdRoom = (int)ViewBag.RoomId;
     int i = 0;
     int IdBaiTap = (int)ViewBag.IdBaiTap;
+    int IdNd = (int)ViewBag.IdNd;
+
+    ChiTietPhong ctp = db.ChiTietPhongs.FirstOrDefault(item => item.IdPhong == IdRoom && item.ChuPhong == true); //lấy thg chủ phòng ra để kiểm tra
+
 }
 
 <style>
-    .list-group-item{
+    .list-group-item {
         margin-bottom: 10px;
         height: 70px;
     }
+
     div#container {
         text-align: left
     }
+
     div#navigation {
         background: #F6F0E0;
     }
 
-    div#navigation ul {
-        margin: 15px 0;
-        padding: 0;
-        list-style-type: none;
-    }
+        div#navigation ul {
+            margin: 15px 0;
+            padding: 0;
+            list-style-type: none;
+        }
 
-    div#navigation li {
-        margin-bottom: 5px;
-    }
+        div#navigation li {
+            margin-bottom: 5px;
+        }
 
     div#extra {
         background: #CCC8B3;
     }
+
     div#container {
         height: 100%;
         width: 100%;
@@ -40,20 +47,27 @@
     }
 
     div#wrapper {
-       flex: 55%;
+        flex: 55%;
     }
+
     div#content {
         margin: 0 20px
     }
+
     div#navigation {
-       flex: 15%;
+        flex: 15%;
     }
+
     div#extra {
         flex: 30%;
     }
 </style>
 <div>
-    <a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true" style="margin-bottom: 30px" id="BtnCreate">Tạo bài tập</a>
+    @if (IdNd == ctp.MaKH)
+    {
+        <a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true" style="margin-bottom: 30px" id="BtnCreate">Tạo bài tập</a>
+    }
+
     <div class="list-group list-group-light">
         @foreach (var item in Model)
         {
@@ -64,96 +78,9 @@
         }
     </div>
 </div>
-@if(IdBaiTap!=0)
+@if (IdBaiTap != 0)
 {
-    var Btr = db.BaiTapRooms.FirstOrDefault(item => item.IdBTRoom == IdBaiTap);
-    <div class="modal" id="BaiTap">
-        <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center">
-            <div class="" style="width: 70%">
-                <div class="modal-content">
-                    <form action="@Url.Action("ThemBaiTap", "Chat")" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="IdRoom" value="@IdRoom" />
-                        <div class="modal-header">
-                            <h5 class="modal-title">Bài tập</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body" style="height: 700px">
-                            <div id="container">
-                                <div id="navigation">
-                                    <p><strong>Đính kèm file</strong></p>
-                                    <ul>
-                                        @{
-                                            List<FileMotaBtRoom> fl = db.FileMotaBtRooms.Where(x => x.IdBtRoom == Btr.IdBTRoom).ToList();
-                                            if (fl != null)
-                                            {
-                                                foreach (var x in fl)
-                                                {
-                                                    var UrlTuongDoi = "/File/OtherFile/";
-                                                    int end = x.File.Length;
-                                                    int start = UrlTuongDoi.Length;
-                                                    string fileName = x.File.Substring(start, end - start);
-                                                    <li>
-                                                        <a href="@Url.Action("DownloadFile","Chat", new { filename=x.File})">@fileName</a>
-                                                    </li>
-                                                }
-                                            }
-                                        }
-                                    </ul>
-                                </div>
-                                <div id="wrapper">
-                                    <div class="form-group" style="padding: 0 20px">
-                                        <label style="font-weight: bold">Tên Bài Tập</label>
-                                        <input type="text" disabled name="Ten" class="form-control" value="@Btr.Ten">
-                                    </div>
-                                    <div class="form-group" id="content" style="height: 100%">
-                                        <p><strong>Nội dung và mô tả</strong></p>
-                                        <textarea name="NoiDung1" disabled class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Nhập nội dung" style="height: 100%">
-                                            @Html.Raw(Btr.NoiDungBaiTap)
-                                        </textarea>
-                                    </div>
-                                </div>
-                                <div id="extra">
-                                    <p><strong>Cài đặt</strong></p>
-                                    <div class="form-group">
-                                        <div class="form-group">
-                                            <label style="font-weight: bold">Ngày Bắt Đầu</label>
-                                            <input type="text" disabled name="DateStart" class="form-control" value="@string.Format("{0:yyyy-MM-dd HH:mm:ss}", Btr.NgayBatDau)">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-group">
-                                            <label style="font-weight: bold">Hạn Chót</label>
-                                            <input type="text" disabled name="DateStart" class="form-control" value="@string.Format("{0:yyyy-MM-dd HH:mm:ss}", Btr.NgayKetThuc)">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-group">
-                                            <input type="file" multiple class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="BtnClose1">Close</button>
-                            <button type="submit" class="btn btn-primary">Nộp bài</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        function ShowBaiTap() {
-            var bt = document.getElementById('BaiTap');
-            bt.style.display='block';
-        }
-        ShowBaiTap();
-        document.getElementById('BtnClose1').addEventListener('click', function () {
-            var bt = document.getElementById('BaiTap');
-            bt.style.display = 'none';
-        });
-    </script>
+    @Html.Action("BaiNop", "Chat", new { IdBaiTap = IdBaiTap, IdNguoiDung = IdNd, IdRoom=IdRoom });
 }
 
 <div class="modal">
@@ -164,16 +91,17 @@
                     <input type="hidden" name="IdRoom" value="@IdRoom" />
                     <div class="modal-header">
                         <h5 class="modal-title">Bài tập</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="CloseForm()"></button>
                     </div>
                     <div class="modal-body" style="height: 700px">
                         <div id="container">
                             <div id="navigation">
                                 <p><strong>Đính kèm file</strong></p>
                                 <ul>
-                                    <li><input type="file" name="fileList[@i]" value="" /></li>
                                     <li>
-                                        <button type="button" class="btn btn-primary" style="width: 100%">+</button>
+                                        <input type="file" multiple name="fileList" id="fileInput" style="display:none;" onchange="updateFileName()" />
+                                        <button type="button" class="btn btn-primary" onclick="openFileInput()">Chọn Files</button>
+                                        <ul id="fileList"></ul>
                                     </li>
                                 </ul>
                             </div>
@@ -197,12 +125,12 @@
                                     <div class="form-group">
                                         <div class="content" style="width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: center">
                                             <div class="column">
-                                                <select name="HourStart">
+                                                <select name="HourStart" id="selectTaoBai">
                                                     <option value="Hour" selected disabled hidden>Hour</option>
                                                 </select>
                                             </div>
                                             <div class="column">
-                                                <select name="MinuteStart">
+                                                <select name="MinuteStart" id="selectTaoBai">
                                                     <option value="Minute" selected disabled hidden>Minute</option>
                                                 </select>
                                             </div>
@@ -217,12 +145,12 @@
                                     <div class="form-group">
                                         <div class="content" style="width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: center">
                                             <div class="column">
-                                                <select name="HourEnd">
+                                                <select name="HourEnd" id="selectTaoBai">
                                                     <option value="Hour" selected disabled hidden>Hour</option>
                                                 </select>
                                             </div>
                                             <div class="column">
-                                                <select name="MinuteEnd">
+                                                <select name="MinuteEnd" id="selectTaoBai">
                                                     <option value="Minute" selected disabled hidden>Minute</option>
                                                 </select>
                                             </div>
@@ -249,8 +177,12 @@
     document.getElementById('BtnClose').addEventListener('click', function () {
         $('.modal').hide();
     });
+    function CloseForm() {
+        $('.modal').hide();
+    }
+
     var i = 0;
-    var selectMenu = document.querySelectorAll("select");
+    var selectMenu = document.querySelectorAll("#selectTaoBai");
     console.log(selectMenu);
     for (let i = 24; i > 0; i--) {
         i = i < 10 ? `0${i}` : i;
@@ -264,5 +196,59 @@
         let option = `<option value="${i}">${i}</option>`;
         selectMenu[1].firstElementChild.insertAdjacentHTML("afterend", option);
         selectMenu[3].firstElementChild.insertAdjacentHTML("afterend", option);
+    }
+    function openFileInput() {
+        document.getElementById('fileInput').click();
+    }
+
+    function updateFileName() {
+        var fileList = document.getElementById('fileInput').files;
+        var listContainer = document.getElementById('fileList');
+        listContainer.innerHTML = '';
+
+        for (var i = 0; i < fileList.length; i++) {
+            var listItem = document.createElement('li');
+            listItem.className = 'file-item';
+
+            var tmp = fileList[i].name;
+            if (fileList[i].name.length > 17) {
+                tmp = fileList[i].name.substring(0, 17);
+                tmp += "..."
+            }   
+            console.log(tmp);
+            
+            var fileName = document.createTextNode(tmp);
+            console.log(fileName);
+            listItem.appendChild(fileName);
+
+            var deleteBtn = document.createElement('span');
+            deleteBtn.className = 'btn btn-danger';
+            deleteBtn.innerHTML = ' X';
+            deleteBtn.onclick = function (index) {
+                return function () {
+                    removeFile(index);
+                };
+            }(i);
+
+            listItem.appendChild(deleteBtn);
+            listContainer.appendChild(listItem);
+        }
+    }
+    function removeFile(index) {
+        var fileInput = document.getElementById('fileInput');
+        var files = Array.from(fileInput.files);
+
+        files.splice(index, 1);
+
+        // Tạo một đối tượng DataTransfer giả mạo
+        var dataTransfer = new DataTransfer();
+        files.forEach(function (file) {
+            dataTransfer.items.add(file);
+        });
+
+        // Gán đối tượng DataTransfer mới cho input[type="file"]
+        fileInput.files = dataTransfer.files;
+
+        updateFileName();
     }
 </script>

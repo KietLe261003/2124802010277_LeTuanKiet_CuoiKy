@@ -42,32 +42,42 @@
             <div class="col-md-6 col-lg-7 col-xl-9" style="max-height: 800px; max-height: 800px;">
                 @if (TypeRoom == 2)
                 {
+                    var mn1 = Menu == 1 ? "nav-link active" : "nav-link";
+                    var mn2 = Menu == 2 ? "nav-link active" : "nav-link";
+                    var mn3 = Menu == 3 ? "nav-link active" : "nav-link";
+                    var mn4 = Menu == 4 ? "nav-link active" : "nav-link";
                     <ul class="nav justify-content-center nav-tabs">
                         <li class="nav-item">
-                            <a class="nav-link active" href="~/Chat/Index?Menu=1&id=@ViewBag.IdRoom&TypeRoom=@TypeRoom">Chat</a>
+                            <a class="@mn1" href="~/Chat/Index?Menu=1&id=@ViewBag.IdRoom&TypeRoom=@TypeRoom">Chat</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="~/Chat/Index?Menu=2&id=@ViewBag.IdRoom&TypeRoom=@TypeRoom">Bài tập</a>
+                            <a class="@mn2" href="~/Chat/Index?Menu=2&id=@ViewBag.IdRoom&TypeRoom=@TypeRoom">Bài tập</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Điểm</a>
+                            <a class="@mn3" href="~/Chat/Index?Menu=3&id=@ViewBag.IdRoom&TypeRoom=@TypeRoom">Điểm</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link disabled" href="#">Tệp</a>
+                            <a class="nav-link" href="~/Chat/Index?Menu=4&id=@ViewBag.IdRoom&TypeRoom=@TypeRoom">Chi tiết nhóm</a>
                         </li>
                     </ul>
                 }
 
                 @if (Menu == 1)
                 {
-                    @Html.Action("ChatUser", "Chat", new {IdRoom=ViewBag.IdRoom ,tmp = Model })
+                    @Html.Action("ChatUser", "Chat", new { IdRoom = ViewBag.IdRoom, tmp = Model })
+                }
+                else if (Menu == 2)
+                {
+                    @Html.Action("BaiTap", "Chat", new { RoomId = ViewBag.IdRoom, IdBt = IdBt })
+                }
+                else if (Menu == 3)
+                {
+                    @Html.Action("Diem", "Chat", new { IdRoom = ViewBag.IdRoom, IdBt = IdBt })
                 }
                 else
                 {
-                    @Html.Action("BaiTap", "Chat", new {RoomId=ViewBag.IdRoom, IdBt=IdBt })
+                    @Html.Action("DetailRoom", "Chat", new { IdRoom = ViewBag.IdRoom})
                 }
-
-
             </div>
         </div>
     </div>
@@ -82,5 +92,6 @@
         CKEDITOR.replace('NoiDung1', {
             width: ['100%'], height: ['450px']
         });
+        
     </script>
 }

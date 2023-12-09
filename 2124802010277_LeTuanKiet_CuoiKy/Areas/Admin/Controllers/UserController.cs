@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using _2124802010277_LeTuanKiet_CuoiKy.App_Start;
 using _2124802010277_LeTuanKiet_CuoiKy.Models;
 namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
 {

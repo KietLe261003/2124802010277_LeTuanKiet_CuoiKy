@@ -19,7 +19,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Models
         public Nullable<int> IdBTRoom { get; set; }
         public string FileNop { get; set; }
         public Nullable<System.DateTime> NgayNop { get; set; }
-        public Nullable<double> Diem { get; set; }
+        public Nullable<int> Diem { get; set; }
     
         public virtual BaiTapRoom BaiTapRoom { get; set; }
     }

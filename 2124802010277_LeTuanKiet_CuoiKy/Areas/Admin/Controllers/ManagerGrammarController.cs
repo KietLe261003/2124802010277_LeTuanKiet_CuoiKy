@@ -25,7 +25,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
             ViewBag.pg = pg;
             return View(tmp);
         }
-        
+        [AdminAuthorize()]
         [HttpPost]
         public ActionResult ActiveGrammar(int id)
         {
@@ -38,7 +38,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
             }
             return Json(new { success = false });
         }
-
+        [AdminAuthorize()]
         /*Lọc start*/
         public ActionResult ListGrammar(int? id,string KeyWork, int pg = 1)
         {
@@ -78,12 +78,12 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
             return PartialView(tmp2);
         }
         /*Lọc end*/
-
+        [AdminAuthorize()]
         public ActionResult Create()
         {
             return Redirect("~/Grammar/AddGrammar");
         }
-
+        [AdminAuthorize()]
         /*Xóa Sửa Chi tiêt start*/
         public ActionResult Details(int id)
         {
@@ -92,6 +92,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
             ViewBag.TacGia = tg;
             return View(tmp);
         }
+        [AdminAuthorize()]
         public ActionResult Edit(int id)
         {
             NguPhap tmp = db.NguPhaps.FirstOrDefault(item => item.IdNguPhap==id);
@@ -99,6 +100,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
             ViewBag.TacGia = tg;
             return View(tmp);
         }
+        [AdminAuthorize()]
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(FormCollection f)
@@ -114,6 +116,7 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Areas.Admin.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        [AdminAuthorize()]
         public ActionResult Delete(int id)
         {
             NguPhap tmp = db.NguPhaps.FirstOrDefault(item => item.IdNguPhap == id);

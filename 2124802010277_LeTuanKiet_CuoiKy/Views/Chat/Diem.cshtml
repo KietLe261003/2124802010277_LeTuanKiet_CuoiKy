@@ -1,0 +1,79 @@
+﻿@model IEnumerable<_2124802010277_LeTuanKiet_CuoiKy.Models.BaiTapRoom>
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@{
+    DataTiengAnhEntities db = new DataTiengAnhEntities();
+    int IdRoom = (int)ViewBag.RoomId;
+    int IdBaiTap = (int)ViewBag.IdBaiTap;
+    int IdNd = (int)ViewBag.IdNd;
+
+    ChiTietPhong ctp = db.ChiTietPhongs.FirstOrDefault(item => item.IdPhong == IdRoom && item.ChuPhong == true);
+
+}
+<style>
+    .list-group-item {
+        margin-bottom: 10px;
+        height: 70px;
+    }
+
+    div#container {
+        text-align: left
+    }
+
+    div#navigation {
+        background: #F6F0E0;
+    }
+
+        div#navigation ul {
+            margin: 15px 0;
+            padding: 0;
+            list-style-type: none;
+            overflow: auto
+        }
+
+        div#navigation li {
+            margin-bottom: 5px;
+            overflow: auto
+        }
+
+    div#extra {
+        background: #CCC8B3;
+    }
+
+    div#container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+
+    div#wrapper {
+        flex: 55%;
+    }
+
+    div#content {
+        margin: 0 20px
+    }
+
+    div#navigation {
+        flex: 15%;
+    }
+
+    div#extra {
+        flex: 30%;
+    }
+</style>
+<div>
+    <div class="list-group list-group-light">
+        @foreach (var item in Model)
+        {
+            BaiTapRoom tmp = item;
+            <a href="~/Chat/Index?Menu=3&id=@IdRoom&TypeRoom=2&IdBt=@item.IdBTRoom" class="list-group-item list-group-item-action px-3 border-0 active" aria-current="true">
+                @item.Ten
+            </a>
+        }
+    </div>
+</div>
+@if (IdBaiTap != 0)
+{
+    @Html.Action("ChamDiem", "Chat", new { IdBaiTap = IdBaiTap, IdNguoiDung = IdNd, IdRoom = IdRoom });
+}

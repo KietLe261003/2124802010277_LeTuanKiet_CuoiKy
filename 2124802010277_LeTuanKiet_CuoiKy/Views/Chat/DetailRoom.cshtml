@@ -1,0 +1,204 @@
+﻿@model _2124802010277_LeTuanKiet_CuoiKy.Models.Room
+@using _2124802010277_LeTuanKiet_CuoiKy.Models
+@{
+    DataTiengAnhEntities db = new DataTiengAnhEntities();
+    NguoiDung nd = (NguoiDung)Session["TaiKhoan"];
+    ChiTietPhong ct = db.ChiTietPhongs.FirstOrDefault(item => item.MaKH == nd.MaKH && item.IdPhong == Model.RoomId);
+    string dis = "disabled";
+    if (ct.ChuPhong == true)
+    {
+        dis = "";
+    }
+}
+<style>
+    /* Đặt chiều cao cố định cho bảng */
+    .scrollable-table {
+        width: 100%; /* Chia đều độ rộng cho 3 cột */
+        box-sizing: border-box; /* Đảm bảo rằng padding và border không làm thay đổi độ rộng */
+        padding: 8px; /* Điều chỉnh padding nếu cần thiết */
+        text-align: left; /* Căn lề văn bản theo trái */
+    }
+</style>
+<div style=""> 
+    @if (ct.ChuPhong == true)
+    {
+        <button type="button" class="btn btn-primary" data-mdb-ripple-init style="float: right" onclick="Show2()">Thêm thành viên mới</button>
+    }
+    <div class="form-group">
+        <div class="form-group">
+            <label style="font-weight: bold">Tên nhóm</label>
+            <input type="text" name="NameNhom" @dis class="form-control" value="@Model.Name">
+        </div>
+        <div class="form-group">
+            <label style="font-weight: bold">Mô tả nhóm</label>
+            <textarea type="text" @dis name="DetialNhom" class="form-control">
+            @Model.MoTa
+        </textarea>
+        </div>
+        <div class="form-group">
+            @if (Model.IdJoin != null)
+            {
+                <select name="LoaiNhom">
+                    <option value="1" selected>Riêng tư</option>
+                    <option value="0">Công khai</option>
+                </select>
+            }
+            else
+            {
+                <select name="LoaiNhom">
+                    <option value="1">Riêng tư</option>
+                    <option value="0" selected>Công khai</option>
+                </select>
+            }
+        </div>
+        <div class="form-group">
+            <input type="text" disabled name="MaNhom" class="form-control" value="@Model.IdJoin">
+        </div>
+    </div>
+    @{
+        var ds = db.ChiTietPhongs.Where(item => item.IdPhong == Model.RoomId).ToList();
+        <table id="" class="table table-striped table-bordered scrollable-table" cellspacing="0" >
+            <thead>
+                <tr>
+                    <td>Danh sách thành viên</td>
+                </tr>
+            </thead>
+            <tbody style="max-height: 350px; width: 100%; overflow: auto; display: block;">
+                @foreach (var item in ds)
+                {
+                    <tr>
+                        <td>
+                            @{
+                                var truongnhom = "";
+                                if (item.ChuPhong == true)
+                                {
+                                    truongnhom = "(Trưởng nhóm)";
+                                }
+                            }
+                            <img src="@db.NguoiDungs.FirstOrDefault(x => x.MaKH == item.MaKH).HinhDaiDien" alt="avatar"
+                                 class="" style="min-height: 60px; max-height: 60px; min-width: 60px; max-width: 60px; border-radius: 30px; margin-right: 10px">
+                            <div class="pt-1">
+                                <p class="fw-bold mb-0">@db.NguoiDungs.FirstOrDefault(x => x.MaKH == item.MaKH).HoTenKH</p>
+                                <span>@truongnhom</span>
+                            </div>
+                        </td>
+                        <td>@string.Format("{0:dd/MM/yyyy}", @db.NguoiDungs.FirstOrDefault(x => x.MaKH == item.MaKH).NgaySinh)</td>
+                        <td>@db.NguoiDungs.FirstOrDefault(x => x.MaKH == item.MaKH).Email</td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    }
+</div>
+
+<div class="modal" id="modalAddUser">
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center">
+        <div class="" style="width: 70%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm thành viên mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="Hide2()"></button>
+                </div>
+                <form action="@Url.Action("AddUserForRoom","Chat")" method="post">
+                    <input type="hidden" name="IdRoom" value="@Model.RoomId"/>
+                    <div class="modal-body" style="height: 700px">
+                        <div id="container">
+                            <div id="wrapper">
+                                <div class="form-group" style="padding: 0 20px">
+                                    <label style="font-weight: bold">Tìm tên người dùng</label>
+                                    <div class="input-group rounded mb-3">
+                                        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                                               aria-describedby="search-addon" id="KeyWork" />
+                                        <button type="button" class="input-group-text border-0" id="search-addon" onclick="SearchUser1()">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="content" style="height: 100%">
+                                    <ul id="ListUserFind" style="overflow: auto">
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="extra">
+                                <p><strong>Danh sách</strong></p>
+                                <div class="form-group">
+                                    <ul id="UserAdd">
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Thêm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function Show2() {
+        var tmp = document.getElementById('modalAddUser');
+        tmp.style.display = 'block';
+    }
+    function Hide2() {
+        var tmp = document.getElementById('modalAddUser');
+        tmp.style.display = 'none';
+    }
+    function SearchUser1() {
+        var KeyWork = document.getElementById('KeyWork').value;
+        $.ajax({
+            url: '/Chat/FindUser',
+            type: 'POST',
+            data: { KeyWork: KeyWork },
+            success: function (res) {
+                var IdKh = res.IdKh;
+                var HinhDaiDien = res.HinhDaiDien;
+                var HoTen = res.Hoten;
+                var ListUser = document.getElementById('ListUserFind');
+                ListUser.innerHTML = '';
+                for (let i = 0; i < IdKh.length; i++) {
+                    var ms = `<li class="p-2 border-bottom" style="background-color: #eee; margin-bottom: 5px" onclick="DiChuyen('` + HoTen[i] + `','` + HinhDaiDien[i] + `','` + IdKh[i] +`')">
+                                            <button type="button" class="d-flex justify-content-between">
+                                                <div class="d-flex flex-row">
+                                                    <img src="`+ HinhDaiDien[i] + `" alt="avatar"
+                                                         class="" style="min-height: 60px; max-height: 60px; min-width: 60px; max-width: 60px; border-radius: 30px; margin-right: 10px">
+                                                    <div class="pt-1">
+                                                        <p class="fw-bold mb-0">`+ HoTen[i] + `</p>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        </li>`
+                    $('#ListUserFind').append(ms);
+                }
+            },
+        });
+    }
+    function DiChuyen(Ten, HinhDaiDien,idkh) {
+        var ms = `<li class="p-2 border-bottom" style="background-color: #eee; margin-bottom: 5px">
+                                            <div type="button" onclick=""  class="d-flex justify-content-between" style="width: 100%">
+                                                <input type="hidden" name="UserItem" value="`+ idkh +`"/>
+                                                <div class="d-flex flex-row">
+                                                    <img src="`+ HinhDaiDien + `" alt="avatar"
+                                                         class="" style="min-height: 60px; max-height: 60px; min-width: 60px; max-width: 60px; border-radius: 30px; margin-right: 10px">
+                                                    <div class="pt-1">
+                                                        <p class="fw-bold mb-0">`+ Ten + `</p>
+                                                    </div>
+                                                </div>
+                                                <span class="btn btn-danger" style="float: right" id="removeUser">
+                                                    X
+                                                </span>
+                                            </div>
+                                        </li>`
+        $('#UserAdd').append(ms);
+        $('#UserAdd').on('click', 'span#removeUser', function () {
+            // Xóa phần tử cha của thẻ span (nghĩa là thẻ li)
+            $(this).closest('li').remove();
+        });
+    } 
+</script>

@@ -33,8 +33,9 @@
                 {
                     if (i < Model.Count)
                     {
+                        int tmp = i + 1;
                         <tr>
-                            <td>@i</td>
+                            <td>@tmp</td>
                             <td><input type="text" name="ListCauHoi[@i].Ques" value="@Model[i].Ques" style="width: 100%" /></td>
                             <td><input type="text" name="ListCauHoi[@i].A" value="@Model[i].A" style="width: 100%" /></td>
                             <td><input type="text" name="ListCauHoi[@i].B" value="@Model[i].B" style="width: 100%" /></td>
@@ -45,8 +46,9 @@
                     }
                     else
                     {
+                        int tmp = i + 1;
                         <tr>
-                            <td>@i</td>
+                            <td>@tmp</td>
                             <td><input type="text" name="ListCauHoi[@i].Ques" style="width: 100%" /></td>
                             <td><input type="text" name="ListCauHoi[@i].A" style="width: 100%" /></td>
                             <td><input type="text" name="ListCauHoi[@i].B" style="width: 100%" /></td>
@@ -61,11 +63,8 @@
         </div>
        
 
-        <input type="submit" value="Gửi Dữ Liệu" style="float: right"/>
+        <input type="submit"  class="btn btn-primary btn-rounded" value="Gửi Dữ Liệu" style="float: right"/>
     }
 
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
 
 </div>

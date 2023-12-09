@@ -1,0 +1,328 @@
+﻿@using _2124802010277_LeTuanKiet_CuoiKy.Models
+
+@{
+    DataTiengAnhEntities db = new DataTiengAnhEntities();
+    int IdBaiTap = (int)ViewBag.IdBaiTap;
+    int IdNguoiDung = (int)ViewBag.IdNguoiDung;
+    int IdRoom = (int)ViewBag.IdRoom;
+    var Btr = db.BaiTapRooms.FirstOrDefault(item => item.IdBTRoom == IdBaiTap);
+    ChiTietPhong ctp = db.ChiTietPhongs.FirstOrDefault(item => item.IdPhong == IdRoom && item.ChuPhong == true);
+}
+<style>
+    .list-group-item {
+        margin-bottom: 10px;
+        height: 70px;
+        
+    }
+
+    div#container {
+        text-align: left
+    }
+
+    div#navigation {
+        background: #F6F0E0;
+    }
+
+        div#navigation ul {
+            margin: 15px 0;
+            padding: 0;
+            list-style-type: none;
+            overflow: auto
+        }
+
+        div#navigation li {
+            margin-bottom: 5px;
+            overflow: auto
+        }
+
+    div#extra {
+        background: #CCC8B3;
+    }
+
+    div#container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+
+    div#wrapper {
+        flex: 55%;
+    }
+
+    div#content {
+        margin: 0 20px
+    }
+
+    div#navigation {
+        flex: 25%;
+    }
+
+    div#extra {
+        flex: 30%;
+    }
+    .slider:hover {
+        opacity: 1;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        background: #04AA6D;
+        cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        background: #04AA6D;
+        cursor: pointer;
+    }
+</style>
+@if (IdNguoiDung == ctp.MaKH)
+{
+    <div class="modal" id="BaiTap">
+        <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center">
+            <div class="" style="width: 70%">
+                <div class="modal-content">
+                    <form action="@Url.Action("NopBai", "Chat")" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="IdBaiTap" id="IdBaiTap" value="@IdBaiTap" />
+                        <input type="hidden" name="IdNd" value="@IdNguoiDung" />
+                        <input type="hidden" name="IdRoom" id="IdRoom" value="@IdRoom" />
+                        <input type="hidden" id="IdNguoiNop"/>
+                        <div class="modal-header">
+                            <h5 class="modal-title">Bài tập</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" style="height: 700px; ">
+                            <div id="container">
+                                <div id="navigation">
+                                    <p><strong>Đính kèm file</strong></p>
+                                    <ul>
+                                        @{
+                                            List<ChiTietPhong> fl = db.ChiTietPhongs.Where(x => x.IdPhong == IdRoom).ToList();
+                                            if (fl != null)
+                                            {
+                                                foreach (var x in fl)
+                                                {
+                                                    <li style="padding: 5px" class="itemUser">
+                                                        <button type="button" class="btn btn-outline-primary" style="width: 100%" id="@x.MaKH" onclick="ShowFileUser(@x.MaKH,@IdBaiTap)">
+                                                            @db.NguoiDungs.FirstOrDefault(tmp=> tmp.MaKH==x.MaKH).HoTenKH
+                                                        </button>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                                <div id="wrapper">
+                                    <ul id="ListFileUser">
+                                        
+                                    </ul>
+                                </div>
+                                <div id="extra">
+                                    <p><strong>Cài đặt</strong></p>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Ngày Bắt Đầu</label>
+                                            <input type="text" disabled name="DateStart" class="form-control" value="@string.Format("{0:yyyy-MM-dd HH:mm:ss}", Btr.NgayBatDau)">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Hạn Chót</label>
+                                            <input type="text" disabled name="DateStart" class="form-control" value="@string.Format("{0:yyyy-MM-dd HH:mm:ss}", Btr.NgayKetThuc)">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <input type="range" min="0" max="100" value="0" class="slider" id="myRange" style="width: 100%">
+                                            <p>Value: <span id="demo"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="BtnClose1">Close</button>
+                            <button type="button" onclick="SavePoint()" class="btn btn-primary">Lưu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function ShowBaiTap() {
+            var bt = document.getElementById('BaiTap');
+            bt.style.display = 'block';
+        }
+        ShowBaiTap();
+        document.getElementById('BtnClose1').addEventListener('click', function () {
+            var bt = document.getElementById('BaiTap');
+            bt.style.display = 'none';
+        });
+        function ShowFileUser(id, idbt) {
+            var buttons = document.querySelectorAll('ul li button');
+            var btn = document.querySelector(`button[id="${id}"]`);
+            // Lặp qua từng button và xóa class 'btn-success' nếu có
+            buttons.forEach(function (btn) {
+                btn.className ='btn btn-outline-primary';
+            });
+            // Thêm class 'btn-success' cho button được nhấp vào
+            btn.className='btn btn-primary';
+
+            console.log(id);
+            $.ajax({
+                url: '/Chat/FileUser',
+                type: 'POST',
+                data: { id: id, Idbt: idbt },
+                success: function (res) {
+                    var Edit = document.getElementById('IdNguoiNop'); //Gán Id Của người đang chấm hiện tại
+                    Edit.value = id;
+                    var point = document.getElementById("myRange");  //Hiện điểm của người đang chấm
+                    point.value = res.Diem;
+                    document.getElementById("demo").innerHTML = res.Diem;
+                    var file = res.data;
+                    var l = document.getElementById('ListFileUser');
+                    l.innerHTML = '';
+                    if (file.length == 0) {
+                        var ms = `<li style="display: flex;
+                                    flex-direction: row;
+                                    align-items: center;
+                                    justify-content: center;">
+                                    <h1>Chưa nộp bài</h1>
+                                </li>`;
+                        $('#ListFileUser').append(ms)
+                    }
+                    else {
+                        for (let i = 0; i < file.length; i++) {
+                            //console.log(file[i]);
+                            var UrlTuongDoi = "/File/OtherFile/";
+                            let end = file[i].length;
+                            let start = UrlTuongDoi.length;
+                            var fileName = file[i].substring(start, end - start);
+                            var ms = `<li style="margin-bottom: 5px">
+                                    <a class="btn btn-outline-primary" href="/Chat/DownloadFile?filename=`+ file[i] + `">` + fileName + `</a>
+                                </li>`;
+                            $('#ListFileUser').append(ms);
+                        }
+                    } 
+                },
+            });
+        }
+
+        var slider = document.getElementById("myRange");
+        var output = document.getElementById("demo");
+        output.innerHTML = slider.value;
+
+        slider.oninput = function () {
+            output.innerHTML = this.value;
+        }
+        function SavePoint() {
+            var point = document.getElementById('myRange').value;
+            var buttons = document.querySelectorAll('ul li button');
+            buttons.forEach(function (btn) {
+                if (btn.className == 'btn btn-primary') {
+                    var currentUrl = window.location.href;
+                    var IdNguoiNop = document.getElementById('IdNguoiNop').value;
+                    var IdBaiTap = document.getElementById('IdBaiTap').value;
+                    var IdRoom = document.getElementById('IdRoom').value;
+                    window.location.href = '/Chat/SavePoint?IdNguoiNop=' + IdNguoiNop + '&Idbt=' + IdBaiTap + '&point=' + point + '&IdRoom=' + IdRoom + '';
+                }
+            });
+        }
+    </script>
+}
+else
+{
+    <div class="modal" id="BaiTap">
+        <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center">
+            <div class="" style="width: 70%">
+                <div class="modal-content">
+                    <form action="@Url.Action("NopBai", "Chat")" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="IdBaiTap" value="@IdBaiTap" />
+                        <input type="hidden" name="IdNd" value="@IdNguoiDung" />
+                        <input type="hidden" name="IdRoom" value="@IdRoom" />
+                        <div class="modal-header">
+                            <h5 class="modal-title">Bài tập</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" style="height: 700px">
+                            <div id="container">
+                                <div id="navigation">
+                                    <p><strong>File đã nộp</strong></p>
+                                    <ul>
+                                        @{
+                                            List<ChiTietBaiTapRoom> fl = db.ChiTietBaiTapRooms.Where(x => x.IdBTRoom == Btr.IdBTRoom && x.IdNguoiNop==IdNguoiDung).ToList();
+                                            if (fl != null)
+                                            {
+                                                foreach (var x in fl)
+                                                {
+                                                    var UrlTuongDoi = "/File/OtherFile/";
+                                                    int end = x.FileNop.Length;
+                                                    int start = UrlTuongDoi.Length;
+                                                    string fileName = x.FileNop.Substring(start, end - start);
+                                                    <li>
+                                                        <a href="@Url.Action("DownloadFile","Chat", new { filename=x.FileNop})">@fileName</a>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                                <div id="wrapper" style="display: flex; flex-direction: column; align-items: center; justify-content: center">
+                                        @{ 
+                                            var CheckDiem = db.ChiTietBaiTapRooms.FirstOrDefault(x => x.IdBTRoom == Btr.IdBTRoom && x.IdNguoiNop == IdNguoiDung);
+                                        } 
+                                        @if (CheckDiem != null)
+                                        {
+                                            <h2>Điểm của bạn là</h2>
+                                            <h1 style="color: red">
+                                                @db.ChiTietBaiTapRooms.FirstOrDefault(x => x.IdBTRoom == Btr.IdBTRoom && x.IdNguoiNop == IdNguoiDung).Diem
+                                            </h1>
+                                        }
+                                        else
+                                        {
+                                        <p>Bạn chưa nộp bài</p>
+                                        }
+                                </div>
+                                <div id="extra">
+                                    <p><strong>Cài đặt</strong></p>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Ngày Bắt Đầu</label>
+                                            <input type="text" disabled name="DateStart" class="form-control" value="@string.Format("{0:yyyy-MM-dd HH:mm:ss}", Btr.NgayBatDau)">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Hạn Chót</label>
+                                            <input type="text" disabled name="DateStart" class="form-control" value="@string.Format("{0:yyyy-MM-dd HH:mm:ss}", Btr.NgayKetThuc)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="BtnClose1">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function ShowBaiTap() {
+            var bt = document.getElementById('BaiTap');
+            bt.style.display = 'block';
+        }
+        ShowBaiTap();
+        document.getElementById('BtnClose1').addEventListener('click', function () {
+            var bt = document.getElementById('BaiTap');
+            bt.style.display = 'none';
+        });
+    </script>
+}

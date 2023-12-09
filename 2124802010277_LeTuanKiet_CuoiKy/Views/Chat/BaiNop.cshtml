@@ -1,0 +1,302 @@
+﻿@using _2124802010277_LeTuanKiet_CuoiKy.Models
+
+@{
+    DataTiengAnhEntities db = new DataTiengAnhEntities();
+    int IdBaiTap = (int)ViewBag.IdBaiTap;
+    int IdNguoiDung = (int)ViewBag.IdNguoiDung;
+    int IdRoom = (int)ViewBag.IdRoom;
+    var Btr = db.BaiTapRooms.FirstOrDefault(item => item.IdBTRoom == IdBaiTap);
+    ChiTietPhong ctp = db.ChiTietPhongs.FirstOrDefault(item => item.IdPhong == IdRoom && item.ChuPhong == true);
+}
+
+@if (IdNguoiDung == ctp.MaKH)
+{
+    List<FileMotaBtRoom> fl = db.FileMotaBtRooms.Where(x => x.IdBtRoom == Btr.IdBTRoom).ToList();
+    <div class="modal" id="BaiTap">
+        <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center">
+            <div class="" style="width: 70%">
+                <div class="modal-content">
+                    <form action="@Url.Action("SuaBaiTap", "Chat")" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="IdBaiTap" value="@IdBaiTap" />
+                        <input type="hidden" name="IdNd" value="@IdNguoiDung" />
+                        <input type="hidden" name="IdRoom" value="@IdRoom" />
+                        <div class="modal-header">
+                            <h5 class="modal-title">Bài tập</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" style="height: 700px">
+                            <div id="container">
+                                <div id="navigation">
+                                    <p><strong>Đính kèm file</strong></p>
+                                    <ul>
+                                        <li>
+                                            <input type="file" multiple name="fileList" id="fileInput1" style="display:none;" onchange="updateFileName1()" />
+                                            <button type="button" class="btn btn-primary" onclick="openFileInput1()">Chọn Files</button>
+                                            <ul id="fileList1">
+                                                @{
+                                                    if (fl != null)
+                                                    {
+                                                        foreach (var x in fl)
+                                                        {
+                                                            var UrlTuongDoi = "/File/OtherFile/";
+                                                            int end = x.File.Length;
+                                                            int start = UrlTuongDoi.Length;
+                                                            string fileName = x.File.Substring(start, end - start);
+                                                            <li class="file-item1">
+                                                                @fileName
+                                                            </li>
+                                                        }
+                                                    }
+                                                }
+                                            </ul>
+                                        </li> 
+                                    </ul>
+                                </div>
+                                <div id="wrapper">
+                                    <div class="form-group" style="padding: 0 20px">
+                                        <label style="font-weight: bold">Tên Bài Tập</label>
+                                        <input name="Ten" type="text" class="form-control" value="@Btr.Ten">
+                                    </div>
+                                    <div class="form-group" id="content" style="height: 100%">
+                                        <p><strong>Nội dung và mô tả</strong></p>
+                                        <textarea name="NoiDung1" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Nhập nội dung" style="height: 100%">
+                                                @Html.Raw(Btr.NoiDungBaiTap)
+                                        </textarea>
+                                    </div>
+                                </div>
+                                <div id="extra">
+                                    <p><strong>Cài đặt</strong></p>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Ngày Bắt Đầu</label>
+                                            <input type="date" name="DateStart" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",Btr.NgayBatDau.Value)">
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="content" style="width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: center">
+                                                <div class="column">
+                                                    <select name="HourStart" id="selectNopBai">
+                                                        <option value="Hour" selected disabled hidden>@Btr.NgayBatDau.Value.Hour</option>
+                                                    </select>
+                                                </div>
+                                                <div class="column">
+                                                    <select name="MinuteStart" id="selectNopBai">
+                                                        <option value="Minute" selected disabled hidden>@Btr.NgayBatDau.Value.Minute</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Hạn Chót</label>
+                                            <input type="date" name="DateEnd" class="form-control" value="@string.Format("{0:yyyy-MM-dd}", Btr.NgayKetThuc)">
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="content" style="width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: center">
+                                                <div class="column">
+                                                    <select name="HourEnd" id="selectNopBai">
+                                                        <option value="Hour" selected disabled hidden>@Btr.NgayKetThuc.Value.Hour</option>
+                                                    </select>
+                                                </div>
+                                                <div class="column">
+                                                    <select name="MinuteEnd" id="selectNopBai">
+                                                        <option value="Minute" selected disabled hidden>@Btr.NgayKetThuc.Value.Minute</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="BtnClose1">Close</button>
+                            <button type="submit" class="btn btn-primary">Sửa</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function ShowBaiTap() {
+            var bt = document.getElementById('BaiTap');
+            bt.style.display = 'block';
+        }
+        ShowBaiTap();
+        document.getElementById('BtnClose1').addEventListener('click', function () {
+            var bt = document.getElementById('BaiTap');
+            bt.style.display = 'none';
+        });
+        var selectMenu = document.querySelectorAll("#selectNopBai");
+        console.log(selectMenu);
+        for (let i = 24; i > 0; i--) {
+            i = i < 10 ? `0${i}` : i;
+            let option = `<option value="${i}">${i}</option>`;
+            selectMenu[0].firstElementChild.insertAdjacentHTML("afterend", option);
+            selectMenu[2].firstElementChild.insertAdjacentHTML("afterend", option);
+        }
+        selectMenu[0].value = '@Btr.NgayBatDau.Value.Hour';
+        selectMenu[2].value = '@Btr.NgayKetThuc.Value.Hour';
+        for (let i = 59; i >= 0; i--) {
+            i = i < 10 ? `0${i}` : i;
+            let option = `<option value="${i}">${i}</option>`;
+            selectMenu[1].firstElementChild.insertAdjacentHTML("afterend", option);
+            selectMenu[3].firstElementChild.insertAdjacentHTML("afterend", option);
+        }
+        selectMenu[1].value = '@Btr.NgayBatDau.Value.Minute';
+        if (@Btr.NgayKetThuc.Value.Minute== 0)
+        selectMenu[3].value = '00';
+        else
+        selectMenu[3].value = '@Btr.NgayKetThuc.Value.Minute';
+
+        function openFileInput1() {
+            document.getElementById('fileInput1').click();
+        }
+
+        function updateFileName1() {
+            var fileList = document.getElementById('fileInput1').files;
+            var listContainer = document.getElementById('fileList1');
+            listContainer.innerHTML = '';
+
+            for (var i = 0; i < fileList.length; i++) {
+                var listItem = document.createElement('li');
+                listItem.className = 'file-item1';
+
+                var tmp = fileList[i].name;
+                if (fileList[i].name.length > 17) {
+                    tmp = fileList[i].name.substring(0, 17);
+                    tmp += "..."
+                }
+                console.log(tmp);
+
+                var fileName = document.createTextNode(tmp);
+                console.log(fileName);
+                listItem.appendChild(fileName);
+
+                var deleteBtn = document.createElement('span');
+                deleteBtn.className = 'btn btn-danger';
+                deleteBtn.innerHTML = ' X';
+                deleteBtn.onclick = function (index) {
+                    return function () {
+                        removeFile1(index);
+                    };
+                }(i);
+
+                listItem.appendChild(deleteBtn);
+                listContainer.appendChild(listItem);
+            }
+        }
+        function removeFile1(index) {
+
+            var fileInput = document.getElementById('fileInput1');
+            var files = Array.from(fileInput.files);
+            console.log(files);
+            files.splice(index, 1);
+
+            // Tạo một đối tượng DataTransfer giả mạo
+            var dataTransfer = new DataTransfer();
+            files.forEach(function (file) {
+                dataTransfer.items.add(file);
+            });
+
+            // Gán đối tượng DataTransfer mới cho input[type="file"]
+            fileInput.files = dataTransfer.files;
+
+            updateFileName1();
+        }
+    </script>
+}
+else
+{
+    <div class="modal" id="BaiTap">
+        <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center">
+            <div class="" style="width: 70%">
+                <div class="modal-content">
+                    <form action="@Url.Action("NopBai", "Chat")" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="IdBaiTap" value="@IdBaiTap" />
+                        <input type="hidden" name="IdNd" value="@IdNguoiDung" />
+                        <input type="hidden" name="IdRoom" value="@IdRoom" />
+                        <div class="modal-header">
+                            <h5 class="modal-title">Bài tập</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" style="height: 700px">
+                            <div id="container">
+                                <div id="navigation">
+                                    <p><strong>Đính kèm file</strong></p>
+                                    <ul>
+                                        @{
+                                            List<FileMotaBtRoom> fl = db.FileMotaBtRooms.Where(x => x.IdBtRoom == Btr.IdBTRoom).ToList();
+                                            if (fl != null)
+                                            {
+                                                foreach (var x in fl)
+                                                {
+                                                    var UrlTuongDoi = "/File/OtherFile/";
+                                                    int end = x.File.Length;
+                                                    int start = UrlTuongDoi.Length;
+                                                    string fileName = x.File.Substring(start, end - start);
+                                                    <li>
+                                                        <a href="@Url.Action("DownloadFile","Chat", new { filename=x.File})">@fileName</a>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                                <div id="wrapper">
+                                    <div class="form-group" style="padding: 0 20px">
+                                        <label style="font-weight: bold">Tên Bài Tập</label>
+                                        <input type="text" disabled class="form-control" value="@Btr.Ten">
+                                    </div>
+                                    <div class="form-group" id="content" style="height: 100%">
+                                        <p><strong>Nội dung và mô tả</strong></p>
+                                        <textarea name="NoiDung1" disabled class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Nhập nội dung" style="height: 100%">
+                                                @Html.Raw(Btr.NoiDungBaiTap)
+                                            </textarea>
+                                    </div>
+                                </div>
+                                <div id="extra">
+                                    <p><strong>Cài đặt</strong></p>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Ngày Bắt Đầu</label>
+                                            <input type="text" disabled name="DateStart" class="form-control" value="@string.Format("{0:yyyy-MM-dd HH:mm:ss}", Btr.NgayBatDau)">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Hạn Chót</label>
+                                            <input type="text" disabled name="DateStart" class="form-control" value="@string.Format("{0:yyyy-MM-dd HH:mm:ss}", Btr.NgayKetThuc)">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <input type="file" name="fileList" multiple class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="BtnClose1">Close</button>
+                            <button type="submit" class="btn btn-primary">Nộp bài</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function ShowBaiTap() {
+            var bt = document.getElementById('BaiTap');
+            bt.style.display = 'block';
+        }
+        ShowBaiTap();
+        document.getElementById('BtnClose1').addEventListener('click', function () {
+            var bt = document.getElementById('BaiTap');
+            bt.style.display = 'none';
+        });
+    </script>
+}

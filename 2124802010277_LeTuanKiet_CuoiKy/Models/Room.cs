@@ -14,8 +14,19 @@ namespace _2124802010277_LeTuanKiet_CuoiKy.Models
     
     public partial class Room
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Room()
+        {
+            this.ChiTietPhongs = new HashSet<ChiTietPhong>();
+        }
+    
         public int RoomId { get; set; }
         public string Name { get; set; }
         public Nullable<int> Type { get; set; }
+        public string IdJoin { get; set; }
+        public string MoTa { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ChiTietPhong> ChiTietPhongs { get; set; }
     }
 }

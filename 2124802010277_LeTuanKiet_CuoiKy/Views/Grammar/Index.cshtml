@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
     List<_2124802010277_LeTuanKiet_CuoiKy.Models.NguoiDung> TaiKhoan = ViewBag.TaiKhoan;
     _2124802010277_LeTuanKiet_CuoiKy.Models.NguoiDung x = new _2124802010277_LeTuanKiet_CuoiKy.Models.NguoiDung();
-
+    int fillter = (int)ViewBag.fillter;
     Pager p = new Pager();
     int pageNo = 0;
     if (ViewBag.Pager != null)
@@ -12,12 +12,27 @@
         p = ViewBag.Pager;
         pageNo = p.CurrentPage;
     }
+
+    string op = fillter == 0 ? "selected" : "";
+    string op1 = fillter == 1 ? "selected" : "";
+    string op2 = fillter == 2 ? "selected" : "";
+    string op3 = fillter == 3 ? "selected" : "";
+    string op4 = fillter == 4 ? "selected" : "";
+    string op5 = fillter == 5 ? "selected" : "";
 }
 <div class="ContainerGrammar">
     <div style="display: flex; flex-direction: row-reverse; margin-bottom: 15px">
         <a href="~/Grammar/AddGrammar" class="btn btn-outline-primary" style="margin-left: 20px; height: 45px; display: flex; align-items: center; justify-content: center">
             Thêm tài liệu
         </a>
+        <select class="btn btn-outline-primary" aria-label="Default select example" style="width: 10%; margin-left: 10px" onchange="filter(this.value)">
+            <option value="0" @op>Tất cả</option>
+            <option value="1" @op1>Mới nhất</option>
+            <option value="2" @op2>Cũ nhất</option>
+            <option value="3" @op3>Nhiều lượt xem</option>
+            <option value="4" @op4>Ít lượt xem</option>
+            <option value="5" @op5>Bài đăng của tôi</option>
+        </select>
         <form class="input-group" style="display: flex; flex-direction: row-reverse">
             <button type="submit" class="btn btn-outline-primary" data-mdb-ripple-init
                     style="height: 45px; border-radius: 5px">
@@ -73,7 +88,7 @@
         @for (int i = p.StartPage; i <= p.EndPage; i++)
         {
             <li class="page-item @(i==p.CurrentPage ? "active" : "")">
-                <a class="page-link" href="~/Grammar/Index?pg=@i">@i</a>
+                <a class="page-link" href="~/Grammar/Index?pg=@i&fillter=@fillter">@i</a>
             </li>
         }
     </ul>
@@ -83,5 +98,10 @@
         var ThongBaoThem = '@ViewBag.ThongBaoThem';
         if (ThongBaoThem != "")
             alert(ThongBaoThem);
+
+        function filter(Op) {
+            console.log(Op);
+            window.location.href = "/Grammar/Index?fillter=" + Op + "";
+        }
     </script>
 }
